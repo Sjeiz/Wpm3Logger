@@ -84,3 +84,4 @@ Deze logger lost dat op door:
 ## Licentie
 
 MIT License — vrij te gebruiken, aan te passen en te delen.
+
