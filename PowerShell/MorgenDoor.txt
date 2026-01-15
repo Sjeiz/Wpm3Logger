@@ -1,0 +1,8 @@
+Bookmark‑zin voor morgen
+“Pak de ISG‑decoder weer op vanaf de YAML‑mapping en de enum‑fix.”
+Als je dat morgen typt, weet ik meteen:
+- dat we bezig waren met jouw WPM3/ISG‑decoder
+- dat de UInt16→Int32 enum‑fix net was afgerond
+- dat de ScaledValue‑engine nu correct werkt
+- dat de YAML‑mapping volledig is gegenereerd
+- dat de volgende stap waarschijnlijk logging, COP‑analyse of dashboarding is

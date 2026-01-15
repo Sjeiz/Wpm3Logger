@@ -1,0 +1,38 @@
+# ============================================
+#   Git Attributes for C# / .NET Projects
+# ============================================
+
+# Force consistent line endings for text files
+*.cs      text eol=lf
+*.csproj  text eol=lf
+*.sln     text eol=lf
+*.md      text eol=lf
+*.json    text eol=lf
+*.yml     text eol=lf
+*.yaml    text eol=lf
+*.xml     text eol=lf
+*.txt     text eol=lf
+*.csv     text eol=lf
+
+# Treat these as binary (no diffs)
+*.dll     binary
+*.exe     binary
+*.png     binary
+*.jpg     binary
+*.jpeg    binary
+*.gif     binary
+*.ico     binary
+*.zip     binary
+*.7z      binary
+*.pdf     binary
+
+# Visual Studio / Rider / VSCode metadata
+*.user    text eol=lf
+*.suo     binary
+*.cache   binary
+
+# Prevent Git from messing with UTF‑8 BOM
+*.cs      working-tree-encoding=UTF-8
+
+# Auto-detect text/binary for everything else
+* text=auto

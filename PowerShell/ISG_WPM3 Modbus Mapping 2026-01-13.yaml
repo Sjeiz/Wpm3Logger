@@ -1,0 +1,130 @@
+system_values:
+  - { address: 507,  name: outside_temp,               type: int16,  scale: 0.1, use: true }
+  - { address: 513,  name: flow_temp_wp,               type: int16,  scale: 0.1, use: true }
+  - { address: 514,  name: flow_temp_nhz,              type: int16,  scale: 0.1, use: true }
+  - { address: 515,  name: flow_temp,                  type: int16,  scale: 0.1, use: true }
+  - { address: 516,  name: return_temp,                type: int16,  scale: 0.1, use: true }
+  - { address: 520,  name: water_pressure,             type: int16,  scale: 0.01, use: true }
+  - { address: 521,  name: flow_rate,                  type: int16,  scale: 0.01, use: true }
+  - { address: 541,  name: compressor_return_temp,     type: int16,  scale: 0.1, use: true }
+  - { address: 542,  name: compressor_flow_temp,       type: int16,  scale: 0.1, use: true }
+  - { address: 543,  name: compressor_hotgas_temp,     type: int16,  scale: 0.1, use: true }
+  - { address: 544,  name: compressor_low_pressure,    type: int16,  scale: 0.01, use: true }
+  - { address: 545,  name: compressor_mean_pressure,   type: int16,  scale: 0.01, use: true }
+  - { address: 546,  name: compressor_high_pressure,   type: int16,  scale: 0.01, use: true }
+  - { address: 547,  name: compressor_flow_rate,       type: int16,  scale: 0.01, use: true }
+  
+parameters:
+  - { address: 1501, name: operating_mode,             type: uint16, scale: 1, use: true }
+  - { address: 1502, name: hk1_comfort_temp,           type: int16,  scale: 0.1, use: true }
+  - { address: 1503, name: hk1_eco_temp,               type: int16,  scale: 0.1, use: true }
+  - { address: 1504, name: hk1_curve,                  type: int16,  scale: 0.01, use: true }
+  - { address: 1505, name: hk2_comfort_temp,           type: int16,  scale: 0.1, use: true }
+  - { address: 1506, name: hk2_eco_temp,               type: int16,  scale: 0.1, use: true }
+  - { address: 1507, name: hk2_curve,                  type: int16,  scale: 0.01, use: true }
+  - { address: 1509, name: dual_mode_temp_hzg,         type: int16,  scale: 0.1, use: true }
+  - { address: 1510, name: dhw_comfort_temp,           type: int16,  scale: 0.1, use: true }
+  - { address: 1511, name: dhw_eco_temp,               type: int16,  scale: 0.1, use: true }
+  - { address: 1520, name: reset_command,              type: uint16, scale: 1, use: false }
+  - { address: 1521, name: restart_isg,                type: uint16, scale: 1, use: false }
+
+status:
+  - { address: 2501, name: operating_status,           type: uint16, use: true }
+  - { address: 2502, name: power_off_status,           type: uint16, use: true }
+  - { address: 2503, name: compressor_status,          type: uint16, use: true }
+  - { address: 2505, name: defrost_initiated,          type: uint16, use: true }
+  - { address: 2506, name: active_error,               type: uint16, use: true }
+
+energy:
+  heat_floor:
+    day:   { address: 3500, type: uint16, scale: 1, use: true }
+    lo:    { address: 3501, type: uint16, use: true }
+    hi:    { address: 3502, type: uint16, use: true }
+
+  heat_water:
+    day:   { address: 3503, type: uint16, scale: 1, use: true }
+    lo:    { address: 3504, type: uint16, use: true }
+    hi:    { address: 3505, type: uint16, use: true }
+
+  nhz_floor:
+    lo:    { address: 3506, type: uint16, use: true }
+    hi:    { address: 3507, type: uint16, use: true }
+
+  nhz_water:
+    lo:    { address: 3508, type: uint16, use: true }
+    hi:    { address: 3509, type: uint16, use: true }
+
+  power_floor:
+    day:   { address: 3510, type: uint16, scale: 1, use: true }
+    lo:    { address: 3511, type: uint16, use: true }
+    hi:    { address: 3512, type: uint16, use: true }
+
+  power_water:
+    day:   { address: 3513, type: uint16, scale: 1, use: true }
+    lo:    { address: 3514, type: uint16, use: true }
+    hi:    { address: 3515, type: uint16, use: true }
+
+    runtime:
+  - { address: 3538, name: runtime_heating_h,   type: uint16, use: true }
+  - { address: 3541, name: runtime_water_h,     type: uint16, use: true }
+  - { address: 3544, name: runtime_cooling_h,   type: uint16, use: true }
+  - { address: 3545, name: runtime_nhz1_h,      type: uint16, use: true }
+  - { address: 3546, name: runtime_nhz2_h,      type: uint16, use: true }
+  - { address: 3547, name: runtime_nhz12_h,     type: uint16, use: true }
+  
+hp:
+  hp1:
+    - { address: 542, name: return_temp,     type: int16, scale: 0.1, use: false }
+    - { address: 543, name: flow_temp,       type: int16, scale: 0.1, use: false }
+    - { address: 544, name: hotgas_temp,     type: int16, scale: 0.1, use: false }
+    - { address: 545, name: low_pressure,    type: int16, scale: 0.01, use: false }
+    - { address: 546, name: mean_pressure,   type: int16, scale: 0.01, use: false }
+    - { address: 547, name: high_pressure,   type: int16, scale: 0.01, use: false }
+    - { address: 548, name: flow_rate,       type: int16, scale: 0.01, use: false }
+
+  hp2:
+    - { address: 549, name: return_temp,     type: int16, scale: 0.1, use: false }
+    - { address: 550, name: flow_temp,       type: int16, scale: 0.1, use: false }
+    - { address: 551, name: hotgas_temp,     type: int16, scale: 0.1, use: false }
+    - { address: 552, name: low_pressure,    type: int16, scale: 0.01, use: false }
+    - { address: 553, name: mean_pressure,   type: int16, scale: 0.01, use: false }
+    - { address: 554, name: high_pressure,   type: int16, scale: 0.01, use: false }
+    - { address: 555, name: flow_rate,       type: int16, scale: 0.01, use: false }
+
+  hp3:
+    - { address: 556, name: return_temp,     type: int16, scale: 0.1, use: false }
+    - { address: 557, name: flow_temp,       type: int16, scale: 0.1, use: false }
+    - { address: 558, name: hotgas_temp,     type: int16, scale: 0.1, use: false }
+    - { address: 559, name: low_pressure,    type: int16, scale: 0.01, use: false }
+    - { address: 560, name: mean_pressure,   type: int16, scale: 0.01, use: false }
+    - { address: 561, name: high_pressure,   type: int16, scale: 0.01, use: false }
+    - { address: 562, name: flow_rate,       type: int16, scale: 0.01, use: false }
+
+  hp4:
+    - { address: 563, name: return_temp,     type: int16, scale: 0.1, use: false }
+    - { address: 564, name: flow_temp,       type: int16, scale: 0.1, use: false }
+    - { address: 565, name: hotgas_temp,     type: int16, scale: 0.1, use: false }
+    - { address: 566, name: low_pressure,    type: int16, scale: 0.01, use: false }
+    - { address: 567, name: mean_pressure,   type: int16, scale: 0.01, use: false }
+    - { address: 568, name: high_pressure,   type: int16, scale: 0.01, use: false }
+    - { address: 569, name: flow_rate,       type: int16, scale: 0.01, use: false }
+
+  hp5:
+    - { address: 570, name: return_temp,     type: int16, scale: 0.1, use: false }
+    - { address: 571, name: flow_temp,       type: int16, scale: 0.1, use: false }
+    - { address: 572, name: hotgas_temp,     type: int16, scale: 0.1, use: false }
+    - { address: 573, name: low_pressure,    type: int16, scale: 0.01, use: false }
+    - { address: 574, name: mean_pressure,   type: int16, scale: 0.01, use: false }
+    - { address: 575, name: high_pressure,   type: int16, scale: 0.01, use: false }
+    - { address: 576, name: flow_rate,       type: int16, scale: 0.01, use: false }
+
+  hp6:
+    - { address: 577, name: return_temp,     type: int16, scale: 0.1, use: false }
+    - { address: 578, name: flow_temp,       type: int16, scale: 0.1, use: false }
+    - { address: 579, name: hotgas_temp,     type: int16, scale: 0.1, use: false }
+    - { address: 580, name: low_pressure,    type: int16, scale: 0.01, use: false }
+    - { address: 581, name: mean_pressure,   type: int16, scale: 0.01, use: false }
+    - { address: 582, name: high_pressure,   type: int16, scale: 0.01, use: false }
+    - { address: 583, name: flow_rate,       type: int16, scale: 0.01, use: false }
+
+    

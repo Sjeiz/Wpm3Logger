@@ -1,0 +1,11 @@
+bin/
+obj/
+.vscode/
+WSL/
+*.user
+*.suo
+*.cache
+*.log
+*.tmp
+*.img
+*.vhdx

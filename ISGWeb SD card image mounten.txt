@@ -1,0 +1,38 @@
+start linux subsystem
+wsl.exe
+
+Met dit heb je de hele loop niet nodig die buggy is met wsl!!
+sudo mount -o loop,offset=$((12544*512)) /mnt/d/git/Sjeiz/Wpm3Logger/SDCard_ISGWeb.img /mnt/usb
+
+sudo umount /mnt/usb
+
+
+
+
+------
+
+
+sudo losetup -fP /mnt/d/git/Sjeiz/Wpm3Logger/SDCard_ISGWeb.img
+losetup -a
+--> /dev/loop0: []: (/mnt/d/git/Sjeiz/Wpm3Logger/SDCard_ISGWeb.img)
+
+lsblk /dev/loop0
+NAME      MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
+loop0       7:0    0   7.4G  0 loop
+└─loop0p1 259:0    0 226.6M  0 part
+
+sudo mount -o rw /dev/loop0p1 /mnt/usb
+
+\\wsl$\Ubuntu\mnt\usb\rel_b\.ssh
+
+
+Dismount:
+sudo umount /mnt/usb
+sudo losetup -D
+
+
+Stop Linux subsystem
+exit
+wsl --shutdown
+
+
