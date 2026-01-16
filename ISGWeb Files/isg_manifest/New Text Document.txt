@@ -1,0 +1,32 @@
+{
+  "3001": { "name": "outdoor_temp", "datatype": "int16", "unit": "°C" },
+  "3003": { "name": "hk1_flow_temp", "datatype": "int16", "unit": "°C" },
+  "3004": { "name": "hk1_return_temp", "datatype": "int16", "unit": "°C" },
+  "3005": { "name": "hk2_flow_temp", "datatype": "int16", "unit": "°C" },
+  "3006": { "name": "hk2_return_temp", "datatype": "int16", "unit": "°C" },
+  "3007": { "name": "buffer_top_temp", "datatype": "int16", "unit": "°C" },
+  "3008": { "name": "buffer_bottom_temp", "datatype": "int16", "unit": "°C" },
+  "3009": { "name": "dhw_temp", "datatype": "int16", "unit": "°C" },
+
+  "3010": { "name": "compressor_status", "datatype": "uint16" },
+  "3011": { "name": "heat_output", "datatype": "int16", "unit": "kW" },
+  "3012": { "name": "el_power", "datatype": "int16", "unit": "kW" },
+  "3013": { "name": "flow_rate", "datatype": "uint16", "unit": "l/min" },
+
+  "3100": { "name": "energy_heat_total", "datatype": "int32", "unit": "Wh" },
+  "3102": { "name": "energy_dhw_total", "datatype": "int32", "unit": "Wh" },
+  "3104": { "name": "energy_cooling_total", "datatype": "int32", "unit": "Wh" },
+  "3106": { "name": "energy_el_total", "datatype": "int32", "unit": "Wh" },
+
+  "3200": { "name": "hk1_setpoint", "datatype": "int16", "unit": "°C" },
+  "3201": { "name": "hk2_setpoint", "datatype": "int16", "unit": "°C" },
+  "3202": { "name": "dhw_setpoint", "datatype": "int16", "unit": "°C" },
+
+  "3300": { "name": "operation_mode", "datatype": "uint16" },
+  "3301": { "name": "heating_mode", "datatype": "uint16" },
+  "3302": { "name": "cooling_mode", "datatype": "uint16" },
+
+  "3400": { "name": "pump_speed_hk1", "datatype": "uint16", "unit": "%" },
+  "3401": { "name": "pump_speed_hk2", "datatype": "uint16", "unit": "%" },
+  "3402": { "name": "brine_pump_speed", "datatype": "uint16", "unit": "%" }
+}

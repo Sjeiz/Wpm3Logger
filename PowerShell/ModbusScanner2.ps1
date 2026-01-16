@@ -84,25 +84,65 @@ function Scan-FunctionCode {
     Write-Host "`n--- Scannen FC=$Function ($Start..$End) ---" -ForegroundColor Yellow
 
     foreach ($addr in $Start..$End) {
+
+        # Eerst checken of het register bestaat
         $resp = Invoke-Modbus -IP $IP -Function $Function -Address $addr
 
-        switch ($resp) {
-            "ok" {
-                Write-Host ("[OK] FC={0} Register={1}" -f $Function,$addr) -ForegroundColor Green
-                $validAddresses.Add($addr)
+        if ($resp -eq "ok") {
+
+            #
+            # Tweede request: echte waarde ophalen
+            #
+            $value = $null
+            try {
+                $Port = 502
+                $client = New-Object System.Net.Sockets.TcpClient
+                $client.ReceiveTimeout = 400
+                $client.SendTimeout = 400
+                $client.Connect($IP, $Port)
+
+                $stream = $client.GetStream()
+
+                # ADU opnieuw opbouwen maar nu willen we de data teruglezen
+                $Transaction = Get-Random -Minimum 1 -Maximum 65535
+                $UnitID = 1
+
+                $adu = @(
+                    [byte](($Transaction -shr 8) -band 0xFF),
+                    [byte]($Transaction -band 0xFF),
+                    0x00,0x00,
+                    0x00,0x06,
+                    [byte]$UnitID,
+                    [byte]$Function,
+                    [byte](($addr -shr 8) -band 0xFF),
+                    [byte]($addr -band 0xFF),
+                    0x00,0x01
+                )
+
+                $stream.Write($adu,0,$adu.Length)
+
+                $buffer = New-Object byte[] 256
+                $read = $stream.Read($buffer,0,256)
+                $client.Close()
+
+                if ($read -gt 9) {
+                    # Byte 9 en 10 vormen de 16‑bit waarde
+                    $hi = $buffer[9]
+                    $lo = $buffer[10]
+                    $value = ($hi -shl 8) -bor $lo
+                }
             }
-            "timeout" {
-                # stil; kan ook betekenen dat FC niet ondersteund wordt
+            catch {
+                $value = "read_error"
             }
-            default {
-                # exception_xx -> meestal 02 (illegal address)
-            }
+
+            Write-Host ("[OK] FC={0} Register={1}  Value={2}" -f $Function,$addr,$value) -ForegroundColor Green
+            $validAddresses.Add($addr)
         }
     }
 
     return $validAddresses
 }
-
 # -----------------------------
 # Blokken vormen uit geldige adressen
 # -----------------------------

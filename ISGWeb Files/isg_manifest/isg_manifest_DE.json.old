@@ -1,0 +1,2366 @@
+{
+  "metadata": {
+    "generated_at": "2026-01-15T19:35:00Z",
+    "description": "Mapping-driven manifest for WPM3 + ISGWeb",
+    "language": "de-DE",
+    "sources": {
+      "templates": [
+        "WPM_3_config.json.template",
+        "WPM_3_S_config.json.template"
+      ],
+      "object_databases": [
+        "WPM_3_isg_objects.json",
+        "isg_core_objects.json"
+      ],
+      "isg_export": "isg_tester_export.json"
+    }
+  },
+
+  "objects": {
+	{
+  "1": {
+    "name_de": "BETRIEBSART",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 5,
+    "access": "RW",
+    "category": "START"
+  },
+  "3": {
+    "name_de": "TAG",
+    "unit": "",
+    "wtype": 8,
+    "min": 1,
+    "max": 31,
+    "access": "RW",
+    "category": "START"
+  },
+  "4": {
+    "name_de": "MONAT",
+    "unit": "",
+    "wtype": 8,
+    "min": 1,
+    "max": 12,
+    "access": "RW",
+    "category": "START"
+  },
+  "5": {
+    "name_de": "JAHR",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 99,
+    "access": "RW",
+    "category": "START"
+  },
+  "6": {
+    "name_de": "STUNDE",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 23,
+    "access": "RW",
+    "category": "START"
+  },
+  "7": {
+    "name_de": "MINUTE",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 59,
+    "access": "RW",
+    "category": "START"
+  },
+  "9": {
+    "name_de": "TAG WW",
+    "unit": "",
+    "wtype": 8,
+    "min": 1,
+    "max": 31,
+    "access": "RW",
+    "category": "WARMWASSER"
+  },
+  "10": {
+    "name_de": "MONAT WW",
+    "unit": "",
+    "wtype": 8,
+    "min": 1,
+    "max": 12,
+    "access": "RW",
+    "category": "WARMWASSER"
+  },
+  "11": {
+    "name_de": "JAHR WW",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 99,
+    "access": "RW",
+    "category": "WARMWASSER"
+  },
+  "12": {
+    "name_de": "TAG HEIZUNG",
+    "unit": "",
+    "wtype": 8,
+    "min": 1,
+    "max": 31,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "13": {
+    "name_de": "MONAT HEIZUNG",
+    "unit": "",
+    "wtype": 8,
+    "min": 1,
+    "max": 12,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "14": {
+    "name_de": "JAHR HEIZUNG",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 99,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "15": {
+    "name_de": "BETRIEBSSTUNDEN WP",
+    "unit": "h",
+    "wtype": 8,
+    "min": 0,
+    "max": 24,
+    "access": "RW",
+    "category": "INFO"
+  },
+  "16": {
+    "name_de": "HK1 KOMFORTTEMPERATUR",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 5,
+    "max": 30,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "17": {
+    "name_de": "HK1 REDUZIERTE TEMPERATUR",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 5,
+    "max": 30,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "18": {
+    "name_de": "HK1 RAUMISTTEMPERATUR",
+    "unit": "°C",
+    "wtype": 2,
+    "min": -20,
+    "max": 60,
+    "access": "RO",
+    "category": "HEIZUNG"
+  },
+  "19": {
+    "name_de": "HK2 KOMFORTTEMPERATUR",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 5,
+    "max": 30,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "20": {
+    "name_de": "HK2 REDUZIERTE TEMPERATUR",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 5,
+    "max": 30,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "21": {
+    "name_de": "HK2 RAUMISTTEMPERATUR",
+    "unit": "°C",
+    "wtype": 2,
+    "min": -20,
+    "max": 60,
+    "access": "RO",
+    "category": "HEIZUNG"
+  },
+  "22": {
+    "name_de": "WW KOMFORTTEMPERATUR",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 10,
+    "max": 60,
+    "access": "RW",
+    "category": "WARMWASSER"
+  },
+  "23": {
+    "name_de": "WW REDUZIERTE TEMPERATUR",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 10,
+    "max": 60,
+    "access": "RW",
+    "category": "WARMWASSER"
+  },
+  "24": {
+    "name_de": "WW ISTTEMPERATUR",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 10,
+    "max": 65,
+    "access": "RO",
+    "category": "WARMWASSER"
+  },
+  "25": {
+    "name_de": "HK1 HEIZKURVE",
+    "unit": "",
+    "wtype": 7,
+    "min": 0,
+    "max": 3,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "26": {
+    "name_de": "HK2 HEIZKURVE",
+    "unit": "",
+    "wtype": 7,
+    "min": 0,
+    "max": 3,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "27": {
+    "name_de": "AUSSENTEMPERATUR",
+    "unit": "°C",
+    "wtype": 2,
+    "min": -60,
+    "max": 80,
+    "access": "RO",
+    "category": "INFO"
+  },
+  "29": {
+    "name_de": "VERDAMPFERTEMPERATUR",
+    "unit": "°C",
+    "wtype": 2,
+    "min": -40,
+    "max": 30,
+    "access": "RO",
+    "category": "WP"
+  },
+  "30": {
+    "name_de": "VERDICHTERAUFTEMP",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 10,
+    "max": 65,
+    "access": "RO",
+    "category": "WP"
+  },
+  "31": {
+    "name_de": "VORLAUFISTTEMPERATUR WP",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 0,
+    "max": 90,
+    "access": "RO",
+    "category": "WP"
+  },
+  "33": {
+    "name_de": "RÜCKLAUFISTTEMPERATUR WP",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 0,
+    "max": 90,
+    "access": "RO",
+    "category": "WP"
+  },
+  "34": {
+    "name_de": "VORLAUFISTTEMPERATUR HK",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 0,
+    "max": 65,
+    "access": "RO",
+    "category": "HEIZUNG"
+  }
+}
+{
+  "35": {
+    "name_de": "PUFFERISTTEMPERATUR",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 20,
+    "max": 70,
+    "access": "CRW",
+    "category": "PUFFER"
+  },
+  "36": {
+    "name_de": "PUFFERUNTENISTTEMPERATUR",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 0,
+    "max": 0,
+    "access": "RO",
+    "category": "PUFFER"
+  },
+  "37": {
+    "name_de": "PUFFEROBENISTTEMPERATUR",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 0,
+    "max": 0,
+    "access": "RO",
+    "category": "PUFFER"
+  },
+  "38": {
+    "name_de": "SOLARISTTEMPERATUR",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 20,
+    "max": 75,
+    "access": "RW",
+    "category": "SOLAR"
+  },
+  "39": {
+    "name_de": "SOLARPUFFERUNTEN",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 0,
+    "max": 0,
+    "access": "RO",
+    "category": "SOLAR"
+  },
+  "40": {
+    "name_de": "SOLARPUFFEROBEN",
+    "unit": "°C",
+    "wtype": 2,
+    "min": -10,
+    "max": 10,
+    "access": "CRW",
+    "category": "SOLAR"
+  },
+  "41": {
+    "name_de": "SOLARKOLLEKTORISTTEMPERATUR",
+    "unit": "°C",
+    "wtype": 2,
+    "min": -20,
+    "max": 40,
+    "access": "RW",
+    "category": "SOLAR"
+  },
+  "42": {
+    "name_de": "SOLARRUECKLAUFISTTEMPERATUR",
+    "unit": "°C",
+    "wtype": 2,
+    "min": -20,
+    "max": 40,
+    "access": "RW",
+    "category": "SOLAR"
+  },
+  "43": {
+    "name_de": "SOLARPUFFERMITTE",
+    "unit": "°C",
+    "wtype": 2,
+    "min": -20,
+    "max": 40,
+    "access": "CRW",
+    "category": "SOLAR"
+  },
+  "44": {
+    "name_de": "SOLARPUFFERUNTEN2",
+    "unit": "°C",
+    "wtype": 2,
+    "min": -20,
+    "max": 40,
+    "access": "CRW",
+    "category": "SOLAR"
+  },
+  "45": {
+    "name_de": "SOLARERTRAG",
+    "unit": "°C",
+    "wtype": 2,
+    "min": -10,
+    "max": 10,
+    "access": "RW",
+    "category": "SOLAR"
+  },
+  "49": {
+    "name_de": "WAERMEERTRAG_HEIZUNG_WH",
+    "unit": "Wh",
+    "wtype": 1,
+    "min": -32768,
+    "max": 32767,
+    "access": "RO",
+    "category": "ENERGIE"
+  },
+  "50": {
+    "name_de": "WAERMEERTRAG_HEIZUNG_KWH",
+    "unit": "kWh",
+    "wtype": 11,
+    "min": -2147483648,
+    "max": 2147483647,
+    "access": "RO",
+    "category": "ENERGIE"
+  },
+  "51": {
+    "name_de": "WAERMEERTRAG_HEIZUNG_SUMME_KWH",
+    "unit": "kWh",
+    "wtype": 1,
+    "min": -32768,
+    "max": 32767,
+    "access": "RO",
+    "category": "ENERGIE"
+  },
+  "52": {
+    "name_de": "WAERMEERTRAG_HEIZUNG_SUMME_MWH",
+    "unit": "MWh",
+    "wtype": 11,
+    "min": -2147483648,
+    "max": 2147483647,
+    "access": "RO",
+    "category": "ENERGIE"
+  },
+  "53": {
+    "name_de": "WAERMEERTRAG_WW_WH",
+    "unit": "Wh",
+    "wtype": 1,
+    "min": -32768,
+    "max": 32767,
+    "access": "RO",
+    "category": "ENERGIE"
+  },
+  "54": {
+    "name_de": "WAERMEERTRAG_WW_KWH",
+    "unit": "kWh",
+    "wtype": 11,
+    "min": -2147483648,
+    "max": 2147483647,
+    "access": "RO",
+    "category": "ENERGIE"
+  },
+  "55": {
+    "name_de": "WAERMEERTRAG_WW_SUMME_KWH",
+    "unit": "kWh",
+    "wtype": 1,
+    "min": -32768,
+    "max": 32767,
+    "access": "RO",
+    "category": "ENERGIE"
+  },
+  "56": {
+    "name_de": "WAERMEERTRAG_WW_SUMME_MWH",
+    "unit": "MWh",
+    "wtype": 11,
+    "min": -2147483648,
+    "max": 2147483647,
+    "access": "RO",
+    "category": "ENERGIE"
+  },
+  "57": {
+    "name_de": "WAERMEERTRAG_KUEHLEN_KWH",
+    "unit": "kWh",
+    "wtype": 1,
+    "min": -32768,
+    "max": 32767,
+    "access": "RO",
+    "category": "ENERGIE"
+  },
+  "58": {
+    "name_de": "WAERMEERTRAG_KUEHLEN_SUMME_KWH",
+    "unit": "kWh",
+    "wtype": 1,
+    "min": -32768,
+    "max": 32767,
+    "access": "RO",
+    "category": "ENERGIE"
+  },
+  "59": {
+    "name_de": "WAERMEERTRAG_KUEHLEN_SUMME_MWH",
+    "unit": "MWh",
+    "wtype": 11,
+    "min": -2147483648,
+    "max": 2147483647,
+    "access": "RO",
+    "category": "ENERGIE"
+  },
+  "60": {
+    "name_de": "WAERMEERTRAG_SOLAR_KWH",
+    "unit": "kWh",
+    "wtype": 1,
+    "min": -32768,
+    "max": 32767,
+    "access": "RO",
+    "category": "SOLAR"
+  },
+  "61": {
+    "name_de": "WAERMEERTRAG_SOLAR_SUMME_KWH",
+    "unit": "kWh",
+    "wtype": 1,
+    "min": -32768,
+    "max": 32767,
+    "access": "RO",
+    "category": "SOLAR"
+  },
+  "62": {
+    "name_de": "WAERMEERTRAG_SOLAR_SUMME_MWH",
+    "unit": "MWh",
+    "wtype": 11,
+    "min": -2147483648,
+    "max": 2147483647,
+    "access": "RO",
+    "category": "SOLAR"
+  },
+  "63": {
+    "name_de": "WAERMEERTRAG_ABTAUEN_WH",
+    "unit": "Wh",
+    "wtype": 1,
+    "min": -32768,
+    "max": 32767,
+    "access": "RO",
+    "category": "WP"
+  },
+  "64": {
+    "name_de": "WAERMEERTRAG_ABTAUEN_KWH",
+    "unit": "kWh",
+    "wtype": 11,
+    "min": -2147483648,
+    "max": 2147483647,
+    "access": "RO",
+    "category": "WP"
+  },
+  "65": {
+    "name_de": "WAERMEERTRAG_ABTAUEN_SUMME_KWH",
+    "unit": "kWh",
+    "wtype": 1,
+    "min": -32768,
+    "max": 32767,
+    "access": "RO",
+    "category": "WP"
+  },
+  "66": {
+    "name_de": "WAERMEERTRAG_ABTAUEN_SUMME_MWH",
+    "unit": "MWh",
+    "wtype": 11,
+    "min": -2147483648,
+    "max": 2147483647,
+    "access": "RO",
+    "category": "WP"
+  },
+  "67": {
+    "name_de": "WAERMEERTRAG_ZUSATZHEIZUNG_WH",
+    "unit": "Wh",
+    "wtype": 1,
+    "min": -32768,
+    "max": 32767,
+    "access": "RO",
+    "category": "HEIZUNG"
+  },
+  "68": {
+    "name_de": "WAERMEERTRAG_ZUSATZHEIZUNG_KWH",
+    "unit": "kWh",
+    "wtype": 11,
+    "min": -2147483648,
+    "max": 2147483647,
+    "access": "RO",
+    "category": "HEIZUNG"
+  },
+  "69": {
+    "name_de": "WAERMEERTRAG_ZUSATZHEIZUNG_SUMME_KWH",
+    "unit": "kWh",
+    "wtype": 1,
+    "min": -32768,
+    "max": 32767,
+    "access": "RO",
+    "category": "HEIZUNG"
+  },
+  "70": {
+    "name_de": "WAERMEERTRAG_ZUSATZHEIZUNG_SUMME_MWH",
+    "unit": "MWh",
+    "wtype": 11,
+    "min": -2147483648,
+    "max": 2147483647,
+    "access": "RO",
+    "category": "HEIZUNG"
+  },
+  "83": {
+    "name_de": "HEIZKREISPUMPE_AKTIV",
+    "unit": "",
+    "wtype": 6,
+    "min": 0,
+    "max": 1,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "85": {
+    "name_de": "MISCHER_AKTIV",
+    "unit": "",
+    "wtype": 6,
+    "min": 0,
+    "max": 1,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "86": {
+    "name_de": "MISCHER_MAX_VORLAUF",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 20,
+    "max": 30,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "87": {
+    "name_de": "MISCHER_MAX_DELTA",
+    "unit": "K",
+    "wtype": 2,
+    "min": 1,
+    "max": 5,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "88": {
+    "name_de": "MISCHER_MIN_VORLAUF",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 7,
+    "max": 25,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "89": {
+    "name_de": "MISCHER_FREIGABE",
+    "unit": "",
+    "wtype": 6,
+    "min": 0,
+    "max": 1,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "90": {
+    "name_de": "HK1_MAX_VORLAUF",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 20,
+    "max": 30,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "91": {
+    "name_de": "HK1_MAX_DELTA",
+    "unit": "K",
+    "wtype": 2,
+    "min": 1,
+    "max": 5,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "92": {
+    "name_de": "HK1_MIN_VORLAUF",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 7,
+    "max": 25,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "93": {
+    "name_de": "HK1_RAUMFUEHLER_AKTIV",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 1,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "94": {
+    "name_de": "HK1_HEIZKURVE_STEILHEIT",
+    "unit": "K/d",
+    "wtype": 6,
+    "min": 1,
+    "max": 10,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "95": {
+    "name_de": "HK1_HEIZKURVE_PARALLELVERSCHIEBUNG",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 20,
+    "max": 40,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "96": {
+    "name_de": "HK1_ABSENKUNG_TAGE",
+    "unit": "d",
+    "wtype": 6,
+    "min": 0,
+    "max": 5,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "97": {
+    "name_de": "HK1_ABSENKUNG_TEMPERATUR",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 20,
+    "max": 50,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "98": {
+    "name_de": "HK1_ABSENKUNG_DAUER",
+    "unit": "d",
+    "wtype": 6,
+    "min": 0,
+    "max": 5,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "99": {
+    "name_de": "HK2_TAG",
+    "unit": "",
+    "wtype": 8,
+    "min": 1,
+    "max": 31,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "100": {
+    "name_de": "HK2_MONAT",
+    "unit": "",
+    "wtype": 8,
+    "min": 1,
+    "max": 12,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "101": {
+    "name_de": "HK2_TAG_WW",
+    "unit": "",
+    "wtype": 8,
+    "min": 1,
+    "max": 31,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "102": {
+    "name_de": "HK2_MONAT_WW",
+    "unit": "",
+    "wtype": 8,
+    "min": 1,
+    "max": 12,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "103": {
+    "name_de": "HK2_RAUMFUEHLER_AKTIV",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 1,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "104": {
+    "name_de": "HK2_HEIZKURVE",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "105": {
+    "name_de": "HK2_ABSENKUNG_TEMPERATUR",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 3,
+    "max": 30,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "106": {
+    "name_de": "HK2_RAUMFUEHLER_FREIGABE",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 1,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+    "108": {
+    "name_de": "HK2_HEIZKURVE_PARALLELVERSCHIEBUNG",
+    "unit": "°C",
+    "wtype": 2,
+    "min": -5,
+    "max": 30,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "109": {
+    "name_de": "HK2_ABSENKUNG_DAUER",
+    "unit": "min",
+    "wtype": 8,
+    "min": 1,
+    "max": 120,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "111": {
+    "name_de": "HK2_ABSENKUNG_TAGE",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 8,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "112": {
+    "name_de": "ANLAGENSTATUS",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 7,
+    "access": "RO",
+    "category": "INFO"
+  },
+  "113": {
+    "name_de": "WW_MAX_TEMPERATUR",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 20,
+    "max": 65,
+    "access": "RW",
+    "category": "WARMWASSER"
+  },
+  "114": {
+    "name_de": "WW_ZEITPROGRAMM_DAUER",
+    "unit": "",
+    "wtype": 8,
+    "min": 30,
+    "max": 240,
+    "access": "RW",
+    "category": "WARMWASSER"
+  },
+  "115": {
+    "name_de": "WW_MAX_TEMPERATUR_2",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 20,
+    "max": 60,
+    "access": "RW",
+    "category": "WARMWASSER"
+  },
+  "116": {
+    "name_de": "WP_VORLAUFISTTEMPERATUR_2",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 0,
+    "max": 40,
+    "access": "RO",
+    "category": "WP"
+  },
+  "117": {
+    "name_de": "WP_RUECKLAUFISTTEMPERATUR_2",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 0,
+    "max": 40,
+    "access": "RO",
+    "category": "WP"
+  },
+  "118": {
+    "name_de": "WP_VERDICHTERAUFTEMP_2",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 0,
+    "max": 90,
+    "access": "RO",
+    "category": "WP"
+  },
+  "119": {
+    "name_de": "HK1_MAX_VORLAUF_DELTA",
+    "unit": "K",
+    "wtype": 2,
+    "min": 1,
+    "max": 15,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "120": {
+    "name_de": "HK1_MIN_VORLAUF_DELTA",
+    "unit": "K",
+    "wtype": 2,
+    "min": 1,
+    "max": 10,
+    "access": "RW",
+    "category": "HEIZUNG"
+  }
+}
+{
+  "121": {
+    "name_de": "HK2_MAX_VORLAUF",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 20,
+    "max": 30,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "122": {
+    "name_de": "HK2_MAX_DELTA",
+    "unit": "K",
+    "wtype": 2,
+    "min": 1,
+    "max": 5,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "123": {
+    "name_de": "HK2_MIN_VORLAUF",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 7,
+    "max": 25,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "124": {
+    "name_de": "HK2_MAX_VORLAUF_DELTA",
+    "unit": "K",
+    "wtype": 2,
+    "min": 1,
+    "max": 15,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "125": {
+    "name_de": "HK2_MIN_VORLAUF_DELTA",
+    "unit": "K",
+    "wtype": 2,
+    "min": 1,
+    "max": 10,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "126": {
+    "name_de": "HK1_PUMPE_MAX_DREHZAHL",
+    "unit": "%",
+    "wtype": 6,
+    "min": 20,
+    "max": 100,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "127": {
+    "name_de": "HK1_PUMPE_MIN_DREHZAHL",
+    "unit": "%",
+    "wtype": 6,
+    "min": 10,
+    "max": 80,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "128": {
+    "name_de": "HK2_PUMPE_MAX_DREHZAHL",
+    "unit": "%",
+    "wtype": 6,
+    "min": 20,
+    "max": 100,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "129": {
+    "name_de": "HK2_PUMPE_MIN_DREHZAHL",
+    "unit": "%",
+    "wtype": 6,
+    "min": 10,
+    "max": 80,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "130": {
+    "name_de": "WP_PUMPE_MAX_DREHZAHL",
+    "unit": "%",
+    "wtype": 6,
+    "min": 20,
+    "max": 100,
+    "access": "RW",
+    "category": "WP"
+  },
+  "131": {
+    "name_de": "WP_PUMPE_MIN_DREHZAHL",
+    "unit": "%",
+    "wtype": 6,
+    "min": 10,
+    "max": 80,
+    "access": "RW",
+    "category": "WP"
+  },
+  "132": {
+    "name_de": "WP_VERDICHTERDREHZAHL",
+    "unit": "Hz",
+    "wtype": 6,
+    "min": 0,
+    "max": 120,
+    "access": "RO",
+    "category": "WP"
+  },
+  "133": {
+    "name_de": "WP_VERDICHTERLEISTUNG",
+    "unit": "W",
+    "wtype": 11,
+    "min": 0,
+    "max": 10000,
+    "access": "RO",
+    "category": "WP"
+  },
+  "134": {
+    "name_de": "WP_ABTAUEN_AKTIV",
+    "unit": "",
+    "wtype": 6,
+    "min": 0,
+    "max": 1,
+    "access": "RO",
+    "category": "WP"
+  },
+  "135": {
+    "name_de": "WP_ABTAUEN_VERBLEIBEND",
+    "unit": "s",
+    "wtype": 6,
+    "min": 0,
+    "max": 900,
+    "access": "RO",
+    "category": "WP"
+  },
+  "136": {
+    "name_de": "WP_ABTAUEN_VERDAMPFERTEMP",
+    "unit": "°C",
+    "wtype": 2,
+    "min": -40,
+    "max": 30,
+    "access": "RO",
+    "category": "WP"
+  },
+  "137": {
+    "name_de": "WP_ABTAUEN_HEISSGASTEMP",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 10,
+    "max": 120,
+    "access": "RO",
+    "category": "WP"
+  },
+  "138": {
+    "name_de": "WP_ABTAUEN_VORLAUF",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 10,
+    "max": 90,
+    "access": "RO",
+    "category": "WP"
+  },
+  "139": {
+    "name_de": "WP_ABTAUEN_RUECKLAUF",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 10,
+    "max": 90,
+    "access": "RO",
+    "category": "WP"
+  },
+  "140": {
+    "name_de": "WP_ABTAUEN_STATUS",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 7,
+    "access": "RO",
+    "category": "WP"
+  },
+  "141": {
+    "name_de": "WP_VERDICHTER_STARTS",
+    "unit": "",
+    "wtype": 11,
+    "min": 0,
+    "max": 2147483647,
+    "access": "RO",
+    "category": "WP"
+  },
+  "142": {
+    "name_de": "WP_VERDICHTER_LAUFZEIT",
+    "unit": "h",
+    "wtype": 11,
+    "min": 0,
+    "max": 2147483647,
+    "access": "RO",
+    "category": "WP"
+  },
+  "143": {
+    "name_de": "WP_VERDICHTER_LAUFZEIT_TAG",
+    "unit": "min",
+    "wtype": 11,
+    "min": 0,
+    "max": 1440,
+    "access": "RO",
+    "category": "WP"
+  },
+  "144": {
+    "name_de": "WP_VERDICHTER_LAUFZEIT_WOCHE",
+    "unit": "min",
+    "wtype": 11,
+    "min": 0,
+    "max": 10080,
+    "access": "RO",
+    "category": "WP"
+  },
+  "145": {
+    "name_de": "WP_VERDICHTER_LAUFZEIT_MONAT",
+    "unit": "min",
+    "wtype": 11,
+    "min": 0,
+    "max": 44640,
+    "access": "RO",
+    "category": "WP"
+  },
+  "146": {
+    "name_de": "WP_VERDICHTER_LAUFZEIT_JAHR",
+    "unit": "min",
+    "wtype": 11,
+    "min": 0,
+    "max": 525600,
+    "access": "RO",
+    "category": "WP"
+  },
+  "147": {
+    "name_de": "WP_VERDICHTER_LAUFZEIT_SUMME",
+    "unit": "h",
+    "wtype": 11,
+    "min": 0,
+    "max": 2147483647,
+    "access": "RO",
+    "category": "WP"
+  },
+  "148": {
+    "name_de": "WP_VERDICHTER_STARTS_SUMME",
+    "unit": "",
+    "wtype": 11,
+    "min": 0,
+    "max": 2147483647,
+    "access": "RO",
+    "category": "WP"
+  },
+  "149": {
+    "name_de": "WP_STATUS",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 15,
+    "access": "RO",
+    "category": "WP"
+  },
+  "150": {
+    "name_de": "WP_STOERUNG",
+    "unit": "",
+    "wtype": 6,
+    "min": 0,
+    "max": 1,
+    "access": "RO",
+    "category": "WP"
+  },
+  "151": {
+    "name_de": "WP_STOERUNG_CODE",
+    "unit": "",
+    "wtype": 11,
+    "min": 0,
+    "max": 65535,
+    "access": "RO",
+    "category": "WP"
+  },
+  "152": {
+    "name_de": "WP_STOERUNG_TIMESTAMP",
+    "unit": "",
+    "wtype": 11,
+    "min": 0,
+    "max": 4294967295,
+    "access": "RO",
+    "category": "WP"
+  },
+  "153": {
+    "name_de": "WP_HOCHDRUCK",
+    "unit": "",
+    "wtype": 6,
+    "min": 0,
+    "max": 1,
+    "access": "RO",
+    "category": "WP"
+  },
+  "154": {
+    "name_de": "WP_NIEDERDRUCK",
+    "unit": "",
+    "wtype": 6,
+    "min": 0,
+    "max": 1,
+    "access": "RO",
+    "category": "WP"
+  },
+  "155": {
+    "name_de": "WP_FROSTSCHUTZ",
+    "unit": "",
+    "wtype": 6,
+    "min": 0,
+    "max": 1,
+    "access": "RO",
+    "category": "WP"
+  },
+  "156": {
+    "name_de": "WP_SICHERHEITSTHERMO",
+    "unit": "",
+    "wtype": 6,
+    "min": 0,
+    "max": 1,
+    "access": "RO",
+    "category": "WP"
+  },
+  "157": {
+    "name_de": "WP_HOCHDRUCK_VERDICHTER",
+    "unit": "",
+    "wtype": 6,
+    "min": 0,
+    "max": 1,
+    "access": "RO",
+    "category": "WP"
+  },
+  "158": {
+    "name_de": "WP_NIEDERDRUCK_VERDICHTER",
+    "unit": "",
+    "wtype": 6,
+    "min": 0,
+    "max": 1,
+    "access": "RO",
+    "category": "WP"
+  },
+  "159": {
+    "name_de": "WP_FROSTSCHUTZ_VERDICHTER",
+    "unit": "",
+    "wtype": 6,
+    "min": 0,
+    "max": 1,
+    "access": "RO",
+    "category": "WP"
+  },
+  "160": {
+    "name_de": "WP_SICHERHEITSTHERMO_VERDICHTER",
+    "unit": "",
+    "wtype": 6,
+    "min": 0,
+    "max": 1,
+    "access": "RO",
+    "category": "WP"
+  },
+  "161": {
+    "name_de": "WP_VERDICHTERUEBERLAST",
+    "unit": "",
+    "wtype": 6,
+    "min": 0,
+    "max": 1,
+    "access": "RO",
+    "category": "WP"
+  },
+  "162": {
+    "name_de": "WP_VERDICHTERUEBERLAST_RUECKSETZ",
+    "unit": "",
+    "wtype": 6,
+    "min": 0,
+    "max": 1,
+    "access": "RW",
+    "category": "WP"
+  },
+  "163": {
+    "name_de": "WP_VERDICHTERUEBERLAST_STATUS",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "WP"
+  },
+  "164": {
+    "name_de": "WP_VERDICHTERUEBERLAST_TIMESTAMP",
+    "unit": "",
+    "wtype": 11,
+    "min": 0,
+    "max": 4294967295,
+    "access": "RO",
+    "category": "WP"
+  },
+  "165": {
+    "name_de": "WP_VERDICHTERUEBERLAST_CODE",
+    "unit": "",
+    "wtype": 11,
+    "min": 0,
+    "max": 65535,
+    "access": "RO",
+    "category": "WP"
+  },
+  "166": {
+    "name_de": "WP_VERDICHTERUEBERLAST_ANZAHL",
+    "unit": "",
+    "wtype": 11,
+    "min": 0,
+    "max": 2147483647,
+    "access": "RO",
+    "category": "WP"
+  },
+  "167": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME",
+    "unit": "",
+    "wtype": 11,
+    "min": 0,
+    "max": 2147483647,
+    "access": "RO",
+    "category": "WP"
+  },
+  "168": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_TIMESTAMP",
+    "unit": "",
+    "wtype": 11,
+    "min": 0,
+    "max": 4294967295,
+    "access": "RO",
+    "category": "WP"
+  },
+  "169": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_CODE",
+    "unit": "",
+    "wtype": 11,
+    "min": 0,
+    "max": 65535,
+    "access": "RO",
+    "category": "WP"
+  },
+  "170": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_ANZAHL",
+    "unit": "",
+    "wtype": 11,
+    "min": 0,
+    "max": 2147483647,
+    "access": "RO",
+    "category": "WP"
+  },
+  "171": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_STATUS",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "WP"
+  },
+  "172": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_RUECKSETZ",
+    "unit": "",
+    "wtype": 6,
+    "min": 0,
+    "max": 1,
+    "access": "RW",
+    "category": "WP"
+  },
+  "173": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_RUECKSETZ_STATUS",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "WP"
+  },
+  "174": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_RUECKSETZ_TIMESTAMP",
+    "unit": "",
+    "wtype": 11,
+    "min": 0,
+    "max": 4294967295,
+    "access": "RO",
+    "category": "WP"
+  },
+  "175": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_RUECKSETZ_CODE",
+    "unit": "",
+    "wtype": 11,
+    "min": 0,
+    "max": 65535,
+    "access": "RO",
+    "category": "WP"
+  },
+  "176": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_RUECKSETZ_ANZAHL",
+    "unit": "",
+    "wtype": 11,
+    "min": 0,
+    "max": 2147483647,
+    "access": "RO",
+    "category": "WP"
+  },
+  "177": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_RUECKSETZ_STATUS_2",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "WP"
+  },
+  "178": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_RUECKSETZ_STATUS_3",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "WP"
+  },
+  "179": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_RUECKSETZ_STATUS_4",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "WP"
+  },
+  "180": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_RUECKSETZ_STATUS_5",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "WP"
+  },
+  "181": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_RUECKSETZ_STATUS_6",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "WP"
+  },
+  "182": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_RUECKSETZ_STATUS_7",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "WP"
+  },
+  "183": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_RUECKSETZ_STATUS_8",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "WP"
+  },
+  "184": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_RUECKSETZ_STATUS_9",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "WP"
+  },
+  "185": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_RUECKSETZ_STATUS_10",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "WP"
+  },
+  "186": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_RUECKSETZ_STATUS_11",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "WP"
+  },
+  "187": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_RUECKSETZ_STATUS_12",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "WP"
+  },
+  "188": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_RUECKSETZ_STATUS_13",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "WP"
+  },
+  "189": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_RUECKSETZ_STATUS_14",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "WP"
+  },
+  "190": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_RUECKSETZ_STATUS_15",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "WP"
+  },
+  "191": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_RUECKSETZ_STATUS_16",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "WP"
+  },
+  "192": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_RUECKSETZ_STATUS_17",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "WP"
+  },
+  "193": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_RUECKSETZ_STATUS_18",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "WP"
+  },
+  "194": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_RUECKSETZ_STATUS_19",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "WP"
+  },
+  "195": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_RUECKSETZ_STATUS_20",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "WP"
+  },
+  "196": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_RUECKSETZ_STATUS_21",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "WP"
+  },
+  "197": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_RUECKSETZ_STATUS_22",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "WP"
+  },
+  "198": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_RUECKSETZ_STATUS_23",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "WP"
+  },
+  "199": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_RUECKSETZ_STATUS_24",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "WP"
+  },
+  "200": {
+    "name_de": "WP_VERDICHTERUEBERLAST_SUMME_RUECKSETZ_STATUS_25",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "WP"
+  }
+}
+{
+  "201": {
+    "name_de": "WP_HOCHDRUCKSCHALTER",
+    "unit": "",
+    "wtype": 6,
+    "min": 0,
+    "max": 1,
+    "access": "RO",
+    "category": "WP"
+  },
+  "202": {
+    "name_de": "WP_NIEDERDRUCKSCHALTER",
+    "unit": "",
+    "wtype": 6,
+    "min": 0,
+    "max": 1,
+    "access": "RO",
+    "category": "WP"
+  },
+  "203": {
+    "name_de": "WP_FROSTSCHUTZSCHALTER",
+    "unit": "",
+    "wtype": 6,
+    "min": 0,
+    "max": 1,
+    "access": "RO",
+    "category": "WP"
+  },
+  "204": {
+    "name_de": "WP_SICHERHEITSTHERMOSTAT",
+    "unit": "",
+    "wtype": 6,
+    "min": 0,
+    "max": 1,
+    "access": "RO",
+    "category": "WP"
+  },
+  "205": {
+    "name_de": "WP_HOCHDRUCKSCHALTER_STATUS",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "WP"
+  },
+  "206": {
+    "name_de": "WP_NIEDERDRUCKSCHALTER_STATUS",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "WP"
+  },
+  "207": {
+    "name_de": "WP_FROSTSCHUTZSCHALTER_STATUS",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "WP"
+  },
+  "208": {
+    "name_de": "WP_SICHERHEITSTHERMOSTAT_STATUS",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "WP"
+  },
+  "209": {
+    "name_de": "WP_DRUCK_GAS",
+    "unit": "bar",
+    "wtype": 2,
+    "min": 0,
+    "max": 40,
+    "access": "RO",
+    "category": "WP"
+  },
+  "210": {
+    "name_de": "WP_DRUCK_FLUESSIG",
+    "unit": "bar",
+    "wtype": 2,
+    "min": 0,
+    "max": 40,
+    "access": "RO",
+    "category": "WP"
+  },
+  "211": {
+    "name_de": "WP_SAUGGASTEMPERATUR",
+    "unit": "°C",
+    "wtype": 2,
+    "min": -40,
+    "max": 40,
+    "access": "RO",
+    "category": "WP"
+  },
+  "212": {
+    "name_de": "WP_HEISSGASTEMPERATUR",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 10,
+    "max": 120,
+    "access": "RO",
+    "category": "WP"
+  },
+  "213": {
+    "name_de": "WP_UEBERHITZUNG",
+    "unit": "K",
+    "wtype": 2,
+    "min": 0,
+    "max": 30,
+    "access": "RO",
+    "category": "WP"
+  },
+  "214": {
+    "name_de": "WP_UNTERKUEHLUNG",
+    "unit": "K",
+    "wtype": 2,
+    "min": 0,
+    "max": 30,
+    "access": "RO",
+    "category": "WP"
+  },
+  "215": {
+    "name_de": "WP_EXPANSIONSVENTIL_POSITION",
+    "unit": "%",
+    "wtype": 6,
+    "min": 0,
+    "max": 100,
+    "access": "RO",
+    "category": "WP"
+  },
+  "216": {
+    "name_de": "WP_EXPANSIONSVENTIL_SOLL",
+    "unit": "%",
+    "wtype": 6,
+    "min": 0,
+    "max": 100,
+    "access": "RO",
+    "category": "WP"
+  },
+  "217": {
+    "name_de": "WP_EXPANSIONSVENTIL_STATUS",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 7,
+    "access": "RO",
+    "category": "WP"
+  },
+  "218": {
+    "name_de": "WP_VERDAMPFERDRUCK",
+    "unit": "bar",
+    "wtype": 2,
+    "min": 0,
+    "max": 40,
+    "access": "RO",
+    "category": "WP"
+  },
+  "219": {
+    "name_de": "WP_KONDENSATORDRUCK",
+    "unit": "bar",
+    "wtype": 2,
+    "min": 0,
+    "max": 40,
+    "access": "RO",
+    "category": "WP"
+  },
+  "220": {
+    "name_de": "WP_VERDAMPFERLEISTUNG",
+    "unit": "W",
+    "wtype": 11,
+    "min": 0,
+    "max": 15000,
+    "access": "RO",
+    "category": "WP"
+  },
+  "221": {
+    "name_de": "WP_KONDENSATORLEISTUNG",
+    "unit": "W",
+    "wtype": 11,
+    "min": 0,
+    "max": 15000,
+    "access": "RO",
+    "category": "WP"
+  },
+  "222": {
+    "name_de": "WP_VERDAMPFERUEBERHITZUNG_SOLL",
+    "unit": "K",
+    "wtype": 2,
+    "min": 0,
+    "max": 20,
+    "access": "RO",
+    "category": "WP"
+  },
+  "223": {
+    "name_de": "WP_VERDAMPFERUEBERHITZUNG_IST",
+    "unit": "K",
+    "wtype": 2,
+    "min": 0,
+    "max": 20,
+    "access": "RO",
+    "category": "WP"
+  },
+  "224": {
+    "name_de": "WP_KONDENSATOR_UNTERKUEHLUNG_SOLL",
+    "unit": "K",
+    "wtype": 2,
+    "min": 0,
+    "max": 20,
+    "access": "RO",
+    "category": "WP"
+  },
+  "225": {
+    "name_de": "WP_KONDENSATOR_UNTERKUEHLUNG_IST",
+    "unit": "K",
+    "wtype": 2,
+    "min": 0,
+    "max": 20,
+    "access": "RO",
+    "category": "WP"
+  },
+  "226": {
+    "name_de": "WP_VERDICHTERFREQUENZ_SOLL",
+    "unit": "Hz",
+    "wtype": 6,
+    "min": 0,
+    "max": 120,
+    "access": "RO",
+    "category": "WP"
+  },
+  "227": {
+    "name_de": "WP_VERDICHTERFREQUENZ_IST",
+    "unit": "Hz",
+    "wtype": 6,
+    "min": 0,
+    "max": 120,
+    "access": "RO",
+    "category": "WP"
+  },
+  "228": {
+    "name_de": "WP_VERDICHTERLEISTUNG_SOLL",
+    "unit": "W",
+    "wtype": 11,
+    "min": 0,
+    "max": 15000,
+    "access": "RO",
+    "category": "WP"
+  },
+  "229": {
+    "name_de": "WP_VERDICHTERLEISTUNG_IST",
+    "unit": "W",
+    "wtype": 11,
+    "min": 0,
+    "max": 15000,
+    "access": "RO",
+    "category": "WP"
+  },
+  "230": {
+    "name_de": "WP_KONDENSATORLEISTUNG_SOLL",
+    "unit": "W",
+    "wtype": 11,
+    "min": 0,
+    "max": 15000,
+    "access": "RO",
+    "category": "WP"
+  },
+  "231": {
+    "name_de": "WP_KONDENSATORLEISTUNG_IST",
+    "unit": "W",
+    "wtype": 11,
+    "min": 0,
+    "max": 15000,
+    "access": "RO",
+    "category": "WP"
+  },
+  "232": {
+    "name_de": "WP_VERDAMPFERLEISTUNG_SOLL",
+    "unit": "W",
+    "wtype": 11,
+    "min": 0,
+    "max": 15000,
+    "access": "RO",
+    "category": "WP"
+  },
+  "233": {
+    "name_de": "WP_VERDAMPFERLEISTUNG_IST",
+    "unit": "W",
+    "wtype": 11,
+    "min": 0,
+    "max": 15000,
+    "access": "RO",
+    "category": "WP"
+  },
+  "234": {
+    "name_de": "WP_KONDENSATOR_UNTERKUEHLUNG",
+    "unit": "K",
+    "wtype": 2,
+    "min": 0,
+    "max": 30,
+    "access": "RO",
+    "category": "WP"
+  },
+  "235": {
+    "name_de": "WP_VERDAMPFERUEBERHITZUNG",
+    "unit": "K",
+    "wtype": 2,
+    "min": 0,
+    "max": 30,
+    "access": "RO",
+    "category": "WP"
+  },
+  "236": {
+    "name_de": "WP_KONDENSATOR_DRUCK_SOLL",
+    "unit": "bar",
+    "wtype": 2,
+    "min": 0,
+    "max": 40,
+    "access": "RO",
+    "category": "WP"
+  },
+  "237": {
+    "name_de": "WP_KONDENSATOR_DRUCK_IST",
+    "unit": "bar",
+    "wtype": 2,
+    "min": 0,
+    "max": 40,
+    "access": "RO",
+    "category": "WP"
+  },
+  "238": {
+    "name_de": "WP_VERDAMPFER_DRUCK_SOLL",
+    "unit": "bar",
+    "wtype": 2,
+    "min": 0,
+    "max": 40,
+    "access": "RO",
+    "category": "WP"
+  },
+  "239": {
+    "name_de": "WP_VERDAMPFER_DRUCK_IST",
+    "unit": "bar",
+    "wtype": 2,
+    "min": 0,
+    "max": 40,
+    "access": "RO",
+    "category": "WP"
+  },
+  "240": {
+    "name_de": "WP_VERDICHTER_STARTS_HEUTE",
+    "unit": "",
+    "wtype": 11,
+    "min": 0,
+    "max": 1000,
+    "access": "RO",
+    "category": "WP"
+  }
+}
+{
+  "241": {
+    "name_de": "WP_VERDICHTER_STARTS_GESTERN",
+    "unit": "",
+    "wtype": 11,
+    "min": 0,
+    "max": 1000,
+    "access": "RO",
+    "category": "WP"
+  },
+  "242": {
+    "name_de": "WP_VERDICHTER_STARTS_WOCHE",
+    "unit": "",
+    "wtype": 11,
+    "min": 0,
+    "max": 5000,
+    "access": "RO",
+    "category": "WP"
+  },
+  "243": {
+    "name_de": "WP_VERDICHTER_STARTS_MONAT",
+    "unit": "",
+    "wtype": 11,
+    "min": 0,
+    "max": 20000,
+    "access": "RO",
+    "category": "WP"
+  },
+  "244": {
+    "name_de": "WP_VERDICHTER_STARTS_JAHR",
+    "unit": "",
+    "wtype": 11,
+    "min": 0,
+    "max": 200000,
+    "access": "RO",
+    "category": "WP"
+  },
+  "245": {
+    "name_de": "WP_VERDICHTER_STARTS_SUMME_2",
+    "unit": "",
+    "wtype": 11,
+    "min": 0,
+    "max": 2147483647,
+    "access": "RO",
+    "category": "WP"
+  },
+  "246": {
+    "name_de": "WP_VERDICHTER_LAUFZEIT_HEUTE",
+    "unit": "min",
+    "wtype": 11,
+    "min": 0,
+    "max": 1440,
+    "access": "RO",
+    "category": "WP"
+  },
+  "247": {
+    "name_de": "WP_VERDICHTER_LAUFZEIT_GESTERN",
+    "unit": "min",
+    "wtype": 11,
+    "min": 0,
+    "max": 1440,
+    "access": "RO",
+    "category": "WP"
+  },
+  "248": {
+    "name_de": "WP_VERDICHTER_LAUFZEIT_WOCHE_2",
+    "unit": "min",
+    "wtype": 11,
+    "min": 0,
+    "max": 10080,
+    "access": "RO",
+    "category": "WP"
+  },
+  "249": {
+    "name_de": "WP_VERDICHTER_LAUFZEIT_MONAT_2",
+    "unit": "min",
+    "wtype": 11,
+    "min": 0,
+    "max": 44640,
+    "access": "RO",
+    "category": "WP"
+  },
+  "250": {
+    "name_de": "WP_VERDICHTER_LAUFZEIT_JAHR_2",
+    "unit": "min",
+    "wtype": 11,
+    "min": 0,
+    "max": 525600,
+    "access": "RO",
+    "category": "WP"
+  },
+  "251": {
+    "name_de": "WP_VERDICHTER_LAUFZEIT_SUMME_2",
+    "unit": "h",
+    "wtype": 11,
+    "min": 0,
+    "max": 2147483647,
+    "access": "RO",
+    "category": "WP"
+  },
+  "252": {
+    "name_de": "HK1_PUMPE_DREHZAHL_IST",
+    "unit": "%",
+    "wtype": 6,
+    "min": 0,
+    "max": 100,
+    "access": "RO",
+    "category": "HEIZUNG"
+  },
+  "253": {
+    "name_de": "HK2_PUMPE_DREHZAHL_IST",
+    "unit": "%",
+    "wtype": 6,
+    "min": 0,
+    "max": 100,
+    "access": "RO",
+    "category": "HEIZUNG"
+  },
+  "254": {
+    "name_de": "WP_PUMPE_DREHZAHL_IST",
+    "unit": "%",
+    "wtype": 6,
+    "min": 0,
+    "max": 100,
+    "access": "RO",
+    "category": "WP"
+  },
+  "255": {
+    "name_de": "HK1_PUMPE_DREHZAHL_SOLL",
+    "unit": "%",
+    "wtype": 6,
+    "min": 0,
+    "max": 100,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "256": {
+    "name_de": "HK2_PUMPE_DREHZAHL_SOLL",
+    "unit": "%",
+    "wtype": 6,
+    "min": 0,
+    "max": 100,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "257": {
+    "name_de": "WP_PUMPE_DREHZAHL_SOLL",
+    "unit": "%",
+    "wtype": 6,
+    "min": 0,
+    "max": 100,
+    "access": "RW",
+    "category": "WP"
+  },
+  "258": {
+    "name_de": "HK1_PUMPE_STATUS",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "HEIZUNG"
+  },
+  "259": {
+    "name_de": "HK2_PUMPE_STATUS",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "HEIZUNG"
+  },
+  "260": {
+    "name_de": "WP_PUMPE_STATUS",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 3,
+    "access": "RO",
+    "category": "WP"
+  },
+  "261": {
+    "name_de": "HK1_MISCHER_POSITION",
+    "unit": "%",
+    "wtype": 6,
+    "min": 0,
+    "max": 100,
+    "access": "RO",
+    "category": "HEIZUNG"
+  },
+  "262": {
+    "name_de": "HK2_MISCHER_POSITION",
+    "unit": "%",
+    "wtype": 6,
+    "min": 0,
+    "max": 100,
+    "access": "RO",
+    "category": "HEIZUNG"
+  },
+  "263": {
+    "name_de": "HK1_MISCHER_STATUS",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 7,
+    "access": "RO",
+    "category": "HEIZUNG"
+  },
+  "264": {
+    "name_de": "HK2_MISCHER_STATUS",
+    "unit": "",
+    "wtype": 8,
+    "min": 0,
+    "max": 7,
+    "access": "RO",
+    "category": "HEIZUNG"
+  },
+  "265": {
+    "name_de": "HK1_VORLAUF_SOLL",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 10,
+    "max": 65,
+    "access": "RO",
+    "category": "HEIZUNG"
+  },
+  "266": {
+    "name_de": "HK1_VORLAUF_IST",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 10,
+    "max": 65,
+    "access": "RO",
+    "category": "HEIZUNG"
+  },
+  "267": {
+    "name_de": "HK2_VORLAUF_SOLL",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 10,
+    "max": 65,
+    "access": "RO",
+    "category": "HEIZUNG"
+  },
+  "268": {
+    "name_de": "HK2_VORLAUF_IST",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 10,
+    "max": 65,
+    "access": "RO",
+    "category": "HEIZUNG"
+  },
+  "269": {
+    "name_de": "HK1_RUECKLAUF_IST",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 10,
+    "max": 65,
+    "access": "RO",
+    "category": "HEIZUNG"
+  },
+  "270": {
+    "name_de": "HK2_RUECKLAUF_IST",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 10,
+    "max": 65,
+    "access": "RO",
+    "category": "HEIZUNG"
+  },
+  "271": {
+    "name_de": "HK1_RAUM_SOLL",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 5,
+    "max": 30,
+    "access": "RO",
+    "category": "HEIZUNG"
+  },
+  "272": {
+    "name_de": "HK2_RAUM_SOLL",
+    "unit": "°C",
+    "wtype": 2,
+    "min": 5,
+    "max": 30,
+    "access": "RO",
+    "category": "HEIZUNG"
+  },
+  "273": {
+    "name_de": "HK1_RAUM_IST",
+    "unit": "°C",
+    "wtype": 2,
+    "min": -20,
+    "max": 60,
+    "access": "RO",
+    "category": "HEIZUNG"
+  },
+  "274": {
+    "name_de": "HK2_RAUM_IST",
+    "unit": "°C",
+    "wtype": 2,
+    "min": -20,
+    "max": 60,
+    "access": "RO",
+    "category": "HEIZUNG"
+  },
+  "275": {
+    "name_de": "HK1_RAUM_OFFSET",
+    "unit": "K",
+    "wtype": 2,
+    "min": -5,
+    "max": 5,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "276": {
+    "name_de": "HK2_RAUM_OFFSET",
+    "unit": "K",
+    "wtype": 2,
+    "min": -5,
+    "max": 5,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "277": {
+    "name_de": "HK1_RAUM_EINFLUSS",
+    "unit": "%",
+    "wtype": 6,
+    "min": 0,
+    "max": 100,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "278": {
+    "name_de": "HK2_RAUM_EINFLUSS",
+    "unit": "%",
+    "wtype": 6,
+    "min": 0,
+    "max": 100,
+    "access": "RW",
+    "category": "HEIZUNG"
+  },
+  "279": {
+    "name_de": "HK1_HEIZKURVE_AKTIV",
+    "unit": "",
+    "wtype": 6,
+    "min": 0,
+    "max": 1,
+    "access": "RO",
+    "category": "HEIZUNG"
+  },
+  "280": {
+    "name_de": "HK2_HEIZKURVE_AKTIV",
+    "unit": "",
+    "wtype": 6,
+    "min": 0,
+    "max": 1,
+    "access": "RO",
+    "category": "HEIZUNG"
+  }
+}
+	  
+	  
+	  
+	  
+	  
+  },
+
+  "engineering": {},
+
+  "ui_tree": {},
+
+  "reverse_index": {},
+
+  "categories": {}
+}
