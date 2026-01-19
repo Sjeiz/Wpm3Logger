@@ -1,131 +1,95 @@
 {
-    "type": "object",
-    "description": "Manifest describing ISG tester registers with optional Modbus metadata.",
-    "patternProperties": {
-        "^[0-9]+$": {
-            "type": "object",
-            "required": [
-                "id",
-                "description",
-                "datatype",
-                "unit",
-                "access",
-                "min",
-                "max",
-                "category",
-                "show",
-                "analyze",
-                "modbus"
-            ],
-            "properties": {
-                "id": {
-                    "type": "integer",
-                    "description": "Register number as used by ISG tester."
-                },
-                "description": {
-                    "type": ["string", "null"],
-                    "description": "Human-readable description of the register."
-                },
-                "datatype": {
-                    "type": "string",
-                    "enum": ["int16", "uint16", "int32", "uint32"],
-                    "description": "Native datatype of the ISG tester value."
-                },
-                "unit": {
-                    "type": "string",
-                    "description": "Unit of measurement, empty string if none."
-                },
-                "access": {
-                    "type": "string",
-                    "enum": ["ro", "rw"],
-                    "description": "Read/write capability."
-                },
-                "min": {
-                    "type": ["number", "integer"],
-                    "description": "Minimum allowed value."
-                },
-                "max": {
-                    "type": ["number", "integer"],
-                    "description": "Maximum allowed value."
-                },
-                "category": {
-                    "type": "string",
-                    "description": "Logical grouping (sensor, flag, energy, engineering, unknown)."
-                },
-                "show": {
-                    "type": "boolean",
-                    "description": "Whether to show this register in UI."
-                },
-                "analyze": {
-                    "type": "boolean",
-                    "description": "Whether this register is used in analytics."
-                },
-                "modbus": {
-                    "type": ["object", "null"],
-                    "description": "Optional official Modbus mapping.",
-                    "properties": {
-                        "address": {
-                            "type": "integer",
-                            "description": "1-based Modbus register address."
-                        },
-                        "type": {
-                            "type": "string",
-                            "enum": ["input_register", "holding_register"],
-                            "description": "Modbus register type."
-                        },
-                        "span": {
-                            "type": "integer",
-                            "enum": [1, 2],
-                            "description": "Number of Modbus registers (1 for 16-bit, 2 for 32-bit)."
-                        }
-                    },
-                    "required": ["address", "type", "span"]
-                }
+  "type": "object",
+  "description": "Manifest describing ISG tester registers with optional Modbus and KNX metadata.",
+  "patternProperties": {
+    "^[0-9]+$": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "description",
+        "category",
+        "datatype",
+        "scaling",
+        "unit",
+        "access",
+        "min",
+        "max",
+        "show",
+        "analyze"
+      ],
+      "properties": {
+        "id": { "type": "integer" },
+        "name": { "type": "string" },
+        "description": { "type": ["string", "null"] },
+        "category": { "type": "string" },
+
+        "datatype": {
+          "type": "string",
+          "enum": ["int16", "uint16", "int32", "uint32"]
+        },
+
+        "scaling": {
+          "type": "number",
+          "description": "Multiplier applied to raw values (e.g. 1, 0.1, 0.01)."
+        },
+
+        "unit": { "type": "string" },
+        "access": {
+          "type": "string",
+          "enum": ["ro", "rw"]
+        },
+        "min": { "type": ["number", "integer"] },
+        "max": { "type": ["number", "integer"] },
+        "show": { "type": "boolean" },
+        "analyze": { "type": "boolean" },
+
+        "modbus": {
+          "type": ["object", "null"],
+          "properties": {
+            "address": { "type": "integer" },
+            "type": {
+              "type": "string",
+              "enum": ["input_register", "holding_register"]
             },
-            "knx": {
-                "type": ["object", "null"],
-                "description": "Optional official KNX mapping.",
-                "properties": {
-                    "commObjID": {
-                        "type": "integer",
-                        "description": "KNX communication object ID."
-                    },
-                    "dpt": {
-                        "type": "string",
-                        "description": "KNX datapoint type (e.g. 1.xxx, 5.xxx, 9.xxx, 14.xxx)."
-                    },
-                    "flags": {
-                        "type": "array",
-                        "items": {
-                            "type": "string",
-                            "enum": ["T", "U", "R", "W", "C"]
-                        },
-                        "description": "KNX object flags: T=Transmit, U=Update, R=Read, W=Write, C=Communication."
-                    },
-                    "priority": {
-                        "type": "string",
-                        "enum": ["low", "normal", "alarm"],
-                        "description": "KNX priority class."
-                    }
-                },
-                "required": ["commObjID"]
-            },
-            "sentinel": {
-                "type": ["object", "null"],
-                "description": "Optional register-specific sentinel values for notset and notavailable.",
-                "properties": {
-                    "notset": {
-                        "type": ["number", "integer", "null"],
-                        "description": "Value indicating that the register has not been set."
-                    },
-                    "notavailable": {
-                        "type": ["number", "integer", "null"],
-                        "description": "Value indicating that the register is currently not available."
-                    }
-                },
-                "required": []
+            "span": {
+              "type": "integer",
+              "enum": [1, 2]
             }
+          },
+          "required": ["address", "type", "span"]
+        },
+
+        "knx": {
+          "type": ["object", "null"],
+          "properties": {
+            "commObjID": { "type": "integer" },
+            "dpt": { "type": "string" },
+            "flags": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["T", "U", "R", "W", "C"]
+              }
+            },
+            "priority": {
+              "type": "string",
+              "enum": ["low", "normal", "alarm"]
+            }
+          },
+          "required": ["commObjID"]
+        },
+
+        "sentinel": {
+          "type": ["object", "null"],
+          "properties": {
+            "notset": { "type": ["number", "integer", "null"] },
+            "notavailable": { "type": ["number", "integer", "null"] }
+          }
         }
-    },
-    "additionalProperties": false
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
 }

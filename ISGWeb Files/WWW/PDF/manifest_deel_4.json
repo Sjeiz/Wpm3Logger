@@ -1,0 +1,1352 @@
+[
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 1, 
+    "datatype": null, 
+    "max": 31, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 6, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 0, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 237, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 1, 
+    "datatype": null, 
+    "max": 31, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 6, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 0, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 230, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 1, 
+    "datatype": null, 
+    "max": 12, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 6, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 0, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 231, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 99, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 6, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 0, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 232, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 5, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 6, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 0, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 233, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": -32768, 
+    "datatype": null, 
+    "max": 32767, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": 1, 
+      "type": "input_register", 
+      "address": 33524
+    }, 
+    "analyze": null, 
+    "id": 1050, 
+    "unit": "kWh", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": -2147483648, 
+    "datatype": null, 
+    "max": 2147483647, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": 1, 
+      "type": "input_register", 
+      "address": 33525
+    }, 
+    "analyze": null, 
+    "id": 1051, 
+    "unit": "MWh", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": -32768, 
+    "datatype": null, 
+    "max": 32767, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 1052, 
+    "unit": "Wh", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": -2147483648, 
+    "datatype": null, 
+    "max": 2147483647, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": 1, 
+      "type": "input_register", 
+      "address": 33526
+    }, 
+    "analyze": null, 
+    "id": 1053, 
+    "unit": "kWh", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": -32768, 
+    "datatype": null, 
+    "max": 32767, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": 1, 
+      "type": "input_register", 
+      "address": 33527
+    }, 
+    "analyze": null, 
+    "id": 1054, 
+    "unit": "kWh", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": -2147483648, 
+    "datatype": null, 
+    "max": 2147483647, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": 1, 
+      "type": "input_register", 
+      "address": 33528
+    }, 
+    "analyze": null, 
+    "id": 1055, 
+    "unit": "MWh", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": -32768, 
+    "datatype": null, 
+    "max": 32767, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 1056, 
+    "unit": "kWh", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": -32768, 
+    "datatype": null, 
+    "max": 32767, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": 1, 
+      "type": "input_register", 
+      "address": 33529
+    }, 
+    "analyze": null, 
+    "id": 1057, 
+    "unit": "kWh", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": -2147483648, 
+    "datatype": null, 
+    "max": 2147483647, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": 1, 
+      "type": "input_register", 
+      "address": 33530
+    }, 
+    "analyze": null, 
+    "id": 1058, 
+    "unit": "MWh", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": -32768, 
+    "datatype": null, 
+    "max": 32767, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 1059, 
+    "unit": "kWh", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 5, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 8, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 32768, 
+    "modbus": {
+      "span": 1, 
+      "type": "input_register", 
+      "address": 41501
+    }, 
+    "analyze": null, 
+    "id": 1, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 32896, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 5, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 32896, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 614, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": "SA-HK1-ZEIT-2", 
+    "min": 0, 
+    "datatype": null, 
+    "max": 32896, 
+    "show": null, 
+    "scaling": 1, 
+    "webType": 5, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 32896, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 146, 
+    "unit": "", 
+    "name": "SA-HK1-ZEIT-2"
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": "SA-HK1-ZEIT-3", 
+    "min": 0, 
+    "datatype": null, 
+    "max": 32896, 
+    "show": null, 
+    "scaling": 1, 
+    "webType": 5, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 32896, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 147, 
+    "unit": "", 
+    "name": "SA-HK1-ZEIT-3"
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": "FR-HK1-ZEIT-3", 
+    "min": 0, 
+    "datatype": null, 
+    "max": 32896, 
+    "show": null, 
+    "scaling": 1, 
+    "webType": 5, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 32896, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 144, 
+    "unit": "", 
+    "name": "FR-HK1-ZEIT-3"
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": "SA-HK1-ZEIT-1", 
+    "min": 0, 
+    "datatype": null, 
+    "max": 32896, 
+    "show": null, 
+    "scaling": 1, 
+    "webType": 5, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 32896, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 145, 
+    "unit": "", 
+    "name": "SA-HK1-ZEIT-1"
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": "FR-HK1-ZEIT-1", 
+    "min": 0, 
+    "datatype": null, 
+    "max": 32896, 
+    "show": null, 
+    "scaling": 1, 
+    "webType": 5, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 32896, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 142, 
+    "unit": "", 
+    "name": "FR-HK1-ZEIT-1"
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": "FR-HK1-ZEIT-2", 
+    "min": 0, 
+    "datatype": null, 
+    "max": 32896, 
+    "show": null, 
+    "scaling": 1, 
+    "webType": 5, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 32896, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 143, 
+    "unit": "", 
+    "name": "FR-HK1-ZEIT-2"
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": "DO-HK1-ZEIT-2", 
+    "min": 0, 
+    "datatype": null, 
+    "max": 32896, 
+    "show": null, 
+    "scaling": 1, 
+    "webType": 5, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 32896, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 140, 
+    "unit": "", 
+    "name": "DO-HK1-ZEIT-2"
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": "DO-HK1-ZEIT-3", 
+    "min": 0, 
+    "datatype": null, 
+    "max": 32896, 
+    "show": null, 
+    "scaling": 1, 
+    "webType": 5, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 32896, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 141, 
+    "unit": "", 
+    "name": "DO-HK1-ZEIT-3"
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 32896, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 5, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 32896, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 612, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 32896, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 5, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 32896, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 613, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 32896, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 5, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 32896, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 610, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 32896, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 5, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 32896, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 611, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 32896, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 5, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 32896, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 616, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 32896, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 5, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 32896, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 617, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": "SO-HK1-ZEIT-1", 
+    "min": 0, 
+    "datatype": null, 
+    "max": 32896, 
+    "show": null, 
+    "scaling": 1, 
+    "webType": 5, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 32896, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 148, 
+    "unit": "", 
+    "name": "SO-HK1-ZEIT-1"
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": "SO-HK1-ZEIT-2", 
+    "min": 0, 
+    "datatype": null, 
+    "max": 32896, 
+    "show": null, 
+    "scaling": 1, 
+    "webType": 5, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 32896, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 149, 
+    "unit": "", 
+    "name": "SO-HK1-ZEIT-2"
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 0, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 1007, 
+    "unit": "%", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": null, 
+    "min": -30, 
+    "datatype": null, 
+    "max": 10, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 1139, 
+    "unit": "\u00b0C", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 0, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": 1, 
+      "type": "input_register", 
+      "address": 30542
+    }, 
+    "analyze": null, 
+    "id": 1006, 
+    "unit": "\u00b0C", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 32896, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 5, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 32896, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 154, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 0, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": 1, 
+      "type": "input_register", 
+      "address": 30543
+    }, 
+    "analyze": null, 
+    "id": 1005, 
+    "unit": "\u00b0C", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": "WARMWASSERHYSTERESE", 
+    "min": 1, 
+    "datatype": "int16", 
+    "max": 10, 
+    "show": null, 
+    "scaling": "0.1", 
+    "webType": 2, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 32768, 
+    "modbus": {
+      "span": 1, 
+      "type": "holding_register", 
+      "address": 48009
+    }, 
+    "analyze": null, 
+    "id": 120, 
+    "unit": "K", 
+    "name": "WARMWASSERHYSTERESE"
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 0, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 1004, 
+    "unit": "\u00b0C", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": "WW-KORREKTUR", 
+    "min": 0, 
+    "datatype": "int16", 
+    "max": 5, 
+    "show": null, 
+    "scaling": "0.1", 
+    "webType": 2, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 32768, 
+    "modbus": {
+      "span": 1, 
+      "type": "holding_register", 
+      "address": 48010
+    }, 
+    "analyze": null, 
+    "id": 121, 
+    "unit": "\u00b0C", 
+    "name": "WW-KORREKTUR"
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": "ANTILEGIONELLENBEHANDLUNG", 
+    "min": 0, 
+    "datatype": null, 
+    "max": 1, 
+    "show": null, 
+    "scaling": 1, 
+    "webType": 8, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 32768, 
+    "modbus": {
+      "span": 1, 
+      "type": "holding_register", 
+      "address": 48011
+    }, 
+    "analyze": null, 
+    "id": 122, 
+    "unit": "", 
+    "name": "ANTILEGIONELLENBEHANDLUNG"
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 0, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 1002, 
+    "unit": "\u00b0C", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": "WW LERNFUNKTION", 
+    "min": 0, 
+    "datatype": "uint16", 
+    "max": 1, 
+    "show": null, 
+    "scaling": 1, 
+    "webType": 6, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 32768, 
+    "modbus": {
+      "span": 1, 
+      "type": "holding_register", 
+      "address": 48012
+    }, 
+    "analyze": null, 
+    "id": 123, 
+    "unit": "", 
+    "name": "WW LERNFUNKTION"
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 0, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 1001, 
+    "unit": "\u00b0C", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": "VORWAHL HEIZKREIS", 
+    "min": 1, 
+    "datatype": "uint16", 
+    "max": 2, 
+    "show": null, 
+    "scaling": 1, 
+    "webType": 6, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 32768, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 124, 
+    "unit": "", 
+    "name": "VORWAHL HEIZKREIS"
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": "KORREKTUR", 
+    "min": -5, 
+    "datatype": null, 
+    "max": 5, 
+    "show": null, 
+    "scaling": 1, 
+    "webType": 4, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 32768, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 125, 
+    "unit": "K", 
+    "name": "KORREKTUR"
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": "DASHBOARD-LOG DAY_DBL", 
+    "min": 0, 
+    "datatype": "uint16", 
+    "max": 7, 
+    "show": null, 
+    "scaling": 1, 
+    "webType": 6, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 32768, 
+    "modbus": {
+      "span": 1, 
+      "type": "input_register", 
+      "address": 38025
+    }, 
+    "analyze": null, 
+    "id": 60022, 
+    "unit": "", 
+    "name": "DASHBOARD-LOG DAY_DBL"
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": "DI-HK1-ZEIT-1", 
+    "min": 0, 
+    "datatype": null, 
+    "max": 32896, 
+    "show": null, 
+    "scaling": 1, 
+    "webType": 5, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 32896, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 133, 
+    "unit": "", 
+    "name": "DI-HK1-ZEIT-1"
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": "MO-HK1-ZEIT-3", 
+    "min": 0, 
+    "datatype": null, 
+    "max": 32896, 
+    "show": null, 
+    "scaling": 1, 
+    "webType": 5, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 32896, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 132, 
+    "unit": "", 
+    "name": "MO-HK1-ZEIT-3"
+  }
+]

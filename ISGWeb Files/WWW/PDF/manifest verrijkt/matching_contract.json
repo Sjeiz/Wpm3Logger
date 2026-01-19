@@ -1,0 +1,100 @@
+{
+  "matching_contract": {
+    "exclusion_criteria": {
+      "no_modbus_address_manifest": true,
+      "no_modbus_address_csv": true,
+      "address_not_in_same_group_range": true,
+      "unit_mismatch": true,
+      "incompatible_access": true,
+      "incompatible_datatype": true,
+      "csv_group_mismatch": true
+    },
+    "group_domains": {
+      "group1": {
+        "address_range": [501, 608],
+        "units": ["°C", "%", "bar", "l/min", "K"],
+        "datatypes": [2, 6, 7]
+      },
+      "group2": {
+        "address_range": [1501, 1521],
+        "units": ["°C", "K", "h", ""],
+        "access": ["r/w"],
+        "datatypes": [2, 7, 8, 6]
+      },
+      "group3": {
+        "address_range": [2501, 2547],
+        "units": [""],
+        "access": ["RO"],
+        "datatypes": [6],
+        "bitflags_required": true
+      },
+      "group4": {
+        "csv_energy_addresses": [3501, 3510],
+        "csv_runtime_addresses": [3507, 3508],
+        "manifest_energy_addresses": [33531, 33538],
+        "manifest_runtime_addresses": [30530, 30535],
+        "units": ["kWh", "MWh", "h"],
+        "datatypes": [6]
+      }
+    },
+    "match_criteria": {
+      "address_domain_match": {
+        "required": true,
+        "rules": {
+          "energy_cluster": {
+            "manifest": [33531, 33538],
+            "csv": [3501, 3510]
+          },
+          "runtime_cluster": {
+            "manifest": [30530, 30535],
+            "csv": [3507, 3508]
+          }
+        }
+      },
+      "unit_match": {
+        "required": true,
+        "case_insensitive": true,
+        "no_fuzzy": true
+      },
+      "datatype_match": {
+        "required": true,
+        "manifest_null_allowed": true
+      },
+      "semantic_cluster_match": {
+        "allowed_patterns": ["TAG", "SUMME", "LAUFZEIT"],
+        "no_fuzzy_semantics": true
+      },
+      "access_match": {
+        "rules": {
+          "csv_r": ["RO", "RW", "CRW"],
+          "csv_rw": ["RW", "CRW"],
+          "csv_w": ["RW"]
+        }
+      }
+    },
+    "enrichment_rules": {
+      "modbus_csv_block": {
+        "address": "<csv.address>",
+        "name": "<csv.name>",
+        "min": "<csv.min>",
+        "max": "<csv.max>",
+        "datatype": "<csv.datatype>",
+        "unit": "<csv.unit>",
+        "WebId_matched": "<manifest.id>",
+        "match_summary": {
+          "confidence": "<0.00–1.00>",
+          "reason": "<mechanical_reason>",
+          "cluster_index": "<1–3>",
+          "pattern": "<TAG|SUMME|LAUFZEIT>"
+        }
+      }
+    },
+    "no_match_behavior": {
+      "add_nothing": true,
+      "no_empty_blocks": true,
+      "no_guesses": true,
+      "no_fuzzy": true,
+      "manifest_unchanged": true
+    }
+  }
+}

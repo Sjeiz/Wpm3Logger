@@ -1,0 +1,95 @@
+{
+  "type": "object",
+  "description": "Manifest describing ISG tester registers with optional Modbus and KNX metadata.",
+  "patternProperties": {
+    "^[0-9]+$": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "description",
+        "category",
+        "datatype",
+        "scaling",
+        "unit",
+        "access",
+        "min",
+        "max",
+        "show",
+        "analyze"
+      ],
+      "properties": {
+        "id": { "type": "integer" },
+        "name": { "type": "string" },
+        "description": { "type": ["string", "null"] },
+        "category": { "type": "string" },
+
+        "datatype": {
+          "type": "string",
+          "enum": ["int16", "uint16", "int32", "uint32"]
+        },
+
+        "scaling": {
+          "type": "number",
+          "description": "Multiplier applied to raw values (e.g. 1, 0.1, 0.01)."
+        },
+
+        "unit": { "type": "string" },
+        "access": {
+          "type": "string",
+          "enum": ["ro", "rw"]
+        },
+        "min": { "type": ["number", "integer"] },
+        "max": { "type": ["number", "integer"] },
+        "show": { "type": "boolean" },
+        "analyze": { "type": "boolean" },
+
+        "modbus": {
+          "type": ["object", "null"],
+          "properties": {
+            "address": { "type": "integer" },
+            "type": {
+              "type": "string",
+              "enum": ["input_register", "holding_register"]
+            },
+            "span": {
+              "type": "integer",
+              "enum": [1, 2]
+            }
+          },
+          "required": ["address", "type", "span"]
+        },
+
+        "knx": {
+          "type": ["object", "null"],
+          "properties": {
+            "commObjID": { "type": "integer" },
+            "dpt": { "type": "string" },
+            "flags": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["T", "U", "R", "W", "C"]
+              }
+            },
+            "priority": {
+              "type": "string",
+              "enum": ["low", "normal", "alarm"]
+            }
+          },
+          "required": ["commObjID"]
+        },
+
+        "sentinel": {
+          "type": ["object", "null"],
+          "properties": {
+            "notset": { "type": ["number", "integer", "null"] },
+            "notavailable": { "type": ["number", "integer", "null"] }
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,1872 @@
+[
+    {
+        "access": "RW",
+        "description": "MAXIMALE VORLAUFTEMP",
+        "max": 75,
+        "min": 20,
+        "modbus": {
+            "address": 48001,
+            "register": 8000,
+            "type": "R/W Holding"
+        },
+        "multiplier": "0.1",
+        "type": 2,
+        "typeText": "16 Bit signed",
+        "unit": "\u00b0C",
+        "webID": 38
+    },
+    {
+        "access": "RW",
+        "description": "FROSTSCHUTZ ANLAGE",
+        "max": 10,
+        "min": -10,
+        "modbus": {
+            "address": 48002,
+            "register": 8001,
+            "type": "R/W Holding"
+        },
+        "multiplier": "0.1",
+        "type": 2,
+        "typeText": "16 Bit signed",
+        "unit": "\u00b0C",
+        "webID": 45
+    },
+    {
+        "access": "RO",
+        "description": "VD HEIZEN TAG",
+        "max": 65535,
+        "min": 0,
+        "modbus": {
+            "address": 38001,
+            "register": 8000,
+            "type": "Read Input"
+        },
+        "multiplier": "1",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "Wh",
+        "webID": 49
+    },
+    {
+        "access": "RO",
+        "description": "VD WARMWASSER TAG",
+        "max": 65535,
+        "min": 0,
+        "modbus": {
+            "address": 38002,
+            "register": 8001,
+            "type": "Read Input"
+        },
+        "multiplier": "1",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "Wh",
+        "webID": 53
+    },
+    {
+        "access": "RO",
+        "description": "-",
+        "max": 32767,
+        "min": -32768,
+        "modbus": {
+            "address": 38003,
+            "register": 8002,
+            "type": "Read Input"
+        },
+        "multiplier": "-",
+        "type": 1,
+        "typeText": "",
+        "unit": "kWh",
+        "webID": 57
+    },
+    {
+        "access": "RO",
+        "description": "NHZ WARMWASSER SUMME",
+        "max": 2147483647,
+        "min": -2147483648,
+        "multiplier": "-",
+        "type": 11,
+        "typeText": "",
+        "unit": "MWh",
+        "webID": 62
+    },
+    {
+        "access": "RO",
+        "description": "VD HEIZEN TAG",
+        "max": 65535,
+        "min": 0,
+        "modbus": {
+            "address": 38005,
+            "register": 8004,
+            "type": "Read Input"
+        },
+        "multiplier": "1",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "Wh",
+        "webID": 63
+    },
+    {
+        "access": "RO",
+        "description": "VD WARMWASSER TAG",
+        "max": 65535,
+        "min": 0,
+        "modbus": {
+            "address": 38006,
+            "register": 8005,
+            "type": "Read Input"
+        },
+        "multiplier": "1",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "Wh",
+        "webID": 67
+    },
+    {
+        "access": "RO",
+        "bits": {
+            "B0": "NHZ-1",
+            "B1": "NHZ-2",
+            "B2": "VERDICHTER",
+            "B4": "WARMWASSERVENTIL",
+            "B5": "HEIZKREISPUMPE",
+            "B6": "PUFFERLADEPUMPE=\"0\"",
+            "B8": "QUELLENPUMPE",
+            "B9": "KUEHLBETRIEB"
+        },
+        "description": "SCHALTZUSTAND",
+        "max": 0,
+        "min": 0,
+        "modbus": {
+            "address": 38007,
+            "register": 8006,
+            "type": "Read Input"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 79
+    },
+    {
+        "access": "RW",
+        "bits": {
+            "0": "PASSIVKUEHLUNG",
+            "1": "AKTIVKUEHLUNG"
+        },
+        "description": "KUEHLMODUS",
+        "max": 1,
+        "min": 0,
+        "modbus": {
+            "address": 48003,
+            "register": 8002,
+            "type": "R/W Holding"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 83
+    },
+    {
+        "access": "RW",
+        "bits": {
+            "0": "AUS",
+            "1": "EIN"
+        },
+        "description": "GEBLAESEKUEHLUNG",
+        "max": 1,
+        "min": 0,
+        "modbus": {
+            "address": 48004,
+            "register": 8003,
+            "type": "R/W Holding"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 85
+    },
+    {
+        "access": "RW",
+        "bits": {
+            "0": "AUS",
+            "1": "EIN"
+        },
+        "description": "FLAECHENKUEHLUNG",
+        "max": 1,
+        "min": 0,
+        "modbus": {
+            "address": 48005,
+            "register": 8004,
+            "type": "R/W Holding"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 89
+    },
+    {
+        "access": "RW",
+        "bits": {
+            "0": "AUS",
+            "1": "EIN"
+        },
+        "description": "AUFHEIZPROGRAMM",
+        "max": 1,
+        "min": 0,
+        "multiplier": "-",
+        "type": 8,
+        "typeText": "0 bis 255",
+        "unit": "",
+        "webID": 93
+    },
+    {
+        "access": "RW",
+        "description": "STEIGUNG PRO TAG",
+        "max": 10,
+        "min": 1,
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "K/d",
+        "webID": 94
+    },
+    {
+        "access": "RW",
+        "description": "SOCKELTEMPERATUR",
+        "max": 40,
+        "min": 20,
+        "multiplier": "0.1",
+        "type": 2,
+        "typeText": "16 Bit signed",
+        "unit": "\u00b0C",
+        "webID": 95
+    },
+    {
+        "access": "RW",
+        "description": "DAUER SOCKEL",
+        "max": 5,
+        "min": 0,
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "d",
+        "webID": 96
+    },
+    {
+        "access": "RW",
+        "description": "MAXIMALTEMPERATUR",
+        "max": 50,
+        "min": 20,
+        "multiplier": "0.1",
+        "type": 2,
+        "typeText": "16 Bit signed",
+        "unit": "\u00b0C",
+        "webID": 97
+    },
+    {
+        "access": "RW",
+        "description": "DAUER MAXIMALTEMPERATUR",
+        "max": 5,
+        "min": 0,
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "d",
+        "webID": 98
+    },
+    {
+        "access": "RW",
+        "description": "SOMMERZEIT TAG ANFANG",
+        "max": 31,
+        "min": 1,
+        "multiplier": "-",
+        "type": 8,
+        "typeText": "0 bis 255",
+        "unit": "",
+        "webID": 99
+    },
+    {
+        "access": "RW",
+        "description": "SOMMERZEIT MONAT ANFANG",
+        "max": 12,
+        "min": 1,
+        "multiplier": "-",
+        "type": 8,
+        "typeText": "0 bis 255",
+        "unit": "",
+        "webID": 100
+    },
+    {
+        "access": "RW",
+        "description": "SOMMERZEIT TAG ENDE",
+        "max": 31,
+        "min": 1,
+        "multiplier": "-",
+        "type": 8,
+        "typeText": "0 bis 255",
+        "unit": "",
+        "webID": 101
+    },
+    {
+        "access": "RW",
+        "description": "SOMMERZEIT MONAT ENDE",
+        "max": 12,
+        "min": 1,
+        "multiplier": "-",
+        "type": 8,
+        "typeText": "0 bis 255",
+        "unit": "",
+        "webID": 102
+    },
+    {
+        "access": "RW",
+        "bits": {
+            "0": "AUS",
+            "1": "EIN"
+        },
+        "description": "SOMMERBETRIEB",
+        "max": 1,
+        "min": 0,
+        "modbus": {
+            "address": 48006,
+            "register": 8005,
+            "type": "R/W Holding"
+        },
+        "multiplier": "-",
+        "type": 8,
+        "typeText": "0 bis 255",
+        "unit": "",
+        "webID": 103
+    },
+    {
+        "access": "RW",
+        "description": "GEBAEUDEDAEMPFUNG",
+        "max": 3,
+        "min": 0,
+        "multiplier": "-",
+        "type": 8,
+        "typeText": "0 bis 255",
+        "unit": "",
+        "webID": 104
+    },
+    {
+        "access": "RW",
+        "description": "AUSSENTEMPERATUR SOMMERBETRIEB",
+        "max": 30,
+        "min": 3,
+        "multiplier": "0.1",
+        "type": 2,
+        "typeText": "16 Bit signed",
+        "unit": "\u00b0C",
+        "webID": 105
+    },
+    {
+        "access": "RW",
+        "bits": {
+            "0": "AUS",
+            "1": "EIN"
+        },
+        "description": "PUMPENZYKLEN",
+        "max": 1,
+        "min": 0,
+        "modbus": {
+            "address": 48007,
+            "register": 8006,
+            "type": "R/W Holding"
+        },
+        "multiplier": "-",
+        "type": 8,
+        "typeText": "0 bis 255",
+        "unit": "",
+        "webID": 106
+    },
+    {
+        "access": "RW",
+        "description": "STILLSTANDSZEIT",
+        "max": 120,
+        "min": 1,
+        "multiplier": "-",
+        "type": 8,
+        "typeText": "0 bis 255",
+        "unit": "min",
+        "webID": 109
+    },
+    {
+        "access": "RW",
+        "description": "REGLERDYNAMIK",
+        "max": 30,
+        "min": 1,
+        "multiplier": "-",
+        "type": 8,
+        "typeText": "0 bis 255",
+        "unit": "",
+        "webID": 110
+    },
+    {
+        "access": "RW",
+        "bits": {
+            "0": "ETHYLENGLYKOL",
+            "1": "KALIUMKARBONAT",
+            "2": "ABLUFTMODUL 0",
+            "3": "ABLUFTMODUL 30",
+            "4": "ABLUFTMODUL 60",
+            "5": "ABLUFTMODUL 120",
+            "6": "ABLUFTMODUL 180",
+            "7": "WASSER",
+            "8": "GRUNDWASSERSTATION"
+        },
+        "description": "QUELLENMEDIUM",
+        "max": 8,
+        "min": 0,
+        "modbus": {
+            "address": 48008,
+            "register": 8007,
+            "type": "R/W Holding"
+        },
+        "multiplier": "-",
+        "type": 8,
+        "typeText": "0 bis 255",
+        "unit": "",
+        "webID": 111
+    },
+    {
+        "access": "RO",
+        "description": "-",
+        "max": 7,
+        "min": 0,
+        "multiplier": "-",
+        "type": 8,
+        "typeText": "0 bis 255",
+        "unit": "",
+        "webID": 112
+    },
+    {
+        "access": "RW",
+        "description": "MAXIMALE RUECKLAUFTEMP",
+        "max": 65,
+        "min": 20,
+        "multiplier": "0.1",
+        "type": 2,
+        "typeText": "16 Bit signed",
+        "unit": "\u00b0C",
+        "webID": 113
+    },
+    {
+        "access": "RW",
+        "description": "MISCHERDYNAMIK HK 2",
+        "max": 240,
+        "min": 30,
+        "multiplier": "-",
+        "type": 8,
+        "typeText": "0 bis 255",
+        "unit": "",
+        "webID": 114
+    },
+    {
+        "access": "RW",
+        "description": "MAXIMAL TEMPERATUR HK 2",
+        "max": 60,
+        "min": 20,
+        "multiplier": "0.1",
+        "type": 2,
+        "typeText": "16 Bit signed",
+        "unit": "\u00b0C",
+        "webID": 115
+    },
+    {
+        "access": "RW",
+        "description": "WARMWASSERHYSTERESE",
+        "max": 10,
+        "min": 1,
+        "modbus": {
+            "address": 48009,
+            "register": 8008,
+            "type": "R/W Holding"
+        },
+        "multiplier": "0.1",
+        "type": 2,
+        "typeText": "16 Bit signed",
+        "unit": "K",
+        "webID": 120
+    },
+    {
+        "access": "RW",
+        "description": "WW-KORREKTUR",
+        "max": 5,
+        "min": 0,
+        "modbus": {
+            "address": 48010,
+            "register": 8009,
+            "type": "R/W Holding"
+        },
+        "multiplier": "0.1",
+        "type": 2,
+        "typeText": "16 Bit signed",
+        "unit": "\u00b0C",
+        "webID": 121
+    },
+    {
+        "access": "RW",
+        "bits": {
+            "0": "AUS",
+            "1": "EIN"
+        },
+        "description": "ANTILEGIONELLENBEHANDLUNG",
+        "max": 1,
+        "min": 0,
+        "modbus": {
+            "address": 48011,
+            "register": 8010,
+            "type": "R/W Holding"
+        },
+        "multiplier": "-",
+        "type": 8,
+        "typeText": "0 bis 255",
+        "unit": "",
+        "webID": 122
+    },
+    {
+        "access": "RW",
+        "bits": {
+            "0": "AUS",
+            "1": "EIN"
+        },
+        "description": "WW LERNFUNKTION",
+        "max": 1,
+        "min": 0,
+        "modbus": {
+            "address": 48012,
+            "register": 8011,
+            "type": "R/W Holding"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 123
+    },
+    {
+        "access": "RW",
+        "description": "VORWAHL HEIZKREIS",
+        "max": 2,
+        "min": 1,
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 124
+    },
+    {
+        "access": "RW",
+        "description": "KORREKTUR",
+        "max": 5,
+        "min": -5,
+        "multiplier": "-",
+        "type": 4,
+        "typeText": "",
+        "unit": "K",
+        "webID": 125
+    },
+    {
+        "access": "RO",
+        "bits": {
+            "390": "WPM 3",
+            "391": "WPM 3i",
+            "449": "WPMsystem"
+        },
+        "description": "TYP",
+        "max": 0,
+        "min": 0,
+        "modbus": {
+            "address": 38008,
+            "register": 8007,
+            "type": "Read Input"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 127
+    },
+    {
+        "access": "RO",
+        "description": "SOFTWARE REGLER",
+        "max": 0,
+        "min": 0,
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 128
+    },
+    {
+        "access": "RW",
+        "description": "MO-HK1-ZEIT-1",
+        "max": 32896,
+        "min": 0,
+        "multiplier": "-",
+        "type": 5,
+        "typeText": "",
+        "unit": "",
+        "webID": 130
+    },
+    {
+        "access": "RW",
+        "description": "MO-HK1-ZEIT-2",
+        "max": 32896,
+        "min": 0,
+        "multiplier": "-",
+        "type": 5,
+        "typeText": "",
+        "unit": "",
+        "webID": 131
+    },
+    {
+        "access": "RW",
+        "description": "MO-HK1-ZEIT-3",
+        "max": 32896,
+        "min": 0,
+        "multiplier": "-",
+        "type": 5,
+        "typeText": "",
+        "unit": "",
+        "webID": 132
+    },
+    {
+        "access": "RW",
+        "description": "DI-HK1-ZEIT-1",
+        "max": 32896,
+        "min": 0,
+        "multiplier": "-",
+        "type": 5,
+        "typeText": "",
+        "unit": "",
+        "webID": 133
+    },
+    {
+        "access": "RW",
+        "description": "DI-HK1-ZEIT-2",
+        "max": 32896,
+        "min": 0,
+        "multiplier": "-",
+        "type": 5,
+        "typeText": "",
+        "unit": "",
+        "webID": 134
+    },
+    {
+        "access": "RW",
+        "description": "DI-HK1-ZEIT-3",
+        "max": 32896,
+        "min": 0,
+        "multiplier": "-",
+        "type": 5,
+        "typeText": "",
+        "unit": "",
+        "webID": 135
+    },
+    {
+        "access": "RW",
+        "description": "MI-HK1-ZEIT-1",
+        "max": 32896,
+        "min": 0,
+        "multiplier": "-",
+        "type": 5,
+        "typeText": "",
+        "unit": "",
+        "webID": 136
+    },
+    {
+        "access": "RW",
+        "description": "MI-HK1-ZEIT-2",
+        "max": 32896,
+        "min": 0,
+        "multiplier": "-",
+        "type": 5,
+        "typeText": "",
+        "unit": "",
+        "webID": 137
+    },
+    {
+        "access": "RW",
+        "description": "MI-HK1-ZEIT-3",
+        "max": 32896,
+        "min": 0,
+        "multiplier": "-",
+        "type": 5,
+        "typeText": "",
+        "unit": "",
+        "webID": 138
+    },
+    {
+        "access": "RW",
+        "description": "DO-HK1-ZEIT-1",
+        "max": 32896,
+        "min": 0,
+        "multiplier": "-",
+        "type": 5,
+        "typeText": "",
+        "unit": "",
+        "webID": 139
+    },
+    {
+        "access": "RW",
+        "description": "DO-HK1-ZEIT-2",
+        "max": 32896,
+        "min": 0,
+        "multiplier": "-",
+        "type": 5,
+        "typeText": "",
+        "unit": "",
+        "webID": 140
+    },
+    {
+        "access": "RW",
+        "description": "DO-HK1-ZEIT-3",
+        "max": 32896,
+        "min": 0,
+        "multiplier": "-",
+        "type": 5,
+        "typeText": "",
+        "unit": "",
+        "webID": 141
+    },
+    {
+        "access": "RW",
+        "description": "FR-HK1-ZEIT-1",
+        "max": 32896,
+        "min": 0,
+        "multiplier": "-",
+        "type": 5,
+        "typeText": "",
+        "unit": "",
+        "webID": 142
+    },
+    {
+        "access": "RW",
+        "description": "FR-HK1-ZEIT-2",
+        "max": 32896,
+        "min": 0,
+        "multiplier": "-",
+        "type": 5,
+        "typeText": "",
+        "unit": "",
+        "webID": 143
+    },
+    {
+        "access": "RW",
+        "description": "FR-HK1-ZEIT-3",
+        "max": 32896,
+        "min": 0,
+        "multiplier": "-",
+        "type": 5,
+        "typeText": "",
+        "unit": "",
+        "webID": 144
+    },
+    {
+        "access": "RW",
+        "description": "SA-HK1-ZEIT-1",
+        "max": 32896,
+        "min": 0,
+        "multiplier": "-",
+        "type": 5,
+        "typeText": "",
+        "unit": "",
+        "webID": 145
+    },
+    {
+        "access": "RW",
+        "description": "SA-HK1-ZEIT-2",
+        "max": 32896,
+        "min": 0,
+        "multiplier": "-",
+        "type": 5,
+        "typeText": "",
+        "unit": "",
+        "webID": 146
+    },
+    {
+        "access": "RW",
+        "description": "SA-HK1-ZEIT-3",
+        "max": 32896,
+        "min": 0,
+        "multiplier": "-",
+        "type": 5,
+        "typeText": "",
+        "unit": "",
+        "webID": 147
+    },
+    {
+        "access": "RW",
+        "description": "SO-HK1-ZEIT-1",
+        "max": 32896,
+        "min": 0,
+        "multiplier": "-",
+        "type": 5,
+        "typeText": "",
+        "unit": "",
+        "webID": 148
+    },
+    {
+        "access": "RW",
+        "description": "SO-HK1-ZEIT-2",
+        "max": 32896,
+        "min": 0,
+        "multiplier": "-",
+        "type": 5,
+        "typeText": "",
+        "unit": "",
+        "webID": 149
+    },
+    {
+        "access": "RW",
+        "description": "SO-HK1-ZEIT-3",
+        "max": 32896,
+        "min": 0,
+        "multiplier": "-",
+        "type": 5,
+        "typeText": "",
+        "unit": "",
+        "webID": 150
+    },
+    {
+        "access": "RW",
+        "description": "MINIMALE ABTAUZEIT",
+        "max": 20,
+        "min": 0,
+        "multiplier": "-",
+        "type": 8,
+        "typeText": "0 bis 255",
+        "unit": "min",
+        "webID": 357
+    },
+    {
+        "access": "RW",
+        "description": "VORLAUFANTEIL HEIZKREIS",
+        "max": 100,
+        "min": 0,
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "%",
+        "webID": 368
+    },
+    {
+        "access": "RW",
+        "description": "MAXIMALE VORLAUFTEMP",
+        "max": 75,
+        "min": 20,
+        "multiplier": "0.1",
+        "type": 2,
+        "typeText": "16 Bit signed",
+        "unit": "\u00b0C",
+        "webID": 372
+    },
+    {
+        "access": "RW",
+        "description": "LEISTUNG HEIZKREISPUMPE",
+        "max": 100,
+        "min": 20,
+        "modbus": {
+            "address": 48013,
+            "register": 8012,
+            "type": "R/W Holding"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "%",
+        "webID": 412
+    },
+    {
+        "access": "RW",
+        "description": "ANZAHL STUFEN",
+        "max": 3,
+        "min": 0,
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 413
+    },
+    {
+        "access": "RW",
+        "description": "VERZOEGERUNGSZEIT",
+        "max": 120,
+        "min": 0,
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "min",
+        "webID": 414
+    },
+    {
+        "access": "RW",
+        "description": "LEISTUNG WARMWASSERPUMPE",
+        "max": 100,
+        "min": 20,
+        "modbus": {
+            "address": 48014,
+            "register": 8013,
+            "type": "R/W Holding"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "%",
+        "webID": 415
+    },
+    {
+        "access": "RW",
+        "bits": {
+            "0": "AUS",
+            "1": "EIN"
+        },
+        "description": "NOTBETRIEB",
+        "max": 1,
+        "min": 0,
+        "modbus": {
+            "address": 48015,
+            "register": 8014,
+            "type": "R/W Holding"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 425
+    },
+    {
+        "access": "RO",
+        "description": "VOLUMENSTROM WPM3I",
+        "max": 0,
+        "min": 0,
+        "multiplier": "0.01",
+        "type": 7,
+        "typeText": "16 Bit signed",
+        "unit": "l/min",
+        "webID": 429
+    },
+    {
+        "access": "RO",
+        "bits": {
+            "B0": "SOMMERBETRIEB AKTIV",
+            "B1": "SOFORTSTART AKTIV",
+            "B10": "SILENT MODE AKTIVIERT",
+            "B11": "SILENT MODE: REDUZIERT",
+            "B12": "SILENT MODE: AUS",
+            "B2": "KUEHLEN",
+            "B3": "ABTAUEN",
+            "B4": "ZWANGSHEIZEN",
+            "B5": "HEIZEN",
+            "B6": "WW-BEREITUNG",
+            "B7": "FERIEN",
+            "B8": "PARTY",
+            "B9": "KOMBISPEICHER MODUS"
+        },
+        "description": "SOMMERBETRIEB WPM3",
+        "max": 32768,
+        "min": 0,
+        "modbus": {
+            "address": 38009,
+            "register": 8008,
+            "type": "Read Input"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 433
+    },
+    {
+        "access": "RW",
+        "bits": {
+            "0": "AUS",
+            "1": "EIN"
+        },
+        "description": "PUFFERBETRIEB",
+        "max": 1,
+        "min": 0,
+        "modbus": {
+            "address": 48016,
+            "register": 8015,
+            "type": "R/W Holding"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 450
+    },
+    {
+        "access": "RW",
+        "bits": {
+            "0": "AUS",
+            "1": "EIN"
+        },
+        "description": "HEIZKREIS OPTIMAL",
+        "max": 1,
+        "min": 0,
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 451
+    },
+    {
+        "access": "CRW",
+        "description": "RAUMEINFLUSS",
+        "max": 20,
+        "min": 0,
+        "multiplier": "-",
+        "type": 1,
+        "typeText": "",
+        "unit": "",
+        "webID": 452
+    },
+    {
+        "access": "RW",
+        "bits": {
+            "0": "AUS",
+            "1": "EIN"
+        },
+        "description": "KOMBISPEICHER",
+        "max": 1,
+        "min": 0,
+        "modbus": {
+            "address": 48017,
+            "register": 8016,
+            "type": "R/W Holding"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 454
+    },
+    {
+        "access": "RW",
+        "bits": {
+            "0": "AUS",
+            "1": "EIN"
+        },
+        "description": "KUEHLEN",
+        "max": 1,
+        "min": 0,
+        "modbus": {
+            "address": 48018,
+            "register": 8017,
+            "type": "R/W Holding"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 456
+    },
+    {
+        "access": "RW",
+        "description": "GEBLAESEKUEHLUNG DYNAMIK AKTIV",
+        "max": 10,
+        "min": 0,
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 460
+    },
+    {
+        "access": "RW",
+        "description": "HYSTERESE",
+        "max": 10,
+        "min": 1,
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "K",
+        "webID": 462
+    },
+    {
+        "access": "RW",
+        "description": "HD SENSOR MAX",
+        "max": 44,
+        "min": 30,
+        "modbus": {
+            "address": 48019,
+            "register": 8018,
+            "type": "R/W Holding"
+        },
+        "multiplier": "0.1",
+        "type": 2,
+        "typeText": "16 Bit signed",
+        "unit": "bar",
+        "webID": 463
+    },
+    {
+        "access": "RW",
+        "description": "LEISTUNG SOLEPUMPE",
+        "max": 100,
+        "min": 20,
+        "modbus": {
+            "address": 48020,
+            "register": 8019,
+            "type": "R/W Holding"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "%",
+        "webID": 464
+    },
+    {
+        "access": "RW",
+        "bits": {
+            "0": "AUS",
+            "1": "EIN"
+        },
+        "description": "EINPHASIGER BETRIEB",
+        "max": 1,
+        "min": 0,
+        "modbus": {
+            "address": 48021,
+            "register": 8020,
+            "type": "R/W Holding"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 465
+    },
+    {
+        "access": "RW",
+        "bits": {
+            "0": "AUS",
+            "1": "EIN"
+        },
+        "description": "SOFORTSTART",
+        "max": 1,
+        "min": 0,
+        "modbus": {
+            "address": 48022,
+            "register": 8021,
+            "type": "R/W Holding"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 466
+    },
+    {
+        "access": "RO",
+        "description": "-",
+        "max": 65535,
+        "min": 0,
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 472
+    },
+    {
+        "access": "RO",
+        "description": "STARTS VERDICHTER",
+        "max": 2147483647,
+        "min": 0,
+        "multiplier": "-",
+        "type": 15,
+        "typeText": "",
+        "unit": "",
+        "webID": 473
+    },
+    {
+        "access": "RW",
+        "description": "GEBLAESE-/FLAECHENKUEHLUNG DYNAMIK PASSIV",
+        "max": 10,
+        "min": 0,
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 474
+    },
+    {
+        "access": "RO",
+        "description": "RESTSTILLSTAND",
+        "max": 0,
+        "min": 0,
+        "modbus": {
+            "address": 38010,
+            "register": 8009,
+            "type": "Read Input"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "min",
+        "webID": 481
+    },
+    {
+        "access": "RO",
+        "bits": {
+            "B0": "HEIZKREISPUMPE",
+            "B1": "MISCHERPUMPE",
+            "B13": "KUEHLBETRIEB",
+            "B14": "VERDICHTERSCHUETZ",
+            "B2": "MISCHER AUF",
+            "B3": "MISCHER ZU",
+            "B4": "NHZ 1",
+            "B5": "NHZ 2",
+            "B6": "QUELLENPUMPE",
+            "B7": "PUFFELADEPUMPE",
+            "B9": "WARMWASSERVENTIL"
+        },
+        "description": "STATUS",
+        "max": 0,
+        "min": 0,
+        "modbus": {
+            "address": 38011,
+            "register": 8010,
+            "type": "Read Input"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 485
+    },
+    {
+        "access": "CRW",
+        "description": "MINIMAL TEMPERATUR HK 1",
+        "max": 30,
+        "min": 10,
+        "multiplier": "0.1",
+        "type": 2,
+        "typeText": "16 Bit signed",
+        "unit": "\u00b0C",
+        "webID": 486
+    },
+    {
+        "access": "CRW",
+        "description": "MINIMAL TEMPERATUR HK 2",
+        "max": 30,
+        "min": 10,
+        "multiplier": "0.1",
+        "type": 2,
+        "typeText": "16 Bit signed",
+        "unit": "\u00b0C",
+        "webID": 487
+    },
+    {
+        "access": "RO",
+        "bits": {
+            "B0": "FATAL-ERROR"
+        },
+        "description": "FATALER FEHLER STATUS",
+        "max": 0,
+        "min": 0,
+        "modbus": {
+            "address": 38012,
+            "register": 8011,
+            "type": "Read Input"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 557
+    },
+    {
+        "access": "RO",
+        "description": "KOMFORTTEMPERATUR INNEN HK 1",
+        "max": 60,
+        "min": -20,
+        "multiplier": "0.1",
+        "type": 2,
+        "typeText": "16 Bit signed",
+        "unit": "\u00b0C",
+        "webID": 558
+    },
+    {
+        "access": "RO",
+        "bits": {
+            "B0": "Raumtemperaturen HK1",
+            "B1": "Raumtemperaturen HK2",
+            "B10": "Inbetriebnahme Auslegung HZG",
+            "B11": "Elektrische Leistungsaufnahme",
+            "B12": "Solar Einstellungen",
+            "B13": "Waermeerzeuger extern WW",
+            "B14": "Waermeerzeuger extern Info",
+            "B2": "Warmwasser",
+            "B3": "Kuehlen",
+            "B4": "Solar Info",
+            "B5": "Waermeerzeuger extern Heizen",
+            "B6": "Elektrische Nacherwaermung",
+            "B7": "Quelle",
+            "B8": "Heizprogramm HZK 1",
+            "B9": "Heizprogramm HZK 2"
+        },
+        "description": "DYNAMISIERUNG-1",
+        "max": 65535,
+        "min": 0,
+        "modbus": {
+            "address": 38013,
+            "register": 8012,
+            "type": "Read Input"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 700
+    },
+    {
+        "access": "RO",
+        "bits": {
+            "B0": "Aktivkuehlung",
+            "B1": "Passivkuehlung",
+            "B2": "WW-Leistung Sommer/Winter",
+            "B3": "Silent-Mode",
+            "B4": "Verdichterstarts",
+            "B5": "Silent-Mode Programm 1",
+            "B6": "Silent-Mode Programm 2",
+            "B7": "WW-Inbetriebnahme",
+            "B8": "Heizkreis 2"
+        },
+        "description": "DYNAMISIERUNG-2",
+        "max": 65535,
+        "min": 0,
+        "modbus": {
+            "address": 38014,
+            "register": 8013,
+            "type": "Read Input"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 701
+    },
+    {
+        "access": "RO",
+        "bits": {
+            "B0": "FE7 an HZK1",
+            "B1": "FE7 an HZK2",
+            "B2": "FEK an HZK1",
+            "B3": "FEK an HZK2",
+            "B4": "HZK2 konfiguriert",
+            "B5": "MSM-2 vorhanden",
+            "B6": "MFG vorhanden",
+            "B7": "MSM-3 vorhanden",
+            "B9": "ISG vorhanden"
+        },
+        "description": "SYSTEM",
+        "max": 65535,
+        "min": 0,
+        "modbus": {
+            "address": 38015,
+            "register": 8014,
+            "type": "Read Input"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 702
+    },
+    {
+        "access": "RO",
+        "bits": {
+            "B0": "WP-Vorlauf",
+            "B1": "WP-Ruecklauf",
+            "B2": "WW-Fuehler",
+            "B3": "Aussenfuehler",
+            "B4": "Mischerfuehler",
+            "B5": "Quellenfuehler",
+            "B6": "Vorlauffuehler Kuehlung",
+            "B7": "Solar Kollektorfuehler"
+        },
+        "description": "FUEHLER",
+        "max": 65535,
+        "min": 0,
+        "modbus": {
+            "address": 38016,
+            "register": 8015,
+            "type": "Read Input"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 704
+    },
+    {
+        "access": "RO",
+        "description": "ISG HAUPTVERSIONSNUMMER",
+        "max": 65535,
+        "min": 0,
+        "modbus": {
+            "address": 38017,
+            "register": 8016,
+            "type": "Read Input"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 60001
+    },
+    {
+        "access": "RO",
+        "description": "ISG NEBENVERSIONSNUMMER",
+        "max": 65535,
+        "min": 0,
+        "modbus": {
+            "address": 38018,
+            "register": 8017,
+            "type": "Read Input"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 60002
+    },
+    {
+        "access": "RO",
+        "description": "ISG REVISIONSNUMMER",
+        "max": 65535,
+        "min": 0,
+        "modbus": {
+            "address": 38019,
+            "register": 8018,
+            "type": "Read Input"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 60003
+    },
+    {
+        "access": "RO",
+        "description": "LAUFZEIT-TAGE",
+        "max": 65535,
+        "min": 0,
+        "modbus": {
+            "address": 38020,
+            "register": 8019,
+            "type": "Read Input"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "d",
+        "webID": 60004
+    },
+    {
+        "access": "RO",
+        "description": "LAUFZEIT-STUNDEN",
+        "max": 65535,
+        "min": 0,
+        "modbus": {
+            "address": 38021,
+            "register": 8020,
+            "type": "Read Input"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "h",
+        "webID": 60005
+    },
+    {
+        "access": "RO",
+        "description": "-",
+        "max": 65535,
+        "min": 0,
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 60006
+    },
+    {
+        "access": "RO",
+        "description": "-",
+        "max": 65535,
+        "min": 0,
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "d",
+        "webID": 60007
+    },
+    {
+        "access": "RO",
+        "description": "-",
+        "max": 65535,
+        "min": 0,
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "h",
+        "webID": 60008
+    },
+    {
+        "access": "RO",
+        "description": "-",
+        "max": 1,
+        "min": 0,
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 60009
+    },
+    {
+        "access": "RW",
+        "description": "-",
+        "max": 900,
+        "min": 60,
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "s",
+        "webID": 60010
+    },
+    {
+        "access": "RO",
+        "description": "-",
+        "max": 65535,
+        "min": 0,
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 60011
+    },
+    {
+        "access": "RO",
+        "description": "-",
+        "max": 65535,
+        "min": 0,
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 60012
+    },
+    {
+        "access": "RO",
+        "description": "FEHLER TIMESTAMP",
+        "max": 65535,
+        "min": 0,
+        "modbus": {
+            "address": 38022,
+            "register": 8021,
+            "type": "Read Input"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 60018
+    },
+    {
+        "access": "RO",
+        "description": "FATALER FEHLER TIMESTAMP",
+        "max": 65535,
+        "min": 0,
+        "modbus": {
+            "address": 38023,
+            "register": 8022,
+            "type": "Read Input"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 60019
+    },
+    {
+        "access": "RO",
+        "bits": {
+            "1": "SG-READY",
+            "2": "KNX",
+            "3": "EMI",
+            "4": "MODBUS",
+            "9": "TEST"
+        },
+        "description": "INSTALLIERTE ERWEITERUNG",
+        "max": 65535,
+        "min": 0,
+        "modbus": {
+            "address": 38024,
+            "register": 8023,
+            "type": "Read Input"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 60020
+    },
+    {
+        "access": "RO",
+        "description": "DASHBOARD-LOG DAY_DBL",
+        "max": 7,
+        "min": 0,
+        "modbus": {
+            "address": 38025,
+            "register": 8024,
+            "type": "Read Input"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 60022
+    },
+    {
+        "access": "RO",
+        "description": "DASHBOARD-LOG WM_HZ_DBL",
+        "max": 0,
+        "min": 0,
+        "modbus": {
+            "address": 38026,
+            "register": 8025,
+            "type": "Read Input"
+        },
+        "multiplier": "-",
+        "type": 1,
+        "typeText": "",
+        "unit": "kWh",
+        "webID": 60023
+    },
+    {
+        "access": "RO",
+        "description": "DASHBOARD-LOG WM_WW_DBL",
+        "max": 0,
+        "min": 0,
+        "modbus": {
+            "address": 38027,
+            "register": 8026,
+            "type": "Read Input"
+        },
+        "multiplier": "-",
+        "type": 1,
+        "typeText": "",
+        "unit": "kWh",
+        "webID": 60024
+    },
+    {
+        "access": "RO",
+        "description": "DASHBOARD-LOG AUSSENTEMP_MAX_DBL",
+        "max": 0,
+        "min": 0,
+        "modbus": {
+            "address": 38028,
+            "register": 8027,
+            "type": "Read Input"
+        },
+        "multiplier": "0.1",
+        "type": 2,
+        "typeText": "16 Bit signed",
+        "unit": "\u00b0C",
+        "webID": 60025
+    },
+    {
+        "access": "RO",
+        "description": "DASHBOARD-LOG AUSSENTEMP_AVG_DBL",
+        "max": 0,
+        "min": 0,
+        "modbus": {
+            "address": 38029,
+            "register": 8028,
+            "type": "Read Input"
+        },
+        "multiplier": "0.1",
+        "type": 2,
+        "typeText": "16 Bit signed",
+        "unit": "\u00b0C",
+        "webID": 60026
+    },
+    {
+        "access": "RO",
+        "description": "DASHBOARD-LOG AUSSENTEMP_MIN_DBL",
+        "max": 0,
+        "min": 0,
+        "modbus": {
+            "address": 38030,
+            "register": 8029,
+            "type": "Read Input"
+        },
+        "multiplier": "0.1",
+        "type": 2,
+        "typeText": "16 Bit signed",
+        "unit": "\u00b0C",
+        "webID": 60027
+    },
+    {
+        "access": "RW",
+        "description": "CAN-INTERVALL",
+        "max": 250,
+        "min": 70,
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "ms",
+        "webID": 60101
+    },
+    {
+        "access": "RO",
+        "bits": {
+            "0": "AUS",
+            "1": "EIN"
+        },
+        "description": "EMI-AKTIVIERT",
+        "max": 32768,
+        "min": 0,
+        "modbus": {
+            "address": 38031,
+            "register": 8030,
+            "type": "Read Input"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 60302
+    },
+    {
+        "access": "RO",
+        "bits": {
+            "0": "EMI-NO-CONNECTION",
+            "1": "EMI-OK",
+            "10": "EMI-ERROR",
+            "11": "EMI-TIMEOUT",
+            "2": "EMI-ACTIVE-ECO",
+            "3": "EMI-ACTIVE-COMFORT",
+            "4": "EMI-ACTIVE-HIGH"
+        },
+        "description": "EMI-STATUS",
+        "max": 32768,
+        "min": 0,
+        "modbus": {
+            "address": 38032,
+            "register": 8031,
+            "type": "Read Input"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 60303
+    },
+    {
+        "access": "RW",
+        "description": "OBERE-RAUMTEMP-HK1",
+        "max": 50,
+        "min": 20,
+        "multiplier": "0.1",
+        "type": 2,
+        "typeText": "16 Bit signed",
+        "unit": "\u00b0C",
+        "webID": 60310
+    },
+    {
+        "access": "RW",
+        "description": "OBERE-RAUMTEMP-HK2",
+        "max": 30,
+        "min": 20,
+        "multiplier": "0.1",
+        "type": 2,
+        "typeText": "16 Bit signed",
+        "unit": "\u00b0C",
+        "webID": 60311
+    },
+    {
+        "access": "RW",
+        "description": "OBERE-WARMWASSER-TEMP",
+        "max": 60,
+        "min": 40,
+        "multiplier": "0.1",
+        "type": 2,
+        "typeText": "16 Bit signed",
+        "unit": "\u00b0C",
+        "webID": 60312
+    },
+    {
+        "access": "",
+        "bits": {
+            "0": "SOMMER ODER WINTER",
+            "1": "WINTER",
+            "2": "SOMMER"
+        },
+        "description": "SOMMERBETRIEB",
+        "max": null,
+        "min": null,
+        "multiplier": "-",
+        "type": null,
+        "typeText": "",
+        "unit": "",
+        "webID": 60313
+    },
+    {
+        "access": "RW",
+        "bits": {
+            "0": "UNBEKANNT",
+            "10": "WPF/C 13 (cool)",
+            "11": "WPF 16 (cool)",
+            "6": "WPF/C 04 (cool)",
+            "68": "WPW 10 Trend",
+            "69": "WPW 12 Trend",
+            "7": "WPF/C 05 (cool)",
+            "70": "WPW 17 Trend",
+            "71": "WPW 22 Trend",
+            "8": "WPF/C 07 (cool)",
+            "9": "WPF/C 10 (cool)"
+        },
+        "description": "WAERMEPUMPENTYP",
+        "max": 32768,
+        "min": 0,
+        "modbus": {
+            "address": 48023,
+            "register": 8022,
+            "type": "R/W Holding"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 60316
+    },
+    {
+        "access": "RW",
+        "bits": {
+            "0": "KEIN-PUFFER",
+            "1": "PUFFER-MIT-MISCHER",
+            "2": "PUFFER-OHNE-MISCHER"
+        },
+        "description": "HEIZUNGSPUFFER",
+        "max": 2,
+        "min": 0,
+        "modbus": {
+            "address": 48024,
+            "register": 8023,
+            "type": "R/W Holding"
+        },
+        "multiplier": "-",
+        "type": 6,
+        "typeText": "16 Bit unsigned",
+        "unit": "",
+        "webID": 60317
+    }
+]

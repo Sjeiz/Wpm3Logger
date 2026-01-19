@@ -1,0 +1,90 @@
+{
+  "type": "object",
+  "description": "Manifest describing ISG tester registers with optional Modbus and KNX metadata.",
+  "patternProperties": {
+    "^[0-9]+$": {
+      "type": "object",
+      "required": ["id", "min", "max", "sentinel"],
+      "properties": {
+        "id": { "type": "integer" },
+
+        "name": { "type": ["string", "null"] },
+
+        "description": { "type": ["string", "null"] },
+
+        "category": { "type": ["string", "null"] },
+
+        "datatype": {
+          "type": ["string", "null"],
+          "enum": ["int16", "uint16", "int32", "uint32", null]
+        },
+
+        "scaling": {
+          "type": "number",
+          "description": "Always a numeric multiplier; nulls replaced by 1."
+        },
+
+        "unit": { "type": "string" },
+
+        "access": {
+          "type": "string",
+          "enum": ["RO", "RW", "ro", "rw"]
+        },
+
+        "webType": { "type": ["integer", "null"] },
+
+        "min": { "type": ["number", "integer"] },
+
+        "max": { "type": ["number", "integer"] },
+
+        "sentinel": {
+          "type": ["number", "integer", "null"],
+          "description": "Single numeric sentinel value indicating 'not available' or 'not set'."
+        },
+
+        "show": { "type": ["boolean", "null"] },
+
+        "analyze": { "type": ["boolean", "null"] },
+
+        "modbus": {
+          "type": ["object", "null"],
+          "properties": {
+            "address": { "type": ["integer", "null"] },
+            "name": { "type": ["string", "null"] },
+            "type": {
+              "type": ["string", "null"],
+              "enum": ["input_register", "holding_register", null]
+            },
+            "span": {
+              "type": ["integer", "null"],
+              "enum": [1, 2, null]
+            }
+          },
+          "additionalProperties": false
+        },
+
+        "knx": {
+          "type": ["object", "null"],
+          "properties": {
+            "commObjID": { "type": ["integer", "null"] },
+            "dpt": { "type": ["string", "null"] },
+            "flags": {
+              "type": ["array", "null"],
+              "items": {
+                "type": "string",
+                "enum": ["T", "U", "R", "W", "C"]
+              }
+            },
+            "priority": {
+              "type": ["string", "null"],
+              "enum": ["low", "normal", "alarm", null]
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

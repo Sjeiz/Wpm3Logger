@@ -1,0 +1,1352 @@
+[
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 0, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 1104, 
+    "unit": "Hz", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 0, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 1102, 
+    "unit": "V", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 0, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 1103, 
+    "unit": "Hz", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 0, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 1100, 
+    "unit": "bar", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 0, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 1101, 
+    "unit": "A", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 65535, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 1108, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 1, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 60704, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": null, 
+    "min": 10, 
+    "datatype": null, 
+    "max": 70, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 60705, 
+    "unit": "\u00b0C", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 2, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 60706, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 1, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 60700, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 2, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 60701, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": null, 
+    "min": 3, 
+    "datatype": null, 
+    "max": 15, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 60702, 
+    "unit": "kW", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": null, 
+    "min": 1, 
+    "datatype": null, 
+    "max": 10, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 60703, 
+    "unit": "kW", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": null, 
+    "min": 1, 
+    "datatype": null, 
+    "max": 31, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 8, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 32768, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 9, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 65535, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 6, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 32768, 
+    "modbus": {
+      "span": 1, 
+      "type": "input_register", 
+      "address": 32507
+    }, 
+    "analyze": null, 
+    "id": 60013, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": null, 
+    "min": 40, 
+    "datatype": null, 
+    "max": 100, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 1138, 
+    "unit": "%", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": "MINIMALE ABTAUZEIT", 
+    "min": 0, 
+    "datatype": null, 
+    "max": 20, 
+    "show": null, 
+    "scaling": 1, 
+    "webType": 8, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 32768, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 357, 
+    "unit": "min", 
+    "name": "MINIMALE ABTAUZEIT"
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 1, 
+    "datatype": null, 
+    "max": 31, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 6, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 0, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 216, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 1, 
+    "datatype": null, 
+    "max": 12, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 6, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 0, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 217, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 59, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 6, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 0, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 214, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 23, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 6, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 0, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 215, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 5, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 6, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 0, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 212, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 1, 
+    "datatype": null, 
+    "max": 65535, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 6, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 0, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 213, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 1, 
+    "datatype": null, 
+    "max": 12, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 6, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 0, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 210, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 99, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 6, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 0, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 211, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 99, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 6, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 0, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 218, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 5, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 6, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 0, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 219, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": -4, 
+    "datatype": null, 
+    "max": 0, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 1, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 0, 
+    "modbus": {
+      "span": 1, 
+      "type": "input_register", 
+      "address": 32505
+    }, 
+    "analyze": null, 
+    "id": 60100, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 5, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 6, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 0, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 268, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 0, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 1078, 
+    "unit": "A", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 0, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 1079, 
+    "unit": "Hz", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 0, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": 1, 
+      "type": "input_register", 
+      "address": 30546
+    }, 
+    "analyze": null, 
+    "id": 1076, 
+    "unit": "bar", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 0, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 1077, 
+    "unit": "A", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 0, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 1074, 
+    "unit": "\u00b0C", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 0, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 1073, 
+    "unit": "\u00b0C", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 5, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 6, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 0, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 289, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 99, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 6, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 0, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 288, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RW", 
+    "description": null, 
+    "min": 1, 
+    "datatype": null, 
+    "max": 12, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 8, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 32768, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 4, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 99, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 6, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 0, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 281, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 1, 
+    "datatype": null, 
+    "max": 12, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 6, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 0, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 280, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 1, 
+    "datatype": null, 
+    "max": 65535, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 6, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 0, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 283, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 5, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 6, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 0, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 282, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 23, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 6, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 0, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 285, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 59, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 6, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 0, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 284, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 1, 
+    "datatype": null, 
+    "max": 12, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 6, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 0, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 287, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 1, 
+    "datatype": null, 
+    "max": 31, 
+    "show": null, 
+    "scaling": null, 
+    "webType": 6, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": 0, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 286, 
+    "unit": "", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 0, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 1094, 
+    "unit": "\u00b0C", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 0, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 1095, 
+    "unit": "\u00b0C", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 0, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 1096, 
+    "unit": "\u00b0C", 
+    "name": null
+  }, 
+  {
+    "category": null, 
+    "access": "RO", 
+    "description": null, 
+    "min": 0, 
+    "datatype": null, 
+    "max": 0, 
+    "show": null, 
+    "scaling": null, 
+    "webType": null, 
+    "knx": {
+      "priority": null, 
+      "commObjID": null, 
+      "dpt": null, 
+      "flags": null
+    }, 
+    "sentinel": null, 
+    "modbus": {
+      "span": null, 
+      "type": null, 
+      "address": null
+    }, 
+    "analyze": null, 
+    "id": 1097, 
+    "unit": "\u00b0C", 
+    "name": null
+  }
+]

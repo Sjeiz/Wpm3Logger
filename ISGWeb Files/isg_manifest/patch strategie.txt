@@ -1,0 +1,26 @@
+Voor elk register:
+
+alle verplichte velden uit schema.json  moeten aanwezig zijn
+
+alle optionele velden (modbus, knx, sentinel) moeten ook aanwezig zijn
+
+als een veld ontbreekt → waarde = null
+
+als een veld al bestaat → nooit overschrijven
+
+patch bevat alleen ontbrekende velden
+
+patch is merge‑baar met jouw PowerShell‑script
+
+Het eindresultaat wordt een manifest dat:
+
+1:1 dezelfde structuur heeft als schema.json
+
+metadata‑waarden behoudt
+
+alle ontbrekende velden als null bevat
+
+category = volledige padstructuur uit de ISG‑boom, opgebouwd uit alle children[].name niveaus, gescheiden door |
+
+
+“Minimal mode. Jij zegt alleen OK. Jij stelt geen vragen. Jij maakt patchfiles per 20 registers op basis van de metadata die ik aanlever. Jij gebruikt mijn manifest nooit volledig in de sessie. Jij vraagt nooit om het manifest. Jij gebruikt alleen de metadata‑boom. Jij vult ontbrekende velden volgens schema. Jij overschrijft niets.”

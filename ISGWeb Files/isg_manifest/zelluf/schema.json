@@ -1,0 +1,145 @@
+{
+  "type": "object",
+  "description": "Manifest describing ISG tester registers with optional Modbus and KNX metadata.",
+  "patternProperties": {
+    "^[0-9]+$": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "description",
+        "category",
+        "datatype",
+        "scaling",
+        "unit",
+        "access",
+        "min",
+        "max",
+        "sentinel",
+        "show",
+        "analyze"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "The numeric webID of the register."
+        },
+        "name": {
+          "type": "string",
+          "description": "Short human-readable name of the register."
+        },
+        "description": {
+          "type": ["string", "null"],
+          "description": "Longer explanation of the register’s purpose."
+        },
+        "category": {
+          "type": "string",
+          "description": "Functional grouping (e.g. heating, DHW, compressor)."
+        },
+
+        "datatype": {
+          "type": "string",
+          "enum": ["int16", "uint16", "int32", "uint32"],
+          "description": "Raw Modbus datatype used for decoding the register."
+        },
+
+        "scaling": {
+          "type": "number",
+          "description": "Multiplier applied to raw values (e.g. 1, 0.1, 0.01)."
+        },
+
+        "unit": {
+          "type": "string",
+          "description": "Engineering unit (e.g. °C, %, kW)."
+        },
+
+        "access": {
+          "type": "string",
+          "enum": ["ro", "rw"],
+          "description": "Read/write capability of the register."
+        },
+
+        "webType": {
+          "type": "integer",
+          "description": "UI/data type classification from WPM/ISG object tables."
+        },
+
+        "min": {
+          "type": ["number", "integer"],
+          "description": "Minimum valid engineering value."
+        },
+        "max": {
+          "type": ["number", "integer"],
+          "description": "Maximum valid engineering value."
+        },
+
+        "sentinel": {
+          "type": ["number", "integer"],
+          "description": "Per-webID invalid/not-set sentinel value from WPM_3_isg_objects.json."
+        },
+
+        "show": {
+          "type": "boolean",
+          "description": "Whether the register is shown in the UI."
+        },
+        "analyze": {
+          "type": "boolean",
+          "description": "Whether the register participates in analysis logic."
+        },
+
+        "modbus": {
+          "type": ["object", "null"],
+          "description": "Optional Modbus mapping for this register.",
+          "properties": {
+            "address": {
+              "type": "integer",
+              "description": "Modbus register address."
+            },
+            "type": {
+              "type": "string",
+              "enum": ["input_register", "holding_register"],
+              "description": "Modbus register type."
+            },
+            "span": {
+              "type": "integer",
+              "enum": [1, 2],
+              "description": "Number of Modbus registers (1 = 16-bit, 2 = 32-bit)."
+            }
+          },
+          "required": ["address", "type", "span"]
+        },
+
+        "knx": {
+          "type": ["object", "null"],
+          "description": "Optional KNX mapping for this register.",
+          "properties": {
+            "commObjID": {
+              "type": "integer",
+              "description": "KNX communication object ID."
+            },
+            "dpt": {
+              "type": "string",
+              "description": "KNX datapoint type (e.g. DPT9.001)."
+            },
+            "flags": {
+              "type": "array",
+              "description": "KNX communication flags.",
+              "items": {
+                "type": "string",
+                "enum": ["T", "U", "R", "W", "C"]
+              }
+            },
+            "priority": {
+              "type": "string",
+              "enum": ["low", "normal", "alarm"],
+              "description": "KNX telegram priority."
+            }
+          },
+          "required": ["commObjID"]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

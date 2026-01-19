@@ -145,64 +145,77 @@ class Program
             byte slave = config.SlaveId;
             Console.WriteLine("📡 Snapshot...");
 
+            // Modbus registers are shown 0-based here.
+            // Empirisch bepaald, uit C# modbus mapping
+
+            /* Het is een bekend en gedocumenteerd fenomeen dat:
+            WPM3 / WPM‑familie (de warmtepompregelaar)
+            → Vorlauf = aanvoer naar het afgiftesysteem  
+            → Rücklauf = retour uit het afgiftesysteem
+            maar dat:
+            ISG‑API (de webinterface)
+            → Vorlauftemperatur WP1 = aanvoer UIT de compressor, richting binnenunit  
+            → Rücklauftemperatur WP1 = retour NAAR de compressor
+            */
+
             //
             // TEMPERATUREN
             //
-            double roomTemp       = ReadScaled(master, slave, 502, 0.1);
-            double roomSet        = ReadScaled(master, slave, 503, 0.1);
-            double outsideTemp    = ReadSigned(master, slave, 506, 0.1);
+            double roomTemp       = ReadScaled(master, slave, 502, 0.1); //done: webid 21 RAUMTEMPERATUR IST, modbus 30503 ISTTEMPERATUR FEK
+            double roomSet        = ReadScaled(master, slave, 503, 0.1); //done: webid 25 RAUMTEMPERATUR SOL, modbus 30504 SOLLTEMPERATUR FEK
+            double outsideTemp    = ReadSigned(master, slave, 506, 0.1); //done: webid 27 AUSSENTEMPERATUR, modbus 30507 AUSSENTEMPERATUR
 
-            double hk1Flow        = ReadScaled(master, slave, 507, 0.1);
-            double hk1Set         = ReadScaled(master, slave, 509, 0.1);
+            double hk1Flow        = ReadScaled(master, slave, 507, 0.1); //done: webid 118 ISTTEMPERATUR HK1, modbus 30508 ISTTEMPERATUR HK1
+            double hk1Set         = ReadScaled(master, slave, 509, 0.1); //done: webid 34 SOLLTEMPERATUR HK1, modbus 30510 SOLLTEMPERATUR HK1
 
-            double hk2Flow        = ReadScaled(master, slave, 510, 0.1);
-            double hk2Set         = ReadScaled(master, slave, 511, 0.1);
+            double hk2Flow        = ReadScaled(master, slave, 510, 0.1); //done: webid 33 ISTTEMPERATUR_HK2, modbus 30511 ISTTEMPERATUR_HK2
+            double hk2Set         = ReadScaled(master, slave, 511, 0.1); //done: webid 26 SOLLTEMPERATUR HK 2, modbus 30512 SOLLTEMPERATUR HK 2
 
             // HK2 RETOUR – deze wordt WÉL gelogd
-            double hk2Return      = ReadScaled(master, slave, 515, 0.1);
+            double hk2Return      = ReadScaled(master, slave, 515, 0.1); //done: webid 37 RUECKLAUFTEMPERATUR_WP1, modbus 30516 RUECKLAUFTEMPERATUR_WP1
 
-            double flowTemp       = ReadScaled(master, slave, 514, 0.1);
+            double flowTemp       = ReadScaled(master, slave, 514, 0.1); //done: webid 36 VORLAUFISTTEMPERATUR_WP1, modbus 30515 VORLAUFISTTEMPERATUR_WP1
 
-            double hotwaterActual = ReadScaled(master, slave, 521, 0.1);
-            double hotwaterSet    = ReadScaled(master, slave, 522, 0.1);
+            double hotwaterActual = ReadScaled(master, slave, 521, 0.1); //done: webid 24 ISTTEMPERATUR WARMWASSER, modbus 30515 ISTTEMPERATUR WARMWASSER
+            double hotwaterSet    = ReadScaled(master, slave, 522, 0.1); //done: webid 1001 SOLLTEMPERATUR WARMWASSER, modbus 30523 SOLLTEMPERATUR WARMWASSER
 
             //
             // COMPRESSOR
             //
-            double compressorReturn = ReadScaled(master, slave, 541, 0.1);
-            double compressorFlow   = ReadScaled(master, slave, 542, 0.1);
-            double hotgas           = ReadScaled(master, slave, 543, 0.1);
+            double compressorReturn = ReadScaled(master, slave, 541, 0.1); //unsure: modbus 30542 RUECKLAUFTEMPERATUR WP1
+            double compressorFlow   = ReadScaled(master, slave, 542, 0.1); //unsure: modbus 30543 VORLAUFISTTEMPERATUR WP1
+            double hotgas           = ReadScaled(master, slave, 543, 0.1); //done: webid 1030 HEISSGASTEMPERATUR WP1, modbus 30544 HEISSGASTEMPERATUR WP1
 
-            double compLow          = ReadScaled(master, slave, 544, 0.01);
-            double compMid          = ReadScaled(master, slave, 545, 0.01);
-            double compHigh         = ReadScaled(master, slave, 546, 0.01);
+            double compLow          = ReadScaled(master, slave, 544, 0.01); //done: webid 1032 DRUCK NIEDERDRUCK WP1, modbus 30545 DRUCK NIEDERDRUCK WP1
+            double compMid          = ReadScaled(master, slave, 545, 0.01); //done: webid 1076 DRUCK MITTELDRUCK WP1, modbus 30546 DRUCK MITTELDRUCK WP1
+            double compHigh         = ReadScaled(master, slave, 546, 0.01); //done: webid 1031 DRUCK HOCHDRUCK WP1, modbus 30546 DRUCK HOCHDRUCK WP1
 
             //
             // HYDRAULIEK
             //
-            double waterPressure    = ReadScaled(master, slave, 519, 0.01);
-            double flowRate         = ReadScaled(master, slave, 520, 0.01);
+            double waterPressure    = ReadScaled(master, slave, 519, 0.01);  //done: webid 435 WASSERDRUCK, modbus 30520 WASSERDRUCK
+            double flowRate         = ReadScaled(master, slave, 520, 0.01);  //unsure: modbus 30521 VOLUMENSTROM or modbus 30548 WP WASSERVOLUMENSTROM WP1`?
 
             //
             // ENERGIE (32-bit)
             //
-            uint energyHeat         = ReadUInt32(master, slave, 3501);
-            uint energyWater        = ReadUInt32(master, slave, 3504);
-            uint energyNhz          = ReadUInt32(master, slave, 3506);
+            uint energyHeat         = ReadUInt32(master, slave, 3501); //unsure: webid 501 VERBRAUCH HEIZUNG, modbus 33502 VERBRAUCH HEIZUNG
+            uint energyWater        = ReadUInt32(master, slave, 3504); //unsure: webid 502 VERBRAUCH WARMWASSER, modbus 33505 VERBRAUCH WARMWASSER
+            uint energyNhz          = ReadUInt32(master, slave, 3506); //unsure: webid 503 VERBRAUCH NHZ, modbus 33507 VERBRAUCH NHZ
 
             //
             // RUNTIME (16-bit)
             //
-            uint runtimeHeat        = master.ReadInputRegisters(slave, 3538, 1)[0];
-            uint runtimeWater       = master.ReadInputRegisters(slave, 3541, 1)[0];
-            uint runtimeCool        = master.ReadInputRegisters(slave, 3544, 1)[0];
-            uint runtimeNhz         = master.ReadInputRegisters(slave, 3545, 1)[0];
+            uint runtimeHeat        = master.ReadInputRegisters(slave, 3538, 1)[0]; //unsure: webid 551 LAUFZEIT HEIZUNG, modbus 33539 LAUFZEIT HEIZUNG
+            uint runtimeWater       = master.ReadInputRegisters(slave, 3541, 1)[0]; //unsure: webid 552 LAUFZEIT WARMWASSER, modbus 33542 LAUFZEIT WARMWASSER
+            uint runtimeCool        = master.ReadInputRegisters(slave, 3544, 1)[0]; //unsure: webid 553 LAUFZEIT KUEHLUNG, modbus 33545 LAUFZEIT KUEHLUNG
+            uint runtimeNhz         = master.ReadInputRegisters(slave, 3545, 1)[0]; //unsure: webid 554 LAUFZEIT NHZ, modbus 33546 LAUFZEIT NHZ
 
             //
             // STATUS
             //
-            ushort sgReady          = master.ReadHoldingRegisters(slave, 4000, 1)[0];
-            ushort statusBits       = master.ReadInputRegisters(slave, 2500, 1)[0];
+            ushort sgReady          = master.ReadHoldingRegisters(slave, 4000, 1)[0]; //unsure: modbus 4001 SG READY
+            ushort statusBits       = master.ReadInputRegisters(slave, 2500, 1)[0]; //done: webid 485 STATUS, modbus 32501 STATUS. BITMAP = "HK 1 PUMPE":B0, "HK 2 PUMPE":B1, "AUFHEIZPROGRAMM":B2, "NHZ STUFEN IN BETRIEB":B3, "WP IM HEIZBETRIEB":B4, "WP IM WARMWASSERBETRIEB":B5, "VERDICHTER IN BETRIEB":B6, "SOMMERBETRIEB AKTIV":B7, "KUEHLBETRIEB AKTIV":B8, "MIN. EINE IWS IM ABTAUBETRIEB":B9, "SILENTMODE 1 AKTIV":B10, "SILENTMODE 2 AKTIV (WP AUS)":B11
             string state            = DecodeState(statusBits);
 
             //

@@ -1,10 +1,4 @@
-# Tabelleformat:;;
-# Spalte A:Modicon MODBUS Register (5-stellig); Spalte B: WebID (siehe http://www.csimn.com/CSI_pages/Modbus101.html); Spalte C: Freitext
-# PDU0 (like modpoll -0 <..>) („0 based“);;
-# actually „1 based“;;
-# Input Register;;
-# Function Code 4;;
-# Block 1;;
+modbus;webid;ignore
 30501;440;
 30502;441;
 30503;442;
@@ -88,7 +82,6 @@
 30581;6076;
 30582;6031;
 30583;6088;
-# Block 3;;
 32501;471;
 32502;488;
 32503;401;
@@ -96,7 +89,6 @@
 32505;60100;
 32506;712;Ebv: ABTAUEN-VORANMELDUNG
 32507;60013;
-# Block 4;;
 33501;50;
 33502;51;
 33503;52;
@@ -240,13 +232,10 @@
 33641;6040;
 33642;6041;
 33643;6036;
-# Block 6;;
 35001;60306;SG-Ready-Betriebszustand
 35002;60000;Reglerkennung
 35003;60321;SG_READY_MODUL_EINGANG_1
 35004;60322;SG_READY_MODUL_EINGANG_2
-# Output (Holding) Register;;
-# Function Code 3;;
 # Block 2;;
 41501;1;
 41502;16;
@@ -269,11 +258,9 @@
 41519;86;
 41520;480;
 41521;60102;
-# Block 5;;
 44001;60305;SG_READY_AKTIV
 44002;60030;SG_READY_EINGANG_1
 44003;60031;SG_READY_EINGANG_2
-# weitere webIDs - JW;;
 48001;38;MAXIMALE VORLAUFTEMP
 48002;45;FROSTSCHUTZ ANLAGE
 38001;49;VD HEIZEN TAG
