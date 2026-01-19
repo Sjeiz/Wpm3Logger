@@ -1729,8 +1729,8 @@
     },
     "1": {
         "id": 1,
-        "name": null,
-        "description": null,
+        "name": "BETRIEBSART (ENUM)",
+        "description": "DONE AND VERIFIED: 0=NOTBETRIEB;1=BEREITSCHAFTS BETRIEB;2=PROGRAMMBETRIEB;3=KOMFORTBETRIEB;4=ECOBETRIEB;5=WARMWASSERBETRIEB",
         "category": null,
         "datatype": "uint16",
         "scaling": 1,
@@ -1744,7 +1744,8 @@
         "analyze": null,
         "modbus": {
             "address": 41501,
-            "type": "input_register",
+            "name": "BETRIEBSART",
+            "type": "holding_register",
             "span": 1
         },
         "knx": {
@@ -1756,8 +1757,8 @@
     },
     "3": {
         "id": 3,
-        "name": null,
-        "description": null,
+        "name": "Wärmepumpen statuscode top-level (WPM prioriteit volgorde, uitzoeken!)",
+        "description": "Copilot (Enum): 0=AUS; 1=ABTAUEN; 2=WARMWASSER; 3=VERDICHTER_LÄUFT; 4=HEIZBETRIEB; 5=ESTRICHFUNKTION; 6=EVU_SPERRE; 7=STÖRUNG; 8=ABSENKBETRIEB; 9=AUFHEIZBETRIEB; 10=LEGIONELLENFUNKTION; 11=ZIRKULATION; 12=SPEICHERLADUNG; 13=KÜHLBETRIEB; 14=SOMMERBETRIEB; 15=FROSTSCHUTZ; 16=PUMPENBETRIEB; 17=VERDICHTERSTART; 18=VERDICHTERSTOP; 19=HEIZBETRIEB_AKTIV",
         "category": null,
         "datatype": "uint16",
         "scaling": 1,
@@ -1783,8 +1784,8 @@
     },
     "4": {
         "id": 4,
-        "name": null,
-        "description": null,
+        "name": "Regelungsfreigabe (System aktiv)?",
+        "description": "Copilot (BITFLAG): 1 = Regelung aktiv; 0 = Regelung deaktiviert. Tot nu toe in alle dumps altijd 1",
         "category": null,
         "datatype": "uint16",
         "scaling": 1,
@@ -1810,8 +1811,8 @@
     },
     "5": {
         "id": 5,
-        "name": null,
-        "description": null,
+        "name": "Interne Regelungsstatus (WPM)?",
+        "description": "Copilot: Interne WPM-regelstatus. Tot nu toe altijd waarde 26. Waarschijnlijk interne Heizkreis-Regelungsmodus. Prioriteit/enum nog te bepalen",
         "category": null,
         "datatype": "uint16",
         "scaling": 1,
@@ -1837,8 +1838,8 @@
     },
     "6": {
         "id": 6,
-        "name": null,
-        "description": null,
+        "name": "Interne Regelungsstatus HK2 (WPM)?",
+        "description": "Copilot: Interne WPM-regelstatus voor Heizkreis 2. Tot nu toe altijd waarde 5. Waarschijnlijk HK2-Regelungsprofil aktiv. Verdere enum/prioriteit nog te bepalen.",
         "category": null,
         "datatype": "uint16",
         "scaling": 1,
@@ -1864,8 +1865,8 @@
     },
     "7": {
         "id": 7,
-        "name": "UITZOEKEN: HYDROLIEKMODES",
-        "description": "Geen bitmask, maar een onbekende enum. 21=no buffer,23-buffer with mixer, 25=buffer without mixer", 
+        "name": "Hydraulik-Statuscode (WPM intern)?",
+        "description": "Copilot: Interne WPM-hydrauliekstate-machine. Waarden gezien: 1, 2, 5, 9, 36. WPM heeft 40+ hydraulische toestanden",
         "category": null,
         "datatype": "uint16",
         "scaling": 1,
@@ -1891,8 +1892,8 @@
     },
     "9": {
         "id": 9,
-        "name": null,
-        "description": null,
+        "name": "Heizkurven-/Regelungsprofil-ID (WPM intern)?",
+        "description": "Copilot: Statische interne WPM-parameter die het actieve Heizkreis-Regelungsprofil of stooklijnpreset representeert. Tot nu toe altijd waarde 30.",
         "category": null,
         "datatype": "uint16",
         "scaling": 1,
@@ -1945,8 +1946,8 @@
     },
     "11": {
         "id": 11,
-        "name": null,
-        "description": null,
+        "name": "Interne Regelungszustand A (WPM)?",
+        "description": "Copilot: Interne WPM-regelstatus. Waarden gezien: 0, 21. Substate van de verwarmingsregelaar.",
         "category": null,
         "datatype": "uint16",
         "scaling": 1,
@@ -1972,8 +1973,8 @@
     },
     "12": {
         "id": 12,
-        "name": null,
-        "description": null,
+        "name": "Regelungsprofil-/Algorithmus-ID (WPM)?",
+        "description": "Interne WPM-parameter. Tot nu toe altijd waarde 7.",
         "category": null,
         "datatype": "uint16",
         "scaling": 1,
@@ -1999,8 +2000,8 @@
     },
     "13": {
         "id": 13,
-        "name": null,
-        "description": null,
+        "name": "Heizkreis-Freigabe (WPM intern, global)?",
+        "description": "Copilot: Globale interne WPM-Freigabe voor de verwarmingsregeling. Tot nu toe altijd waarde 8. Niet HK1- of HK2-specifiek.",
         "category": null,
         "datatype": "uint16",
         "scaling": 1,
@@ -2026,8 +2027,8 @@
     },
     "14": {
         "id": 14,
-        "name": null,
-        "description": null,
+        "name": "Interne Regelungszustand B (WPM)?",
+        "description": "Copilot: Tweede interne WPM-regelstatus. Waarden gezien: 21.",
         "category": null,
         "datatype": "uint16",
         "scaling": 1,
@@ -2053,8 +2054,8 @@
     },
     "15": {
         "id": 15,
-        "name": null,
-        "description": null,
+        "name": "Interne Regelungszustand C (WPM, inaktiv)?",
+        "description": "Copilot: Interne WPM-regelstatus die in deze installatie nooit actief wordt. Tot nu toe altijd waarde 0. Waarschijnlijk gerelateerd aan niet-geïnstalleerde functies zoals Kühlung, Solar, Buffer of externe Umschaltventile.",
         "category": null,
         "datatype": "uint16",
         "scaling": 1,
@@ -2095,7 +2096,7 @@
         "analyze": null,
         "modbus": {
             "address": 31502,
-			"name": "KOMFORTTEMPERATUR Heizkreis 1",
+            "name": "KOMFORTTEMPERATUR Heizkreis 1",
             "type": "input_register",
             "span": 1
         },
@@ -2123,7 +2124,7 @@
         "analyze": null,
         "modbus": {
             "address": 31503,
-			"name": "ECOTEMPERATUR Heizkreis 1",
+            "name": "ECOTEMPERATUR Heizkreis 1",
             "type": "input_register",
             "span": 1
         },
@@ -2136,11 +2137,11 @@
     },
     "18": {
         "id": 18,
-        "name": null,
-        "description": null,
+        "name": "Temperaturkanal (nicht belegt)?",
+        "description": "Copilot: Wert in 0,1 °C. –400 = –40,0 °C, die Standard-Sentinel für nicht vorhandene oder deaktivierte Sensoren.",
         "category": null,
         "datatype": "int16",
-        "scaling": 1,
+        "scaling": 0.11,
         "unit": "°C",
         "access": "RO",
         "webType": 2,
@@ -2178,7 +2179,7 @@
         "analyze": null,
         "modbus": {
             "address": 30505,
-			"name": "KOMFORT TEMPERATUR HK2",
+            "name": "KOMFORT TEMPERATUR HK2",
             "type": "input_register",
             "span": 1
         },
@@ -2206,7 +2207,7 @@
         "analyze": null,
         "modbus": {
             "address": 31506,
-			"name": "ECO TEMPERATUR HK2",
+            "name": "ECO TEMPERATUR HK2",
             "type": "input_register",
             "span": 1
         },
@@ -2262,7 +2263,7 @@
         "analyze": null,
         "modbus": {
             "address": 31511,
-			"name": "SOLLTEMPERATUR WARMWASSER COMFORT",
+            "name": "SOLLTEMPERATUR WARMWASSER COMFORT",
             "type": "input_register",
             "span": 1
         },
@@ -2290,7 +2291,7 @@
         "analyze": null,
         "modbus": {
             "address": 31510,
-			"name": "SOLLTEMPERATUR WARMWASSER ECO",
+            "name": "SOLLTEMPERATUR WARMWASSER ECO",
             "type": "input_register",
             "span": 1
         },
@@ -2331,7 +2332,7 @@
     },
     "25": {
         "id": 25,
-        "name": "interne HK1‑Offset",
+        "name": "interne HK1‑Offset?",
         "description": "empirisch vastgesteld",
         "category": null,
         "datatype": "uint16",
@@ -2430,7 +2431,7 @@
         "analyze": null,
         "modbus": {
             "address": 30506,
-			"name": " TAUPUNKTTEMPERATUR",
+            "name": " TAUPUNKTTEMPERATUR",
             "type": "input_register",
             "span": 1
         },
@@ -2443,11 +2444,11 @@
     },
     "30": {
         "id": 30,
-        "name": null,
-        "description": null,
+        "name": "Temperaturgröße (0,1 °C, functie onbekend)?",
+        "description": "Copilot: Wert in 0,1 °C. Actuele waarde 500 = 50,0 °C. De specifieke functie binnen de regeling is nog niet vastgesteld.",
         "category": null,
         "datatype": "uint16",
-        "scaling": 1,
+        "scaling": 0.1,
         "unit": "°C",
         "access": "RO",
         "webType": 2,
@@ -2470,7 +2471,7 @@
     },
     "31": {
         "id": 31,
-        "name": "HK1/HK2(gedeeld) Vorlauf‑SOLL",
+        "name": "HK1/HK2(gedeeld) Vorlauf‑SOLL?",
         "description": "empirisch vastgesteld via HK1 en HK2",
         "category": null,
         "datatype": "uint16",
@@ -2553,11 +2554,11 @@
     },
     "35": {
         "id": 35,
-        "name": null,
-        "description": null,
+        "name": "Temperaturgröße (Funktion unbekannt)?",
+        "description": "Copilot: Temperaturwert in 0,1 °C. Aktueller Wert 0 = 0,0 °C. Funktion innerhalb der Regelung ist nicht bekannt.",
         "category": null,
         "datatype": "uint16",
-        "scaling": 1,
+        "scaling": 0.1,
         "unit": "°C",
         "access": "CRW",
         "webType": 2,
@@ -2581,7 +2582,7 @@
     "36": {
         "id": 36,
         "name": "VORLAUFISTTEMPERATUR - WP1",
-        "description": "DONE",
+        "description": "DONE and VERIFIED",
         "category": null,
         "datatype": "uint16",
         "scaling": 0.1,
@@ -2636,8 +2637,8 @@
     },
     "38": {
         "id": 38,
-        "name": "MAXIMALE VORLAUFTEMP",
-        "description": "MAXIMALE VORLAUFTEMP",
+        "name": "MAXIMALE VORLAUFTEMP?",
+        "description": "Copilot: Statische Grenztemperatur in 0,1 °C. Aktueller Wert 450 = 45,0 °C. Könnte die maximale Vorlaufbegrenzung der WP darstellen",
         "category": null,
         "datatype": "int16",
         "scaling": "0.1",
@@ -2663,11 +2664,11 @@
     },
     "39": {
         "id": 39,
-        "name": null,
-        "description": null,
+        "name": "Temperatur (nicht belegt) – Vorschlag?",
+        "description": "Copilot: Temperaturregister (Datatype C) in 0,1 °C. Wert 32768 = ungültig / Sensor nicht vorhanden / nicht angeschlossen.",
         "category": null,
         "datatype": "uint16",
-        "scaling": 1,
+        "scaling": 0.1,
         "unit": "°C",
         "access": "RO",
         "webType": 2,
@@ -2690,11 +2691,11 @@
     },
     "40": {
         "id": 40,
-        "name": null,
-        "description": null,
+        "name": "Temperatur (nicht belegt) – Vorschlag?",
+        "description": "Copilot: Temperaturregister (Datatype C) in 0,1 °C. Wert 32768 = ungültig / Sensor nicht vorhanden / nicht angeschlossen.",
         "category": null,
         "datatype": "uint16",
-        "scaling": 1,
+        "scaling": 0.1,
         "unit": "°C",
         "access": "CRW",
         "webType": 2,
@@ -2704,9 +2705,9 @@
         "show": null,
         "analyze": null,
         "modbus": {
-            "address": 30537,
-            "type": "input_register",
-            "span": 1
+            "address": null,
+            "type": null,
+            "span": null
         },
         "knx": {
             "commObjID": null,
@@ -2717,11 +2718,11 @@
     },
     "41": {
         "id": 41,
-        "name": null,
-        "description": null,
+        "name": "BIVALENZTEMPERATUR HZG (Vorschlag)?",
+        "description": "Copilot en modbus value: Systemparameter aus Block 2 (Read/Write Holding Register). Temperaturregister (Datatype C) in 0,1 °C. Wert -200 = typische Bivalenz-Sentinel: Sensor/Quelle nicht aktiv oder nicht konfiguriert. Laut Modbus-Dokumentation: 'BIVALENZTEMPERATUR HZG – Einsatzgrenzen beachten!",
         "category": null,
         "datatype": "int16",
-        "scaling": 1,
+        "scaling": 0.1,
         "unit": "°C",
         "access": "RW",
         "webType": 2,
@@ -2732,7 +2733,7 @@
         "analyze": null,
         "modbus": {
             "address": 41509,
-            "type": "input_register",
+            "type": "holding_register",
             "span": 1
         },
         "knx": {
@@ -2744,11 +2745,11 @@
     },
     "42": {
         "id": 42,
-        "name": null,
-        "description": null,
+        "name": "BIVALENZTEMPERATUR WW (Vorschlag)?",
+        "description": "Copilot en modbus value: Systemparameter aus Block 2 (Read/Write Holding Register). Temperaturregister (Datatype C) in 0,1 °C. Wert -200 = typische Bivalenz-Sentinel: Sensor/Quelle nicht aktiv oder nicht konfiguriert. Laut Modbus-Dokumentation: 'Warmwassertemperaturen",
         "category": null,
         "datatype": "int16",
-        "scaling": 1,
+        "scaling": 0.1,
         "unit": "°C",
         "access": "RW",
         "webType": 2,
@@ -2759,7 +2760,7 @@
         "analyze": null,
         "modbus": {
             "address": 41513,
-            "type": "input_register",
+            "type": "holding_register",
             "span": 1
         },
         "knx": {
@@ -2771,11 +2772,11 @@
     },
     "43": {
         "id": 43,
-        "name": null,
-        "description": null,
+        "name": "Temperatur (nicht belegt) – Vorschlag?",
+        "description": "Copilot: Temperaturregister (Datatype C) in 0,1 °C. Wert 32768 = ungültig / nicht belegt. entspricht einem ungenutzten Temperatur-Slot",
         "category": null,
         "datatype": "uint16",
-        "scaling": 1,
+        "scaling": 0.1,
         "unit": "°C",
         "access": "CRW",
         "webType": 2,
@@ -2798,11 +2799,11 @@
     },
     "44": {
         "id": 44,
-        "name": null,
-        "description": null,
+        "name": "Temperatur (nicht belegt) – Vorschlag?",
+        "description": "Copilot: Temperaturregister (Datatype C) in 0,1 °C. Wert 32768 = ungültig / nicht belegt. entspricht einem ungenutzten Temperatur-Slot.",
         "category": null,
         "datatype": "uint16",
-        "scaling": 1,
+        "scaling": 0.1,
         "unit": "°C",
         "access": "CRW",
         "webType": 2,
@@ -2826,8 +2827,7 @@
     "45": {
         "id": 45,
         "name": "FROSTSCHUTZ ANLAGE",
-        "description": "FROSTSCHUTZ ANLAGE",
-        "category": null,
+        "description": "Emperisch (Geen andere waarde die hier op lijkt). Modbus-Zuordnung 48002 bleibt unbestätigt.",
         "datatype": "int16",
         "scaling": "0.1",
         "unit": "°C",
@@ -2907,8 +2907,8 @@
     },
     "51": {
         "id": 51,
-        "name": null,
-        "description": null,
+        "name": "VD ZÄHLER (unbestimmt) – Vorschlag?",
+        "description": "CopilotRohwert 445. Eigenständiger Verdichter-Laufzeit- oder Startzähler. Keine Zuordnung zu Heizen/WW/Kühlen möglich aus der Dump-Struktur.",
         "category": null,
         "datatype": "uint16",
         "scaling": 1,
@@ -2921,9 +2921,9 @@
         "show": null,
         "analyze": null,
         "modbus": {
-            "address": 33502,
-            "type": "input_register",
-            "span": 1
+            "address": null,
+            "type": null,
+            "span": null
         },
         "knx": {
             "commObjID": null,
@@ -3523,7 +3523,7 @@
         "analyze": null,
         "modbus": {
             "address": null,
-			"name": null,
+            "name": null,
             "type": "input_register",
             "span": 1
         },
@@ -3578,8 +3578,7 @@
         "analyze": null,
         "modbus": {
             "address": 30525,
-			"name": "SOLLTEMPERATUR GEBLAESE",
-			"name": null,
+            "name": null,
             "type": "input_register",
             "span": 1
         },
@@ -3607,7 +3606,7 @@
         "analyze": null,
         "modbus": {
             "address": null,
-			"name": null,
+            "name": null,
             "type": "holding_register",
             "span": 1
         },
@@ -3635,7 +3634,7 @@
         "analyze": null,
         "modbus": {
             "address": 30526,
-			"name": "ISTTEMPERATUR FLAECHE",
+            "name": "ISTTEMPERATUR FLAECHE",
             "type": "input_register",
             "span": 1
         },
@@ -3690,7 +3689,7 @@
         "analyze": null,
         "modbus": {
             "address": 30527,
-			"name": "SOLLTEMPERATUR FLAECHE",
+            "name": "SOLLTEMPERATUR FLAECHE",
             "type": "input_register",
             "span": 1
         },
@@ -11173,7 +11172,7 @@
         "analyze": null,
         "modbus": {
             "address": 30505,
-			"name": "RAUMFEUCHTE",
+            "name": "RAUMFEUCHTE",
             "type": "input_register",
             "span": 1
         },
@@ -16578,7 +16577,7 @@
         "category": null,
         "datatype": "uint16",
         "scaling": 1,
-        "unit": "l / min",
+        "unit": "l/min",
         "access": "RO",
         "webType": null,
         "min": 0,
