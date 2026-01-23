@@ -1,0 +1,354 @@
+#include <Arduino.h>
+#include <ESP8266WiFi.h>
+#include <ESP8266WebServer.h>
+#include <time.h>
+
+// ===============================
+// PIN DEFINITIES
+// ===============================
+const int PIN_PWM_OUT = D5;     // naar pomp-optocoupler
+const int PIN_PWM_IN  = D6;     // van WPM3-optocoupler
+const int PIN_VLOERPOMP = D7;   // pomp aan/uit
+const int LED_PIN = LED_BUILTIN;
+
+ESP8266WebServer server(80);
+
+// ===============================
+// INSTELLINGEN
+// ===============================
+const float NALOOP_MINUTEN = 30.0;
+const int NALOOP_PERCENT = 40;
+const int PWM_FREQ = 150;
+
+const char* WIFI_SSID = "SjeizWifi_IoT";
+const char* WIFI_PW   = "VerbindenMetSjeizW1f1_IoT";
+
+const unsigned long WIFI_TIMEOUT = 30000;
+const unsigned long NTP_TIMEOUT  = 30000;
+const unsigned long NTP_INTERVAL = 3600000;
+
+// ===============================
+// STATUSVARIABELEN
+// ===============================
+float dutyIn = 0.0;
+float freqIn = 0.0;
+float dutyOut = 0.0;
+
+bool pwmIsAanwezig = false;
+bool pwmWasAanwezig = false;
+
+bool naloopActief = false;
+bool naloopNetBeëindigd = false;
+
+unsigned long naloopStart = 0;
+unsigned long lastBlink = 0;
+unsigned long lastWifiCheck = 0;
+unsigned long lastNtpSync = 0;
+unsigned long lastLogTime = -30000;
+
+bool ledState = false;
+
+String logBuffer = "";
+
+// ===============================
+// NALOOP
+// ===============================
+const unsigned long NALOOP_DUUR = (unsigned long)(NALOOP_MINUTEN * 60.0 * 1000.0);
+int PWM_DUTY_NALOOP = (int)(1023 * (NALOOP_PERCENT / 100.0));
+
+// ===============================
+// STATUS MACHINE
+// ===============================
+enum SystemState { STANDBY, WPM3_ACTIEF, NALOOP_ACTIEF };
+SystemState currentState = STANDBY;
+SystemState lastState = STANDBY;
+
+String stateToString(SystemState s) {
+    if (s == STANDBY) return "Standby";
+    if (s == WPM3_ACTIEF) return "WPM3 actief";
+    return "Naloop actief";
+}
+
+// ===============================
+// LOGGING
+// ===============================
+String timestamp() {
+    time_t now = time(nullptr);
+    struct tm* t = localtime(&now);
+    char buf[32];
+    strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", t);
+    return String(buf);
+}
+
+void addLog(String s) {
+    String line = timestamp() + "  " + s;
+    Serial.println(line);
+    logBuffer += line + "\n";
+    if (logBuffer.length() > 4000)
+        logBuffer = logBuffer.substring(2000);
+}
+
+// ===============================
+// WIFI
+// ===============================
+void connectWiFi() {
+    addLog("WiFi verbinden met SSID: " + String(WIFI_SSID));
+    WiFi.mode(WIFI_STA);
+    WiFi.begin(WIFI_SSID, WIFI_PW);
+
+    unsigned long start = millis();
+    while (WiFi.status() != WL_CONNECTED && millis() - start < WIFI_TIMEOUT) {
+        delay(100);
+        yield();
+    }
+
+    if (WiFi.status() == WL_CONNECTED)
+        addLog("WiFi verbonden. IP: " + WiFi.localIP().toString());
+    else
+        addLog("WiFi timeout → geen verbinding");
+}
+
+// ===============================
+// NTP
+// ===============================
+void syncNtpTime() {
+    if (WiFi.status() != WL_CONNECTED) {
+        addLog("NTP overgeslagen (geen WiFi)");
+        return;
+    }
+
+    addLog("NTP synchronisatie gestart");
+
+    configTime("CET-1CEST,M3.5.0/02:00:00,M10.5.0/03:00:00",
+               "pool.ntp.org", "time.nist.gov");
+
+    time_t now = time(nullptr);
+    unsigned long start = millis();
+
+    while (now < 1700000000 && millis() - start < NTP_TIMEOUT) {
+        delay(100);
+        yield();
+        now = time(nullptr);
+    }
+
+    if (now >= 1700000000)
+        addLog("NTP tijd gesynchroniseerd");
+    else
+        addLog("NTP timeout → geen tijdsync");
+}
+
+// ===============================
+// WEBSERVER
+// ===============================
+void handleRoot() {
+    String html =
+    "<html><head><meta http-equiv='refresh' content='1' /></head><body>"
+    "<h2>PWM Monitor (ESP8266)</h2>"
+    "<p><b>IN (OC1 → D6)</b><br>"
+    "Duty: " + String(dutyIn, 1) + "%<br>"
+    "Freq: " + String(freqIn, 1) + " Hz</p>"
+    "<p><b>OUT (D5 → OC2 → pomp)</b><br>"
+    "Duty: " + String(dutyOut, 1) + "%<br>"
+    "Freq: 150 Hz</p>"
+    "<p><b>Status:</b> " + stateToString(currentState) + "</p>"
+    "<p><b>VloerPomp:</b> " + String(naloopActief ? "AAN" : "UIT") + "</p>"
+    "<pre>" + logBuffer + "</pre>"
+    "</body></html>";
+
+    server.send(200, "text/html; charset=utf-8", html);
+}
+
+// ===============================
+// SETUP
+// ===============================
+void setup() {
+    Serial.begin(115200);
+
+    pinMode(PIN_PWM_OUT, OUTPUT);
+    analogWriteRange(1023);
+    analogWriteFreq(PWM_FREQ);
+    analogWrite(PIN_PWM_OUT, 0);
+
+    pinMode(PIN_PWM_IN, INPUT);
+    pinMode(PIN_VLOERPOMP, OUTPUT);
+    digitalWrite(PIN_VLOERPOMP, LOW);
+
+    pinMode(LED_PIN, OUTPUT);
+
+    connectWiFi();
+    syncNtpTime();
+
+    server.on("/", handleRoot);
+    server.begin();
+    addLog("Webserver gestart");
+
+    lastNtpSync = millis();
+}
+
+// ===============================
+// LOOP
+// ===============================
+void loop() {
+    server.handleClient();
+
+    // ===============================
+    // WIFI RECONNECT
+    // ===============================
+    if (millis() - lastWifiCheck > 30000) {
+        lastWifiCheck = millis();
+        if (WiFi.status() != WL_CONNECTED) {
+            addLog("WiFi weggevallen → opnieuw verbinden...");
+            connectWiFi();
+            if (WiFi.status() == WL_CONNECTED)
+                syncNtpTime();
+        }
+    }
+
+    // ===============================
+    // PWM-IN METING + RUISFILTER
+    // ===============================
+    unsigned long highTime = pulseIn(PIN_PWM_IN, HIGH, 2000);
+    yield();
+    unsigned long lowTime  = pulseIn(PIN_PWM_IN, LOW,  2000);
+    yield();
+
+    bool pwmRaw = false;
+    freqIn = 0.0;
+    dutyIn = 0.0;
+
+    if (highTime > 0 && lowTime > 0) {
+        float period = (highTime + lowTime) / 1000000.0;
+        float f = 1.0 / period;
+        float d = (highTime * 100.0) / (highTime + lowTime);
+
+        if (f > 20.0 && f < 200.0) {
+            freqIn = f;
+            dutyIn = d;
+            pwmRaw = true;
+        }
+    }
+
+    // ===============================
+    // DEBOUNCE
+    // ===============================
+    static unsigned long lastChange = 0;
+
+    if (pwmRaw != pwmIsAanwezig) {
+        if (millis() - lastChange > 150) {
+            pwmIsAanwezig = pwmRaw;
+        }
+    } else {
+        lastChange = millis();
+    }
+
+    // ===============================
+    // EDGE-DETECTIE
+    // ===============================
+    if (pwmWasAanwezig && !pwmIsAanwezig) {
+        addLog("PWM-IN weggevallen → naloop gestart");
+
+        naloopActief = true;
+        naloopNetBeëindigd = false;
+        naloopStart = millis();
+
+        analogWrite(PIN_PWM_OUT, PWM_DUTY_NALOOP);
+        digitalWrite(PIN_VLOERPOMP, HIGH);
+    }
+
+    if (!pwmWasAanwezig && pwmIsAanwezig) {
+        if (naloopActief) {
+            addLog("PWM-IN gedetecteerd → naloop afgebroken");
+
+            naloopActief = false;
+            naloopNetBeëindigd = true;
+
+            analogWrite(PIN_PWM_OUT, 0);
+            digitalWrite(PIN_VLOERPOMP, LOW);
+        }
+    }
+
+    pwmWasAanwezig = pwmIsAanwezig;
+
+    // ===============================
+    // NALOOPTIMER
+    // ===============================
+    if (naloopActief && millis() - naloopStart >= NALOOP_DUUR) {
+        addLog("Nalooptimer verstreken → naloop beëindigd");
+
+        naloopActief = false;
+        naloopNetBeëindigd = true;
+
+        analogWrite(PIN_PWM_OUT, 0);
+        digitalWrite(PIN_VLOERPOMP, LOW);
+    }
+
+    dutyOut = naloopActief ? NALOOP_PERCENT : 0.0;
+
+    // ===============================
+    // STATUS MACHINE
+    // ===============================
+    if (naloopActief) currentState = NALOOP_ACTIEF;
+    else if (pwmIsAanwezig) currentState = WPM3_ACTIEF;
+    else currentState = STANDBY;
+
+    if (currentState != lastState) {
+        addLog("STATUS: " + stateToString(currentState));
+        lastState = currentState;
+    }
+
+    // ===============================
+    // LED MODI
+    // ===============================
+    if (currentState == NALOOP_ACTIEF) {
+        if (millis() - lastBlink > 150) {
+            lastBlink = millis();
+            ledState = !ledState;
+            digitalWrite(LED_PIN, ledState);
+        }
+    }
+    else if (currentState == WPM3_ACTIEF) {
+        if (millis() - lastBlink > 800) {
+            lastBlink = millis();
+            ledState = !ledState;
+            digitalWrite(LED_PIN, ledState);
+        }
+    }
+    else {
+        unsigned long now = millis();
+        if (now - lastBlink < 50) digitalWrite(LED_PIN, LOW);
+        else digitalWrite(LED_PIN, HIGH);
+        if (now - lastBlink > 1000) lastBlink = now;
+    }
+
+    // ===============================
+    // PERIODIEKE NTP RESYNC
+    // ===============================
+    if (millis() - lastNtpSync > NTP_INTERVAL) {
+        lastNtpSync = millis();
+        syncNtpTime();
+    }
+
+    // ===============================
+    // PERIODIEKE LOG
+    // ===============================
+    if (millis() - lastLogTime > 30000) {
+        lastLogTime = millis();
+
+        String line =
+            "IN: " + String(dutyIn, 1) + "% " + String(freqIn, 1) + "Hz   "
+            "OUT: " + String(dutyOut, 1) + "%   "
+            "PWM=" + String(pwmIsAanwezig ? "JA" : "NEE") +
+            "  STATUS=" + stateToString(currentState);
+
+        if (naloopActief) {
+            line += "  Naloop " +
+                String((NALOOP_DUUR - (millis() - naloopStart)) / 60000.0, 1) +
+                " minuten";
+        } else if (naloopNetBeëindigd) {
+            line += "  Naloop beëindigd";
+            naloopNetBeëindigd = false;
+        }
+
+        addLog(line);
+    }
+}
