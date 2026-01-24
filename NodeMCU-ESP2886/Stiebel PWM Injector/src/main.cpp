@@ -48,7 +48,7 @@
 //    - NTP time synchronization for accurate timestamps
 //    - Initial NTP sync at startup, periodic resync (1 min if invalid, 1 hour if valid)
 //    - Serial logging at configured interval with format:
-//      [YYYY-MM-DD HH:MM:SS] PWM-in: X%/OFF  PWM-out: X%/OFF  Pump HK2: ON/OFF  Status: ...
+//      [YYYY-MM-DD HH:MM:SS] PWM-in: X%/OFF  PWM-out: X%/OFF  Pump-HK2: ON/OFF  Status: ...
 //    - Config: WIFI_CONNECTION_TIMEOUT, WIFI_RECONNECT_INTERVAL, NTP_RESYNC_INTERVAL, 
 //              NTP_RESYNC_INTERVAL_VALID, LOG_INTERVAL
 //
@@ -193,7 +193,7 @@ String buildStatusLog() {
   String timestamp = getTimestamp();
   return "[" + timestamp + "] PWM-in: " + pwmInStatus + 
          "  PWM-out: " + pwmOutStatus + 
-         "  Pump HK2: " + pumpStatus + 
+         "  Pump-HK2: " + pumpStatus + 
          "  Status: " + statusString;
 }
 
