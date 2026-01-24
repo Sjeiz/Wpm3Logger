@@ -90,7 +90,8 @@ void updatePWMDetection() {
       pwmDetected = true;
       float period = (highTime + lowTime) / 1000000.0;
       freqIn = 1.0 / period;
-      dutyIn = (highTime * 100.0) / (highTime + lowTime);
+      // Invert duty cycle for open collector optocoupler (LOW = active)
+      dutyIn = 100.0 - (highTime * 100.0) / (highTime + lowTime);
       lastValidMeasurement = millis();
       dcLevelStartTime = millis();  // Reset DC counter on edge detection
     }
@@ -110,15 +111,16 @@ void updatePWMDetection() {
     if (currentLevel == lastDCLevel) {
       unsigned long dcDuration = currentTime - dcLevelStartTime;
       if (dcDuration > DC_DETECTION_THRESHOLD && dcDuration < PWM_DETECTION_TIMEOUT) {
-        // Constant HIGH level = valid DC signal (100% duty)
-        // Constant LOW level = no signal (0% duty = absence of PWM)
-        if (currentLevel == HIGH) {
+        // Open collector inverts logic: LOW = active, HIGH = inactive
+        // Constant LOW level = 100% duty (pump fully active)
+        // Constant HIGH level = 0% duty (no signal)
+        if (currentLevel == LOW) {
           pwmDetected = true;
           freqIn = 0.0;  // DC has no frequency
           dutyIn = 100.0;
           lastValidMeasurement = currentTime;
         } else {
-          // LOW = 0% = no signal
+          // HIGH = 0% = no signal
           pwmDetected = false;
           freqIn = 0.0;
           dutyIn = 0.0;

@@ -16,7 +16,8 @@
 // 1. PWM INPUT DETECTION (D6):
 //    - Detects PWM signal via interrupt-based edge detection with debouncing
 //    - Measures duty cycle and frequency (100-150 Hz expected)
-//    - DC level detection: 100% duty = constant HIGH (valid signal), 0% duty = constant LOW (no signal)
+//    - Open collector optocoupler inverts logic: LOW=active/100%, HIGH=inactive/0%
+//    - DC level detection: 100% duty = constant LOW (valid signal), 0% duty = constant HIGH (no signal)
 //    - Stable measurement without blocking the main loop
 //    - Config: PWM_DEBOUNCE_TIME, PWM_DETECTION_TIMEOUT
 //
