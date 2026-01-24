@@ -22,18 +22,19 @@
 //
 // 2. HEAT PUMP STATE MACHINE (6 States):
 //    - STANDBY: PWM-in OFF, no post-run timer active
-//    - STARTUP: PWM-in ON, waiting 5 minutes for stable temperature reading
-//    - HOT_WATER: Temp >45°C (domestic hot water production)
-//    - HEATING: Temp 24-45°C (space heating mode)
-//    - COOLING: Temp <24°C (active cooling mode)
+//    - STARTUP: PWM-in ON, waiting 2 minutes for mode detection
+//    - HOT_WATER: Temp >40°C (domestic hot water production)
+//    - HEATING: Stable/rising temp during startup (space heating mode)
+//    - COOLING: Temp drops >1°C during startup (active cooling mode)
 //    - POST_RUN: PWM-in OFF after HOT_WATER, 30-minute timer for floor cooling
 //
 // 3. TEMPERATURE-BASED MODE DETECTION (DS18B20 on D2):
 //    - Non-blocking temperature reading with 30-second retry on failure
-//    - After 5-minute STARTUP, determines mode: >45°C → HOT_WATER, ≥24°C → HEATING, <24°C → COOLING
-//    - Mode changes dynamically based on temperature during operation
-//    - Fallback: If sensor unavailable, defaults to HOT_WATER (conservative choice)
-//    - Config: TEMP_THRESHOLD_HOT_WATER (45°C), TEMP_THRESHOLD_HEATING (24°C)
+//    - During 2-minute STARTUP: temp trend determines COOLING (>1°C drop) vs HEATING (stable)
+//    - Runtime: only switch to/from HOT_WATER when crossing 40°C threshold
+//    - HEATING and COOLING modes remain fixed once determined
+//    - Fallback: If sensor unavailable during startup, defaults to HEATING (conservative choice)
+//    - Config: TEMP_THRESHOLD_HOT_WATER (40°C), TEMP_TREND_COOLING_THRESHOLD (-1°C)
 //
 // 4. DEFROST CYCLE DETECTION:
 //    - Detected when duty cycle ≥95% AND temperature is falling in HOT_WATER or HEATING modes
@@ -72,24 +73,25 @@
 //
 // ===== STATE TRANSITION EXAMPLES - COMPLETE OVERVIEW =====
 //
-// 1. NORMALE STARTUP NAAR HOT WATER:
-//   [2026-01-24 10:00:00] === HEATPUMP STARTED: Determining mode for 5 minutes... ===
-//   [2026-01-24 10:00:00] State: STARTUP  PumpHK2: NORMAL  PWM-in: 45.0%  PWM-out: OFF  Flow: 32.5°C
-//   [2026-01-24 10:02:30] State: STARTUP  PumpHK2: NORMAL  PWM-in: 48.2%  PWM-out: OFF  Flow: 38.7°C
-//   [2026-01-24 10:05:00] === MODE DETECTED: Hot Water Mode ===
-//   [2026-01-24 10:05:00] State: HOT_WATER  PumpHK2: NORMAL  PWM-in: 85.0%  PWM-out: OFF  Flow: 52.3°C
+// 1. NORMALE STARTUP NAAR HEATING (STABIELE TEMP):
+//   [2026-01-24 10:00:00] === HEATPUMP STARTED: Determining mode for 2 minutes... ===
+//   [2026-01-24 10:00:00] State: STARTUP  PumpHK2: NORMAL  PWM-in: 45.0%  PWM-out: OFF  Flow: 28.5°C
+//   [2026-01-24 10:01:00] State: STARTUP  PumpHK2: NORMAL  PWM-in: 48.0%  PWM-out: OFF  Flow: 29.0°C
+//   [2026-01-24 10:02:00] === MODE DETECTED: Heating Mode ===
+//   [2026-01-24 10:02:00] State: HEATING  PumpHK2: NORMAL  PWM-in: 50.0%  PWM-out: OFF  Flow: 29.5°C
 //
-// 2. STARTUP NAAR HEATING (TEMPERATUUR 24-45°C):
-//   [2026-01-24 10:15:00] === HEATPUMP STARTED: Determining mode for 5 minutes... ===
-//   [2026-01-24 10:15:00] State: STARTUP  PumpHK2: NORMAL  PWM-in: 50.0%  PWM-out: OFF  Flow: 28.5°C
-//   [2026-01-24 10:20:00] === MODE DETECTED: Heating Mode ===
-//   [2026-01-24 10:20:00] State: HEATING  PumpHK2: NORMAL  PWM-in: 65.0%  PWM-out: OFF  Flow: 35.2°C
+// 2. STARTUP NAAR COOLING (TEMP DAALT >1°C):
+//   [2026-01-24 10:15:00] === HEATPUMP STARTED: Determining mode for 2 minutes... ===
+//   [2026-01-24 10:15:00] State: STARTUP  PumpHK2: NORMAL  PWM-in: 95.0%  PWM-out: OFF  Flow: 22.5°C
+//   [2026-01-24 10:16:00] State: STARTUP  PumpHK2: NORMAL  PWM-in: 98.0%  PWM-out: OFF  Flow: 21.0°C
+//   [2026-01-24 10:17:00] === MODE DETECTED: Cooling Mode (temp trend) ===
+//   [2026-01-24 10:17:00] State: COOLING  PumpHK2: NORMAL  PWM-in: 100.0%  PWM-out: OFF  Flow: 20.0°C
 //
-// 3. STARTUP NAAR COOLING (TEMPERATUUR <24°C):
-//   [2026-01-24 11:00:00] === HEATPUMP STARTED: Determining mode for 5 minutes... ===
-//   [2026-01-24 11:00:00] State: STARTUP  PumpHK2: NORMAL  PWM-in: 95.0%  PWM-out: OFF  Flow: 18.2°C
-//   [2026-01-24 11:05:00] === MODE DETECTED: Cooling Mode ===
-//   [2026-01-24 11:05:00] State: COOLING  PumpHK2: NORMAL  PWM-in: 100.0%  PWM-out: OFF  Flow: 18.5°C
+// 3. STARTUP NAAR HOT_WATER (TEMP METEEN >40°C):
+//   [2026-01-24 11:00:00] === HEATPUMP STARTED: Determining mode for 2 minutes... ===
+//   [2026-01-24 11:00:00] State: STARTUP  PumpHK2: NORMAL  PWM-in: 60.0%  PWM-out: OFF  Flow: 42.0°C
+//   [2026-01-24 11:02:00] === MODE DETECTED: Hot Water Mode ===
+//   [2026-01-24 11:02:00] State: HOT_WATER  PumpHK2: NORMAL  PWM-in: 75.0%  PWM-out: OFF  Flow: 48.0°C
 //
 // 4. HOT WATER NAAR POST-RUN (NORMALE FLOW):
 //   [2026-01-24 12:00:00] State: HOT_WATER  PumpHK2: NORMAL  PWM-in: 85.0%  PWM-out: OFF  Flow: 52.3°C
@@ -112,11 +114,11 @@
 //   [2026-01-24 15:25:45] State: STANDBY  PumpHK2: NORMAL  PWM-in: OFF  PWM-out: OFF  Flow: 22.1°C
 //
 // 7. POST-RUN TIMER GEANNULEERD DOOR HERSTART:
-//   [2026-01-24 16:00:00] State: POST_RUN (15.5 min)  PumpHK2: FORCED  PWM-in: OFF  PWM-out: 30%  Flow: 32.1°C
-//   [2026-01-24 16:05:00] === HEATPUMP RESTARTED: Post-Run Timer cancelled, determining mode for 5 minutes... ===
+//   [2026-01-24 16:00:00] State: POST_RUN (15.5 min)  PumpHK2: FORCED  PWM-in: OFF  PWM-out: 30%  Flow: 32.0°C
+//   [2026-01-24 16:05:00] === HEATPUMP RESTARTED: Post-Run Timer cancelled, determining mode for 2 minutes... ===
 //   [2026-01-24 16:05:00] State: STARTUP  PumpHK2: NORMAL  PWM-in: 45.0%  PWM-out: OFF  Flow: 30.5°C
-//   [2026-01-24 16:10:00] === MODE DETECTED: Hot Water Mode ===
-//   [2026-01-24 16:10:00] State: HOT_WATER  PumpHK2: NORMAL  PWM-in: 78.0%  PWM-out: OFF  Flow: 48.3°C
+//   [2026-01-24 16:07:00] === MODE DETECTED: Hot Water Mode ===
+//   [2026-01-24 16:07:00] State: HOT_WATER  PumpHK2: NORMAL  PWM-in: 78.0%  PWM-out: OFF  Flow: 48.0°C
 //
 // 8. DEFROST CYCLUS IN HOT WATER MODE:
 //   [2026-01-24 17:00:00] State: HOT_WATER  PumpHK2: NORMAL  PWM-in: 80.0%  PWM-out: OFF  Flow: 50.5°C
@@ -133,60 +135,50 @@
 //   [2026-01-24 18:15:45] === DEFROST CYCLE FINISHED ===
 //   [2026-01-24 18:15:45] State: HEATING  PumpHK2: NORMAL  PWM-in: 68.0%  PWM-out: OFF  Flow: 36.8°C
 //
-// 10. MODE CHANGES HOT WATER → HEATING → COOLING:
-//   [2026-01-24 19:00:00] State: HOT_WATER  PumpHK2: NORMAL  PWM-in: 80.0%  PWM-out: OFF  Flow: 48.5°C
-//   [2026-01-24 19:10:00] === MODE CHANGE: Hot Water → Heating ===
-//   [2026-01-24 19:10:00] State: HEATING  PumpHK2: NORMAL  PWM-in: 60.0%  PWM-out: OFF  Flow: 38.2°C
-//   [2026-01-24 19:20:00] === MODE CHANGE: Heating → Cooling ===
-//   [2026-01-24 19:20:00] State: COOLING  PumpHK2: NORMAL  PWM-in: 100.0%  PWM-out: OFF  Flow: 18.5°C
+// 10. MODE CHANGE HEATING → HOT_WATER (TEMP >40°C):
+//   [2026-01-24 19:00:00] State: HEATING  PumpHK2: NORMAL  PWM-in: 60.0%  PWM-out: OFF  Flow: 38.5°C
+//   [2026-01-24 19:10:00] === MODE CHANGE: Heating → Hot Water ===
+//   [2026-01-24 19:10:00] State: HOT_WATER  PumpHK2: NORMAL  PWM-in: 75.0%  PWM-out: OFF  Flow: 42.0°C
 //
-// 11. MODE CHANGES COOLING → HEATING → HOT WATER:
-//   [2026-01-24 20:00:00] State: COOLING  PumpHK2: NORMAL  PWM-in: 100.0%  PWM-out: OFF  Flow: 20.2°C
-//   [2026-01-24 20:15:00] === MODE CHANGE: Cooling → Heating ===
-//   [2026-01-24 20:15:00] State: HEATING  PumpHK2: NORMAL  PWM-in: 65.0%  PWM-out: OFF  Flow: 30.5°C
-//   [2026-01-24 20:30:00] === MODE CHANGE: Heating → Hot Water ===
-//   [2026-01-24 20:30:00] State: HOT_WATER  PumpHK2: NORMAL  PWM-in: 75.0%  PWM-out: OFF  Flow: 46.8°C
+// 11. MODE CHANGE COOLING → HOT_WATER (TEMP >40°C):
+//   [2026-01-24 20:00:00] State: COOLING  PumpHK2: NORMAL  PWM-in: 100.0%  PWM-out: OFF  Flow: 35.0°C
+//   [2026-01-24 20:15:00] === MODE CHANGE: Cooling → Hot Water ===
+//   [2026-01-24 20:15:00] State: HOT_WATER  PumpHK2: NORMAL  PWM-in: 80.0%  PWM-out: OFF  Flow: 43.0°C
 //
-// 12. STARTUP TIJDENS STARTUP (PWM UIT TIJDENS STARTUP):
-//   [2026-01-24 21:00:00] === HEATPUMP STARTED: Determining mode for 5 minutes... ===
-//   [2026-01-24 21:00:00] State: STARTUP  PumpHK2: NORMAL  PWM-in: 50.0%  PWM-out: OFF  Flow: 28.5°C
-//   [2026-01-24 21:02:30] === HEATPUMP STOPPED: Entering Standby ===
-//   [2026-01-24 21:02:30] State: STANDBY  PumpHK2: NORMAL  PWM-in: OFF  PWM-out: OFF  Flow: 26.2°C
+// 12. MODE CHANGE HOT_WATER → HEATING (TEMP <40°C):
+//   [2026-01-24 21:00:00] State: HOT_WATER  PumpHK2: NORMAL  PWM-in: 70.0%  PWM-out: OFF  Flow: 41.5°C
+//   [2026-01-24 21:10:00] === MODE CHANGE: Hot Water → Heating ===
+//   [2026-01-24 21:10:00] State: HEATING  PumpHK2: NORMAL  PWM-in: 55.0%  PWM-out: OFF  Flow: 38.0°C
 //
-// 13. STARTUP MET TEMPERATUUR SENSOR UITVAL:
-//   [2026-01-24 22:00:00] === HEATPUMP STARTED: Determining mode for 5 minutes... ===
-//   [2026-01-24 22:00:00] State: STARTUP  PumpHK2: NORMAL  PWM-in: 50.0%  PWM-out: OFF  Flow: --°C
-//   [2026-01-24 22:05:00] === MODE DETECTED: Hot Water Mode (temp sensor unavailable) ===
-//   [2026-01-24 22:05:00] State: HOT_WATER  PumpHK2: NORMAL  PWM-in: 75.0%  PWM-out: OFF  Flow: --°C
+// 12. MODE CHANGE HOT_WATER → HEATING (TEMP <40°C):
+//   [2026-01-24 21:00:00] State: HOT_WATER  PumpHK2: NORMAL  PWM-in: 70.0%  PWM-out: OFF  Flow: 41.5°C
+//   [2026-01-24 21:10:00] === MODE CHANGE: Hot Water → Heating ===
+//   [2026-01-24 21:10:00] State: HEATING  PumpHK2: NORMAL  PWM-in: 55.0%  PWM-out: OFF  Flow: 38.0°C
 //
-// 14. VOLLEDIGE CYCLUS (STANDBY → STARTUP → HOT WATER → POST-RUN → STANDBY):
-//   [2026-01-24 23:00:00] State: STANDBY  PumpHK2: NORMAL  PWM-in: OFF  PWM-out: OFF  Flow: 25.5°C
-//   [2026-01-24 23:05:00] === HEATPUMP STARTED: Determining mode for 5 minutes... ===
-//   [2026-01-24 23:05:00] State: STARTUP  PumpHK2: NORMAL  PWM-in: 45.0%  PWM-out: OFF  Flow: 28.5°C
-//   [2026-01-24 23:10:00] === MODE DETECTED: Hot Water Mode ===
-//   [2026-01-24 23:10:00] State: HOT_WATER  PumpHK2: NORMAL  PWM-in: 85.0%  PWM-out: OFF  Flow: 52.3°C
-//   [2026-01-24 23:45:00] State: HOT_WATER  PumpHK2: NORMAL  PWM-in: 82.0%  PWM-out: OFF  Flow: 51.5°C
-//   [2026-01-24 23:50:00] === HEATPUMP STOPPED: Post-Run Timer started (30.0 min) ===
-//   [2026-01-24 23:50:00] State: POST_RUN (30.0 min)  PumpHK2: FORCED  PWM-in: OFF  PWM-out: 30%  Flow: 48.2°C
-//   [2026-01-25 00:10:00] State: POST_RUN (10.0 min)  PumpHK2: FORCED  PWM-in: OFF  PWM-out: 30%  Flow: 35.5°C
-//   [2026-01-25 00:20:00] === POST-RUN TIMER FINISHED: Entering Standby ===
-//   [2026-01-25 00:20:00] State: STANDBY  PumpHK2: NORMAL  PWM-in: OFF  PWM-out: OFF  Flow: 28.5°C
+// 13. STARTUP TIJDENS STARTUP (PWM UIT TIJDENS STARTUP):
+//   [2026-01-24 22:00:00] === HEATPUMP STARTED: Determining mode for 2 minutes... ===
+//   [2026-01-24 22:00:00] State: STARTUP  PumpHK2: NORMAL  PWM-in: 50.0%  PWM-out: OFF  Flow: 28.5°C
+//   [2026-01-24 22:01:30] === HEATPUMP STOPPED: Entering Standby ===
+//   [2026-01-24 22:01:30] State: STANDBY  PumpHK2: NORMAL  PWM-in: OFF  PWM-out: OFF  Flow: 28.0°C
+//
+// 14. STARTUP MET TEMPERATUUR SENSOR UITVAL:
+//   [2026-01-24 23:00:00] === HEATPUMP STARTED: Determining mode for 2 minutes... ===
+//   [2026-01-24 23:00:00] State: STARTUP  PumpHK2: NORMAL  PWM-in: 50.0%  PWM-out: OFF  Flow: --°C
+//   [2026-01-24 23:02:00] === MODE DETECTED: Heating Mode (temp sensor unavailable) ===
+//   [2026-01-24 23:02:00] State: HEATING  PumpHK2: NORMAL  PWM-in: 60.0%  PWM-out: OFF  Flow: --°C
 //
 // ALLE MOGELIJKE STATE TRANSITIES:
 // • STANDBY → STARTUP (PWM-in ON)
-// • STARTUP → HOT_WATER (5 min, temp >45°C)
-// • STARTUP → HEATING (5 min, temp 24-45°C)
-// • STARTUP → COOLING (5 min, temp <24°C)
+// • STARTUP → HEATING (2 min, temp stable/rising)
+// • STARTUP → COOLING (2 min, temp drops >1°C)
+// • STARTUP → HOT_WATER (2 min, temp >40°C)
 // • STARTUP → STANDBY (PWM-in OFF tijdens startup)
 // • HOT_WATER → POST_RUN (PWM-in OFF)
-// • HOT_WATER → HEATING (temp daalt onder 45°C)
-// • HOT_WATER → COOLING (temp daalt onder 24°C)
+// • HOT_WATER → HEATING (temp daalt onder 40°C)
+// • HEATING → HOT_WATER (temp stijgt boven 40°C)
 // • HEATING → STANDBY (PWM-in OFF)
-// • HEATING → HOT_WATER (temp stijgt boven 45°C)
-// • HEATING → COOLING (temp daalt onder 24°C)
+// • COOLING → HOT_WATER (temp stijgt boven 40°C)
 // • COOLING → STANDBY (PWM-in OFF)
-// • COOLING → HEATING (temp stijgt boven 24°C)
-// • COOLING → HOT_WATER (temp stijgt boven 45°C)
 // • POST_RUN → STANDBY (timer afgelopen)
 // • POST_RUN → STARTUP (PWM-in ON tijdens post-run)
 //
@@ -269,30 +261,29 @@ void handleRoot() {
 
 // Function to set output PWM parameters
 void setOutputPWM(int frequency, int duty) {
-  if (DEBUG_MODE) {
+  static int lastFrequency = -1;
+  static int lastDuty = -1;
+  
+  // Only log on change
+  if (DEBUG_MODE && (frequency != lastFrequency || duty != lastDuty)) {
     Serial.print("DEBUG: setOutputPWM(");
     Serial.print(frequency);
     Serial.print("Hz, ");
     Serial.print(duty);
     Serial.println("%)");
+    lastFrequency = frequency;
+    lastDuty = duty;
   }
   
   if (duty == 0) {
     // Stop PWM completely
     analogWrite(PIN_PWM_OUT, 0);
     digitalWrite(PIN_PWM_OUT, LOW);
-    if (DEBUG_MODE) {
-      Serial.println("DEBUG: PWM stopped (pin set to LOW)");
-    }
   } else {
     // Set PWM frequency and duty cycle
     analogWriteFreq(frequency);
     int pwmValue = (duty * 1023) / 100;
     analogWrite(PIN_PWM_OUT, pwmValue);
-    if (DEBUG_MODE) {
-      Serial.print("DEBUG: PWM active - analogWrite value = ");
-      Serial.println(pwmValue);
-    }
   }
 }
 

@@ -11,6 +11,8 @@ HeatPumpStateMachine::HeatPumpStateMachine()
     lastTemperature(0.0),
     previousTemperature(0.0),
     lastTempUpdateTime(0),
+    startupInitialTemp(0.0),
+    startupInitialTempSet(false),
     eventCallback(nullptr) {
 }
 
@@ -27,24 +29,19 @@ void HeatPumpStateMachine::update(bool pwmActive, float dutyCycle, float tempera
   tempSensorAvailable = tempAvailable;
   lastTemperature = temperature;
   
-  // Update defrost detection (only in HOT_WATER or HEATING states)
   if (currentState == HOT_WATER || currentState == HEATING) {
     updateDefrostDetection(dutyCycle, temperature, tempAvailable);
-  } else {
-    // Not in a state where defrost is applicable
-    if (inDefrostCycle) {
-      inDefrostCycle = false;
-      if (eventCallback) {
-        eventCallback("DEFROST CYCLE FINISHED");
-      }
+  } else if (inDefrostCycle) {
+    inDefrostCycle = false;
+    if (eventCallback) {
+      eventCallback("DEFROST CYCLE FINISHED");
     }
   }
   
-  // State-specific handling
   switch (currentState) {
     case STANDBY:
       if (pwmActive) {
-        transitionToState(STARTUP, "HEATPUMP STARTED: Determining mode for 5 minutes...");
+        transitionToState(STARTUP, "HEATPUMP STARTED: Determining mode for 2 minutes...");
         startupStartTime = millis();
       }
       break;
@@ -70,150 +67,103 @@ void HeatPumpStateMachine::handleStartupState(bool pwmActive, float temperature,
   if (!pwmActive) {
     // PWM turned off during startup
     transitionToState(STANDBY, "HEATPUMP STOPPED: Entering Standby");
+    startupInitialTempSet = false;
     return;
+  }
+  
+  // Record initial temperature at startup
+  if (!startupInitialTempSet && tempAvailable) {
+    startupInitialTemp = temperature;
+    startupInitialTempSet = true;
   }
   
   // Check if startup period has elapsed
   unsigned long elapsed = millis() - startupStartTime;
   if (elapsed >= STARTUP_WAIT_TIME) {
-    // Determine mode based on temperature
-    HeatPumpState newState = determineStateFromTemperature(temperature);
-    
-    // Generate appropriate event message
-    if (newState == HOT_WATER) {
-      if (tempAvailable) {
+    // Determine mode based on temperature trend and threshold
+    if (tempAvailable && startupInitialTempSet) {
+      float tempChange = temperature - startupInitialTemp;
+      
+      if (temperature > TEMP_THRESHOLD_HOT_WATER) {
         transitionToState(HOT_WATER, "MODE DETECTED: Hot Water Mode");
+      } else if (tempChange <= TEMP_TREND_COOLING_THRESHOLD) {
+        transitionToState(COOLING, "MODE DETECTED: Cooling Mode (temp trend)");
       } else {
-        transitionToState(HOT_WATER, "MODE DETECTED: Hot Water Mode (temp sensor unavailable)");
+        transitionToState(HEATING, "MODE DETECTED: Heating Mode");
       }
-    } else if (newState == HEATING) {
-      transitionToState(HEATING, "MODE DETECTED: Heating Mode");
-    } else {  // COOLING
-      transitionToState(COOLING, "MODE DETECTED: Cooling Mode");
+    } else {
+      transitionToState(HEATING, "MODE DETECTED: Heating Mode (temp sensor unavailable)");
     }
+    
+    startupInitialTempSet = false;
   }
 }
 
 // Handle operational states (HOT_WATER, HEATING, COOLING)
 void HeatPumpStateMachine::handleOperationalState(bool pwmActive, float temperature) {
   if (!pwmActive) {
-    // PWM turned off
     if (currentState == HOT_WATER) {
-      // Only trigger post-run from HOT_WATER state
       transitionToState(POST_RUN, "HEATPUMP STOPPED: Post-Run Timer started (30.0 min)");
       postRunStartTime = millis();
     } else {
-      // From HEATING or COOLING, go directly to STANDBY
       transitionToState(STANDBY, "HEATPUMP STOPPED: Entering Standby");
     }
     return;
   }
   
-  // PWM still active - check for mode changes based on temperature
-  HeatPumpState newState = determineStateFromTemperature(temperature);
+  if (!tempSensorAvailable) return;
   
-  if (newState != currentState) {
-    // Mode change detected
-    char eventMsg[100];
-    const char* fromState = (currentState == HOT_WATER) ? "Hot Water" : 
-                            (currentState == HEATING) ? "Heating" : "Cooling";
-    const char* toState = (newState == HOT_WATER) ? "Hot Water" : 
-                          (newState == HEATING) ? "Heating" : "Cooling";
-    
-    snprintf(eventMsg, sizeof(eventMsg), "MODE CHANGE: %s → %s", fromState, toState);
-    transitionToState(newState, eventMsg);
+  // Only HOT_WATER mode can switch at runtime (HEATING/COOLING remain fixed)
+  if (currentState == HOT_WATER) {
+    if (temperature < TEMP_THRESHOLD_HOT_WATER) {
+      transitionToState(HEATING, "MODE CHANGE: Hot Water → Heating");
+    }
+  } else if (temperature > TEMP_THRESHOLD_HOT_WATER) {
+    char eventMsg[80];
+    snprintf(eventMsg, sizeof(eventMsg), "MODE CHANGE: %s → Hot Water", 
+             currentState == HEATING ? "Heating" : "Cooling");
+    transitionToState(HOT_WATER, eventMsg);
   }
 }
 
 // Handle POST_RUN state logic
 void HeatPumpStateMachine::handlePostRunState(bool pwmActive) {
   if (pwmActive) {
-    // PWM returned during post-run - cancel timer and restart
-    transitionToState(STARTUP, "HEATPUMP RESTARTED: Post-Run Timer cancelled, determining mode for 5 minutes...");
+    transitionToState(STARTUP, "HEATPUMP RESTARTED: Post-Run Timer cancelled, determining mode for 2 minutes...");
     startupStartTime = millis();
     return;
   }
   
-  // Check if post-run timer has expired
-  unsigned long elapsed = millis() - postRunStartTime;
-  if (elapsed >= POSTRUN_TIMER_DURATION) {
+  if (millis() - postRunStartTime >= POSTRUN_TIMER_DURATION) {
     transitionToState(STANDBY, "POST-RUN TIMER FINISHED: Entering Standby");
-  }
-}
-
-// Determine state based on temperature thresholds
-HeatPumpState HeatPumpStateMachine::determineStateFromTemperature(float temperature) {
-  // If temperature sensor unavailable, default to HOT_WATER (conservative choice)
-  if (!tempSensorAvailable) {
-    return HOT_WATER;
-  }
-  
-  // Temperature evaluation order (as specified):
-  // 1. Check >45°C first (HOT_WATER)
-  // 2. Then check ≥24°C (HEATING)
-  // 3. Otherwise <24°C (COOLING)
-  if (temperature > TEMP_THRESHOLD_HOT_WATER) {
-    return HOT_WATER;
-  } else if (temperature >= TEMP_THRESHOLD_HEATING) {
-    return HEATING;
-  } else {
-    return COOLING;
   }
 }
 
 // Update defrost cycle detection
 void HeatPumpStateMachine::updateDefrostDetection(float dutyCycle, float temperature, bool tempAvailable) {
-  // Defrost only applicable in HOT_WATER or HEATING states
-  if (currentState != HOT_WATER && currentState != HEATING) {
-    return;
-  }
+  if (currentState != HOT_WATER && currentState != HEATING) return;
   
   bool wasInDefrost = inDefrostCycle;
   
-  // Defrost detection requires:
-  // 1. High duty cycle (≥95%)
-  // 2. Temperature sensor available
-  // 3. Falling temperature (indicating defrost cycle)
   if (dutyCycle >= DEFROST_DUTY_THRESHOLD && tempAvailable) {
     unsigned long currentTime = millis();
     
-    // Check if we have a previous temperature measurement (wait at least 30 seconds for trend)
     if (lastTempUpdateTime > 0 && (currentTime - lastTempUpdateTime) >= 30000) {
       float tempChange = temperature - previousTemperature;
+      inDefrostCycle = (tempChange < -0.3);
       
-      // Defrost: temperature is falling (< -0.3°C change over 30 second period)
-      // Normal hot water: temperature is rising or stable
-      if (tempChange < -0.3) {
-        inDefrostCycle = true;
-      } else {
-        inDefrostCycle = false;
-      }
-      
-      // Update temperature tracking
       previousTemperature = temperature;
       lastTempUpdateTime = currentTime;
-    } else {
-      // First measurement or too soon - initialize tracking
-      if (lastTempUpdateTime == 0) {
-        previousTemperature = temperature;
-        lastTempUpdateTime = currentTime;
-      }
-      // Keep current defrost state until we have trend data
+    } else if (lastTempUpdateTime == 0) {
+      previousTemperature = temperature;
+      lastTempUpdateTime = currentTime;
     }
   } else {
-    // Duty cycle below threshold or temp sensor unavailable - not in defrost
     inDefrostCycle = false;
   }
   
-  // Log state change
-  if (inDefrostCycle && !wasInDefrost) {
-    if (eventCallback) {
-      eventCallback("DEFROST CYCLE STARTED");
-    }
-  } else if (!inDefrostCycle && wasInDefrost) {
-    if (eventCallback) {
-      eventCallback("DEFROST CYCLE FINISHED");
-    }
+  if (inDefrostCycle != wasInDefrost && eventCallback) {
+    eventCallback(inDefrostCycle ? "DEFROST CYCLE STARTED" : "DEFROST CYCLE FINISHED");
   }
 }
 
@@ -221,6 +171,10 @@ void HeatPumpStateMachine::updateDefrostDetection(float dutyCycle, float tempera
 void HeatPumpStateMachine::transitionToState(HeatPumpState newState, const char* eventMessage) {
   previousState = currentState;
   currentState = newState;
+  
+  if (newState == STARTUP) {
+    startupInitialTempSet = false;
+  }
   
   if (eventCallback && eventMessage) {
     eventCallback(eventMessage);

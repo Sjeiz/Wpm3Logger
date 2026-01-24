@@ -3,7 +3,7 @@
 
 // ===== CONFIGURATION =====
 // Debug
-#define DEBUG_MODE false  // Set to true to enable debug output
+#define DEBUG_MODE true  // Set to true to enable debug output
 
 // Logging
 #define LOG_INTERVAL 30000  // Log every 30 seconds (milliseconds)
@@ -16,9 +16,9 @@
 #define POSTRUN_TIMER_DURATION (30 * 60 * 1000)   // Post-run timer duration (30 minutes)
 
 // State Machine
-#define STARTUP_WAIT_TIME 300000              // Startup wait time (5 minutes)
-#define TEMP_THRESHOLD_HOT_WATER 45.0         // Hot water mode threshold (°C)
-#define TEMP_THRESHOLD_HEATING 24.0           // Heating mode threshold (°C)
+#define STARTUP_WAIT_TIME 120000              // Startup wait time (2 minutes)
+#define TEMP_THRESHOLD_HOT_WATER 40.0         // Hot water mode threshold (°C)
+#define TEMP_TREND_COOLING_THRESHOLD -1.0     // Temp drop threshold for cooling detection (°C)
 #define DEFROST_DUTY_THRESHOLD 95.0           // Defrost cycle duty threshold (%)
 
 // PWM Detection

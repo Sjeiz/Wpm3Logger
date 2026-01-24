@@ -6,11 +6,11 @@
 // Heat pump operational states
 enum HeatPumpState {
   STANDBY,      // PWM-in OFF, no post-run timer
-  STARTUP,      // PWM-in ON, waiting for stable temperature (5 min)
-  HOT_WATER,    // PWM-in ON, temp >45°C (domestic hot water production)
-  HEATING,      // PWM-in ON, temp 24-45°C (space heating)
-  COOLING,      // PWM-in ON, temp <24°C (active cooling)
-  POST_RUN      // PWM-in OFF, post-run timer active (floor cooling)
+  STARTUP,      // PWM-in ON, determining mode (2 min)
+  HOT_WATER,    // PWM-in ON, temp >40°C (domestic hot water)
+  HEATING,      // PWM-in ON, stable temp (space heating)
+  COOLING,      // PWM-in ON, falling temp (active cooling)
+  POST_RUN      // PWM-in OFF, post-run timer active (30 min)
 };
 
 // Pump control modes
@@ -31,13 +31,14 @@ private:
   float lastTemperature;
   float previousTemperature;
   unsigned long lastTempUpdateTime;
+  float startupInitialTemp;
+  bool startupInitialTempSet;
   
   // Callback for state change events
   void (*eventCallback)(const char* event);
   
   // Internal helper methods
   void transitionToState(HeatPumpState newState, const char* eventMessage);
-  HeatPumpState determineStateFromTemperature(float temperature);
   void updateDefrostDetection(float dutyCycle, float temperature, bool tempAvailable);
   void handleStartupState(bool pwmActive, float temperature, bool tempAvailable);
   void handleOperationalState(bool pwmActive, float temperature);

@@ -1,4 +1,5 @@
 #include "PWMDetector.h"
+#include "Config.h"
 
 // PWM measurement with interrupt-based edge detection
 volatile unsigned long lastRisingEdge = 0;
@@ -33,9 +34,6 @@ IRAM_ATTR void handlePWMEdge() {
   unsigned long currentTime = micros();
   bool currentLevel = digitalRead(pwmPin);
   
-  // Track ANY edge attempt (before debounce check)
-  lastAnyEdgeTime = millis();
-  
   // Debounce: ignore edges faster than configured time to filter optocoupler noise
   unsigned long timeSinceLastEdge = currentTime - lastEdgeTime;
   if (timeSinceLastEdge < PWM_DEBOUNCE_TIME) {
@@ -48,6 +46,9 @@ IRAM_ATTR void handlePWMEdge() {
   }
   lastLevel = currentLevel;
   edgeCount++;
+  
+  // Track valid edges only (after debounce and level change checks)
+  lastAnyEdgeTime = millis();
 
   if (currentLevel == HIGH) {
     // Rising edge
@@ -78,6 +79,29 @@ void initPWMDetector(int pin) {
 
 // Update PWM measurements from interrupt data
 void updatePWMDetection() {
+  static unsigned long lastDebugUpdate = 0;
+  unsigned long currentTime = millis();
+  
+  // Periodic status debug every 15 seconds, only when having issues
+  if (DEBUG_MODE && (currentTime - lastDebugUpdate >= 15000)) {
+    unsigned long timeSinceEdge = currentTime - lastAnyEdgeTime;
+    unsigned long timeSinceValid = currentTime - lastValidMeasurement;
+    // Only log if we're approaching timeout or in problematic state
+    if (timeSinceValid > 5000 || timeSinceEdge > 500) {
+      Serial.print("DEBUG PWM: pwmValid=");
+      Serial.print(pwmValid ? "YES" : "NO");
+      Serial.print(" lastEdge=");
+      Serial.print(timeSinceEdge);
+      Serial.print("ms lastValid=");
+      Serial.print(timeSinceValid);
+      Serial.print("ms pinLevel=");
+      Serial.print(digitalRead(pwmPin) == LOW ? "LOW" : "HIGH");
+      Serial.print(" detected=");
+      Serial.println(pwmDetected ? "YES" : "NO");
+    }
+    lastDebugUpdate = currentTime;
+  }
+  
   // Check if we have a valid PWM measurement from interrupt
   if (pwmValid) {
     noInterrupts();
@@ -97,7 +121,6 @@ void updatePWMDetection() {
     }
   } else {
     // No edge detected - check for DC level (constant 0% or 100%)
-    unsigned long currentTime = millis();
     bool currentLevel = digitalRead(pwmPin);
     
     // Only consider DC if no edges for NO_EDGE_THRESHOLD (prevents ruis triggering)
@@ -119,11 +142,17 @@ void updatePWMDetection() {
           freqIn = 0.0;  // DC has no frequency
           dutyIn = 100.0;
           lastValidMeasurement = currentTime;
+          if (DEBUG_MODE) {
+            Serial.println("DEBUG: PWM DC level detected - constant LOW = 100% duty (defrost?)");
+          }
         } else {
           // HIGH = 0% = no signal
           pwmDetected = false;
           freqIn = 0.0;
           dutyIn = 0.0;
+          if (DEBUG_MODE) {
+            Serial.println("DEBUG: PWM DC level detected - constant HIGH = 0% duty (no signal)");
+          }
         }
       }
     } else {
@@ -138,6 +167,11 @@ void updatePWMDetection() {
       pwmDetected = false;
       freqIn = 0.0;
       dutyIn = 0.0;
+      if (DEBUG_MODE) {
+        Serial.print("DEBUG: PWM timeout - no valid signal for ");
+        Serial.print(timeSinceLastValid);
+        Serial.println("ms");
+      }
     }
   }
   
@@ -146,7 +180,15 @@ void updatePWMDetection() {
   if (pwmDetected != lastPwmDetectedState) {
     pwmStateJustChanged = true;
     lastPwmDetectedState = pwmDetected;
-    // State change detected - no logging here, handled by state machine
+    if (DEBUG_MODE) {
+      Serial.print("DEBUG: PWM state changed to ");
+      Serial.print(pwmDetected ? "DETECTED" : "NOT DETECTED");
+      Serial.print(" - Duty: ");
+      Serial.print(dutyIn, 1);
+      Serial.print("%, Freq: ");
+      Serial.print(freqIn, 1);
+      Serial.println("Hz");
+    }
   }
 }
 
