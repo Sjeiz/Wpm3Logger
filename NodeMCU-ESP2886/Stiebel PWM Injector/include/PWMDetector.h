@@ -7,7 +7,6 @@
 // PWM measurement variables (volatile for interrupt use)
 extern volatile unsigned long highDuration;
 extern volatile unsigned long lowDuration;
-extern volatile unsigned long edgeCount;
 
 // PWM results (updated by interrupt handler)
 extern float dutyIn;

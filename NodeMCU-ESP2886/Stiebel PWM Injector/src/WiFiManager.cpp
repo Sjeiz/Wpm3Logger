@@ -5,7 +5,6 @@
 static const char* wifiSSID = nullptr;
 static const char* wifiPassword = nullptr;
 static unsigned long lastConnectionAttempt = 0;
-static int connectionAttempts = 0;
 static bool wasConnected = false;
 
 // Initialize WiFi connection
@@ -18,12 +17,10 @@ void initWiFi(const char* ssid, const char* password) {
 
   Serial.print("WiFi verbinden");
   unsigned long start = millis();
-  connectionAttempts = 0;
 
   while (WiFi.status() != WL_CONNECTED && millis() - start < WIFI_CONNECTION_TIMEOUT) {
     delay(200);
     Serial.print(".");
-    connectionAttempts++;
   }
   Serial.println();
 
@@ -70,9 +67,4 @@ void updateWiFi() {
 // Get WiFi connection status
 bool isWiFiConnected() {
   return WiFi.status() == WL_CONNECTED;
-}
-
-// Get WiFi connection attempt count
-int getWiFiAttempts() {
-  return connectionAttempts;
 }

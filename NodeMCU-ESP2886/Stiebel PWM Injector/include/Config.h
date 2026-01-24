@@ -22,10 +22,13 @@
 // WiFi
 #define WIFI_CONNECTION_TIMEOUT 30000      // 30 seconds max wait for initial connection
 #define WIFI_RECONNECT_INTERVAL 60000      // Try reconnect every 60 seconds if disconnected
+#define NTP_RESYNC_INTERVAL 60000          // Try NTP resync every 60 seconds if time not valid
+#define NTP_RESYNC_INTERVAL_VALID 3600000  // Resync every hour when time is valid
 
 // LED Blinking
-#define LED_BLINK_SLOW 500UL  // Slow blink interval (ms)
-#define LED_BLINK_FAST 100UL  // Fast blink interval (ms, post-run timer active)
+#define LED_BLINK_STANDBY 200UL  // Standby blink interval (ms, short flashes)
+#define LED_BLINK_SLOW 500UL     // Slow blink interval (ms, PWM-in active)
+#define LED_BLINK_FAST 100UL     // Fast blink interval (ms, post-run timer active)
 
 // Serial & Web
 #define SERIAL_BAUD_RATE 115200          // Serial communication baud rate

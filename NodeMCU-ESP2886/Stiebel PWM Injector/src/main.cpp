@@ -16,6 +16,7 @@
 // 1. PWM INPUT DETECTION (D6):
 //    - Detects PWM signal via interrupt-based edge detection with debouncing
 //    - Measures duty cycle and frequency (100-150 Hz expected)
+//    - DC level detection: 100% duty = constant HIGH (valid signal), 0% duty = constant LOW (no signal)
 //    - Stable measurement without blocking the main loop
 //    - Config: PWM_DEBOUNCE_TIME, PWM_DETECTION_TIMEOUT
 //
@@ -37,16 +38,19 @@
 //    - Goes HIGH (ON) during post-run timer
 //
 // 5. LED INDICATOR (Built-in LED):
-//    - HEATPUMP ACTIVE / STANDBY: Slow blink interval
-//    - POST-RUN TIMER ACTIVE: Fast blink interval
-//    - Config: LED_BLINK_SLOW, LED_BLINK_FAST
+//    - STANDBY: Short flashes (no PWM-in, no post-run)
+//    - PWM-IN ACTIVE: Slow blink
+//    - POST-RUN TIMER ACTIVE: Fast blink
+//    - Config: LED_BLINK_STANDBY, LED_BLINK_SLOW, LED_BLINK_FAST
 //
 // 6. WIFI & LOGGING:
-//    - WiFi connection with auto-reconnect at configured interval
+//    - WiFi connection with auto-reconnect at configured interval (non-blocking)
 //    - NTP time synchronization for accurate timestamps
+//    - Initial NTP sync at startup, periodic resync (1 min if invalid, 1 hour if valid)
 //    - Serial logging at configured interval with format:
 //      [YYYY-MM-DD HH:MM:SS] PWM-in: X%/OFF  PWM-out: X%/OFF  Pump HK2: ON/OFF  Status: ...
-//    - Config: WIFI_CONNECTION_TIMEOUT, WIFI_RECONNECT_INTERVAL, LOG_INTERVAL
+//    - Config: WIFI_CONNECTION_TIMEOUT, WIFI_RECONNECT_INTERVAL, NTP_RESYNC_INTERVAL, 
+//              NTP_RESYNC_INTERVAL_VALID, LOG_INTERVAL
 //
 // 7. WEB SERVER:
 //    - HTTP server on port 80
@@ -64,8 +68,8 @@ bool ledState = false;
 // Logging and state tracking
 unsigned long lastLog = 0;
 bool firstLogSent = false;
-bool postRunTimerJustFinished = false;
-String lastStatusChange = "";  // Store last status change message for web display
+String lastStatusChange = "";
+unsigned long lastNTPSyncAttempt = 0;  // Track NTP resync attempts  // Store last status change message for web display
 
 // Heap warning tracking
 bool lowHeapWarned = false;
@@ -266,6 +270,22 @@ void loop() {
   // Maintain WiFi connection
   updateWiFi();
 
+  // Periodically retry NTP sync (non-blocking)
+  time_t now = time(nullptr);
+  bool timeValid = (now >= 1000000000);  // Time synced if after ~2001
+  unsigned long currentMillis = millis();
+  unsigned long resyncInterval = timeValid ? NTP_RESYNC_INTERVAL_VALID : NTP_RESYNC_INTERVAL;
+  
+  if (currentMillis - lastNTPSyncAttempt >= resyncInterval) {
+    configTime(1 * 3600, 0, "pool.ntp.org", "time.nist.gov");
+    lastNTPSyncAttempt = currentMillis;
+    if (DEBUG_MODE) {
+      Serial.print("DEBUG: NTP resync poging (");
+      Serial.print(timeValid ? "geldig, uur-interval" : "ongeldig, minuut-interval");
+      Serial.println(")");
+    }
+  }
+
   // Update PWM measurements from interrupt data
   updatePWMDetection();
 
@@ -293,7 +313,7 @@ void loop() {
   }
 
   // Update post-run timer
-  bool wasPostRunTimerActive = postRunTimerJustFinished; // Track if timer just finished
+  bool wasPostRunTimerActive = isPostRunTimerActive();
   updatePostRunTimer();
   
   if (wasPostRunTimerActive && !isPostRunTimerActive()) {
@@ -301,41 +321,35 @@ void loop() {
     Serial.println(lastStatusChange);
     addWebLogLine(lastStatusChange);
     logDataLine();
-    postRunTimerJustFinished = false;
   }
+
+  // LED gedrag: 3 verschillende snelheden
+  unsigned long currentTime = millis();
+  unsigned long blinkInterval;
   
-  // Track if post-run timer is currently active for next loop
   if (isPostRunTimerActive()) {
-    postRunTimerJustFinished = true;
-  }
-
-  // LED gedrag
-  unsigned long now = millis();
-  unsigned long blinkInterval;  // milliseconds
-
-  if (isPostRunTimerActive()) {
-    // Post-run timer active: fast flash
+    // Post-run timer active: fast blink
     blinkInterval = LED_BLINK_FAST;
   } else if (pwmDetected) {
-    // PWM-in present: slow flash
+    // PWM-in active: slow blink
     blinkInterval = LED_BLINK_SLOW;
   } else {
-    // No PWM-in and no post-run timer: slow flash
-    blinkInterval = LED_BLINK_SLOW;
+    // Standby (no PWM-in, no post-run): short flashes
+    blinkInterval = LED_BLINK_STANDBY;
   }
 
-  if (now - lastBlink >= blinkInterval) {
-    lastBlink = now;
+  if (currentTime - lastBlink >= blinkInterval) {
+    lastBlink = currentTime;
     ledState = !ledState;
     digitalWrite(LED_PIN, ledState ? HIGH : LOW);  // active LOW
   }
 
   // Logging: First log immediately, then every 30 seconds
-  if (!firstLogSent || (now - lastLog >= LOG_INTERVAL)) {
+  if (!firstLogSent || (currentTime - lastLog >= LOG_INTERVAL)) {
     if (!firstLogSent) {
       firstLogSent = true;
     }
-    lastLog = now;
+    lastLog = currentTime;
     
     logDataLine();
   }

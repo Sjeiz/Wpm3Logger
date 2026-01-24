@@ -14,7 +14,4 @@ void updateWiFi();
 // Get WiFi connection status
 bool isWiFiConnected();
 
-// Get WiFi connection attempt count
-int getWiFiAttempts();
-
 #endif
