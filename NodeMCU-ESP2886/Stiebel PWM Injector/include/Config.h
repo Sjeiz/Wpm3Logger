@@ -15,9 +15,15 @@
 // Post-Run Timer
 #define POSTRUN_TIMER_DURATION (30 * 60 * 1000)   // Post-run timer duration (30 minutes)
 
+// State Machine
+#define STARTUP_WAIT_TIME 300000              // Startup wait time (5 minutes)
+#define TEMP_THRESHOLD_HOT_WATER 45.0         // Hot water mode threshold (°C)
+#define TEMP_THRESHOLD_HEATING 24.0           // Heating mode threshold (°C)
+#define DEFROST_DUTY_THRESHOLD 95.0           // Defrost cycle duty threshold (%)
+
 // PWM Detection
 #define PWM_DEBOUNCE_TIME 3000   // Debounce time in microseconds (3ms)
-#define PWM_DETECTION_TIMEOUT 5000  // 5 seconds without edge = no PWM
+#define PWM_DETECTION_TIMEOUT 30000  // 30 seconds without valid measurement = no PWM (increased for defrost compatibility)
 
 // WiFi
 #define WIFI_CONNECTION_TIMEOUT 30000      // 30 seconds max wait for initial connection
@@ -44,7 +50,10 @@
 // PIN DEFINITIONS
 #define PIN_PWM_OUT D5          // PWM output
 #define PIN_PWM_IN  D6          // PWM input (optocoupler)
-#define PIN_PUMP    D7          // Pump HK2 control
+#define PIN_PUMP    D7          // Pump HK2 control (POST_RUN: forced ON)
+#define PIN_TEMP_SENSOR D2      // DS18B20 temperature sensor
+#define PIN_FORCE_PUMP_HK2 D7   // Force pump ON (HIGH = forced ON)
+#define PIN_BLOCK_PUMP_HK2 D8   // Block pump (HIGH = blocked during defrost)
 #define LED_PIN     LED_BUILTIN // Onboard LED (active LOW)
 
 #endif

@@ -7,61 +7,204 @@
 #include "Config.h"
 #include "PWMDetector.h"
 #include "WiFiManager.h"
-#include "PostRunTimerManager.h"
+#include "HeatPumpStateMachine.h"
+#include "TemperatureSensor.h"
 
 // ===== FUNCTIONALITY OVERVIEW =====
-// This application monitors a PWM signal on D6 (from external heat pump) and controls
-// a PWM output on D1. It implements the following features:
+// This application monitors a PWM signal from a heat pump and intelligently manages
+// a floor heating pump based on the heat pump's operational state. It implements:
 //
 // 1. PWM INPUT DETECTION (D6):
-//    - Detects PWM signal via interrupt-based edge detection with debouncing
-//    - Measures duty cycle and frequency (100-150 Hz expected)
+//    - Interrupt-based edge detection with debouncing (100-150 Hz expected)
 //    - Open collector optocoupler inverts logic: LOW=active/100%, HIGH=inactive/0%
-//    - DC level detection: 100% duty = constant LOW (valid signal), 0% duty = constant HIGH (no signal)
-//    - Stable measurement without blocking the main loop
+//    - DC level detection: 100% duty = constant LOW, 0% duty = constant HIGH (no signal)
 //    - Config: PWM_DEBOUNCE_TIME, PWM_DETECTION_TIMEOUT
 //
-// 2. PWM OUTPUT CONTROL (D1):
-//    - HEATPUMP ACTIVE / STANDBY: No output (PWM inactive)
-//    - POST-RUN TIMER ACTIVE: Outputs fixed PWM with configured frequency and duty cycle
-//    - Config: PWM_OUTPUT_FREQ_POSTRUN, PWM_OUTPUT_DUTY_POSTRUN
+// 2. HEAT PUMP STATE MACHINE (6 States):
+//    - STANDBY: PWM-in OFF, no post-run timer active
+//    - STARTUP: PWM-in ON, waiting 5 minutes for stable temperature reading
+//    - HOT_WATER: Temp >45°C (domestic hot water production)
+//    - HEATING: Temp 24-45°C (space heating mode)
+//    - COOLING: Temp <24°C (active cooling mode)
+//    - POST_RUN: PWM-in OFF after HOT_WATER, 30-minute timer for floor cooling
 //
-// 3. POST-RUN TIMER:
-//    - Auto-starts when input PWM is lost
-//    - Duration: Configured duration (see POSTRUN_TIMER_DURATION)
-//    - Output: Configured frequency and duty cycle
-//    - Auto-stops when input PWM returns
-//    - Activates pump on D7 during post-run timer
-//    - Config: POSTRUN_TIMER_DURATION
+// 3. TEMPERATURE-BASED MODE DETECTION (DS18B20 on D2):
+//    - Non-blocking temperature reading with 30-second retry on failure
+//    - After 5-minute STARTUP, determines mode: >45°C → HOT_WATER, ≥24°C → HEATING, <24°C → COOLING
+//    - Mode changes dynamically based on temperature during operation
+//    - Fallback: If sensor unavailable, defaults to HOT_WATER (conservative choice)
+//    - Config: TEMP_THRESHOLD_HOT_WATER (45°C), TEMP_THRESHOLD_HEATING (24°C)
 //
-// 4. PUMP CONTROL (D7):
-//    - Normally LOW (OFF)
-//    - Goes HIGH (ON) during post-run timer
+// 4. DEFROST CYCLE DETECTION:
+//    - Detected when duty cycle ≥95% AND temperature is falling in HOT_WATER or HEATING modes
+//    - Uses temperature trend analysis: falling temp (< -0.3°C over 30s) = defrost, rising = normal
+//    - NOT applicable in COOLING mode (100% duty is normal cooling operation)
+//    - Triggers PUMP_BLOCKED state to prevent circulation during defrost
+//    - Config: DEFROST_DUTY_THRESHOLD (95%)
 //
-// 5. LED INDICATOR (Built-in LED):
-//    - STANDBY: Short flashes (no PWM-in, no post-run)
-//    - PWM-IN ACTIVE: Slow blink
-//    - POST-RUN TIMER ACTIVE: Fast blink
+// 5. INTELLIGENT PUMP CONTROL (3 Modes via D7 + D8 relays):
+//    - PUMP_FORCED: D7=HIGH (post-run timer) - Forces pump ON for floor cooling
+//    - PUMP_BLOCKED: D8=HIGH (defrost cycle) - Blocks pump during defrost
+//    - PUMP_NORMAL: Both LOW (normal operation) - Pump follows heat pump control
+//    - Priority: POST_RUN > DEFROST > NORMAL
+//
+// 6. POST-RUN TIMER LOGIC:
+//    - Triggered ONLY when transitioning from HOT_WATER state (floor is hottest)
+//    - Duration: 30 minutes (configurable)
+//    - NOT triggered from HEATING or COOLING states
+//    - Cancelled if PWM-in returns (heat pump restarts)
+//    - Outputs PWM signal to D5 during post-run (PWM_OUTPUT_FREQ_POSTRUN, PWM_OUTPUT_DUTY_POSTRUN)
+//
+// 7. LED INDICATOR (Built-in LED):
+//    - STANDBY: Short flashes (200ms)
+//    - PWM-IN ACTIVE: Slow blink (500ms)
+//    - POST-RUN TIMER: Fast blink (100ms)
 //    - Config: LED_BLINK_STANDBY, LED_BLINK_SLOW, LED_BLINK_FAST
 //
-// 6. WIFI & LOGGING:
-//    - WiFi connection with auto-reconnect at configured interval (non-blocking)
-//    - NTP time synchronization for accurate timestamps
-//    - Initial NTP sync at startup, periodic resync (1 min if invalid, 1 hour if valid)
-//    - Serial logging at configured interval with format:
-//      [YYYY-MM-DD HH:MM:SS] PWM-in: X%/OFF  PWM-out: X%/OFF  Pump-HK2: ON/OFF  Status: ...
-//    - Config: WIFI_CONNECTION_TIMEOUT, WIFI_RECONNECT_INTERVAL, NTP_RESYNC_INTERVAL, 
-//              NTP_RESYNC_INTERVAL_VALID, LOG_INTERVAL
+// 8. WIFI & WEB SERVER:
+//    - HTTP server on port 80 displays real-time log with auto-refresh
+//    - NTP time synchronization (1-min retry if invalid, 1-hour if valid)
+//    - Config: WIFI_SSID, WIFI_PW, WEBSERVER_REFRESH_INTERVAL
 //
-// 7. WEB SERVER:
-//    - HTTP server on port 80
-//    - Displays current PWM, frequency, and status on root path "/"
+// 9. LOGGING FORMAT (every 30 seconds):
+//    - Regular log: [YYYY-MM-DD HH:MM:SS] State: <STATE>  PumpHK2: <STATUS>  PWM-in: <X%|OFF>  PWM-out: <X%|OFF>  Flow: <XX.X|-->°C
+//    - Event log: [YYYY-MM-DD HH:MM:SS] === <EVENT MESSAGE> ===
+//
+// ===== STATE TRANSITION EXAMPLES - COMPLETE OVERVIEW =====
+//
+// 1. NORMALE STARTUP NAAR HOT WATER:
+//   [2026-01-24 10:00:00] === HEATPUMP STARTED: Determining mode for 5 minutes... ===
+//   [2026-01-24 10:00:00] State: STARTUP  PumpHK2: NORMAL  PWM-in: 45.0%  PWM-out: OFF  Flow: 32.5°C
+//   [2026-01-24 10:02:30] State: STARTUP  PumpHK2: NORMAL  PWM-in: 48.2%  PWM-out: OFF  Flow: 38.7°C
+//   [2026-01-24 10:05:00] === MODE DETECTED: Hot Water Mode ===
+//   [2026-01-24 10:05:00] State: HOT_WATER  PumpHK2: NORMAL  PWM-in: 85.0%  PWM-out: OFF  Flow: 52.3°C
+//
+// 2. STARTUP NAAR HEATING (TEMPERATUUR 24-45°C):
+//   [2026-01-24 10:15:00] === HEATPUMP STARTED: Determining mode for 5 minutes... ===
+//   [2026-01-24 10:15:00] State: STARTUP  PumpHK2: NORMAL  PWM-in: 50.0%  PWM-out: OFF  Flow: 28.5°C
+//   [2026-01-24 10:20:00] === MODE DETECTED: Heating Mode ===
+//   [2026-01-24 10:20:00] State: HEATING  PumpHK2: NORMAL  PWM-in: 65.0%  PWM-out: OFF  Flow: 35.2°C
+//
+// 3. STARTUP NAAR COOLING (TEMPERATUUR <24°C):
+//   [2026-01-24 11:00:00] === HEATPUMP STARTED: Determining mode for 5 minutes... ===
+//   [2026-01-24 11:00:00] State: STARTUP  PumpHK2: NORMAL  PWM-in: 95.0%  PWM-out: OFF  Flow: 18.2°C
+//   [2026-01-24 11:05:00] === MODE DETECTED: Cooling Mode ===
+//   [2026-01-24 11:05:00] State: COOLING  PumpHK2: NORMAL  PWM-in: 100.0%  PWM-out: OFF  Flow: 18.5°C
+//
+// 4. HOT WATER NAAR POST-RUN (NORMALE FLOW):
+//   [2026-01-24 12:00:00] State: HOT_WATER  PumpHK2: NORMAL  PWM-in: 85.0%  PWM-out: OFF  Flow: 52.3°C
+//   [2026-01-24 12:30:00] State: HOT_WATER  PumpHK2: NORMAL  PWM-in: 82.5%  PWM-out: OFF  Flow: 51.8°C
+//   [2026-01-24 12:35:15] === HEATPUMP STOPPED: Post-Run Timer started (30.0 min) ===
+//   [2026-01-24 12:35:15] State: POST_RUN (30.0 min)  PumpHK2: FORCED  PWM-in: OFF  PWM-out: 30%  Flow: 48.2°C
+//   [2026-01-24 12:40:15] State: POST_RUN (25.0 min)  PumpHK2: FORCED  PWM-in: OFF  PWM-out: 30%  Flow: 45.1°C
+//   [2026-01-24 13:00:15] State: POST_RUN (5.0 min)  PumpHK2: FORCED  PWM-in: OFF  PWM-out: 30%  Flow: 32.5°C
+//   [2026-01-24 13:05:15] === POST-RUN TIMER FINISHED: Entering Standby ===
+//   [2026-01-24 13:05:15] State: STANDBY  PumpHK2: NORMAL  PWM-in: OFF  PWM-out: OFF  Flow: 28.5°C
+//
+// 5. HEATING NAAR STANDBY (GEEN POST-RUN):
+//   [2026-01-24 14:00:00] State: HEATING  PumpHK2: NORMAL  PWM-in: 65.0%  PWM-out: OFF  Flow: 35.2°C
+//   [2026-01-24 14:15:30] === HEATPUMP STOPPED: Entering Standby ===
+//   [2026-01-24 14:15:30] State: STANDBY  PumpHK2: NORMAL  PWM-in: OFF  PWM-out: OFF  Flow: 30.8°C
+//
+// 6. COOLING NAAR STANDBY (GEEN POST-RUN):
+//   [2026-01-24 15:00:00] State: COOLING  PumpHK2: NORMAL  PWM-in: 100.0%  PWM-out: OFF  Flow: 18.5°C
+//   [2026-01-24 15:25:45] === HEATPUMP STOPPED: Entering Standby ===
+//   [2026-01-24 15:25:45] State: STANDBY  PumpHK2: NORMAL  PWM-in: OFF  PWM-out: OFF  Flow: 22.1°C
+//
+// 7. POST-RUN TIMER GEANNULEERD DOOR HERSTART:
+//   [2026-01-24 16:00:00] State: POST_RUN (15.5 min)  PumpHK2: FORCED  PWM-in: OFF  PWM-out: 30%  Flow: 32.1°C
+//   [2026-01-24 16:05:00] === HEATPUMP RESTARTED: Post-Run Timer cancelled, determining mode for 5 minutes... ===
+//   [2026-01-24 16:05:00] State: STARTUP  PumpHK2: NORMAL  PWM-in: 45.0%  PWM-out: OFF  Flow: 30.5°C
+//   [2026-01-24 16:10:00] === MODE DETECTED: Hot Water Mode ===
+//   [2026-01-24 16:10:00] State: HOT_WATER  PumpHK2: NORMAL  PWM-in: 78.0%  PWM-out: OFF  Flow: 48.3°C
+//
+// 8. DEFROST CYCLUS IN HOT WATER MODE:
+//   [2026-01-24 17:00:00] State: HOT_WATER  PumpHK2: NORMAL  PWM-in: 80.0%  PWM-out: OFF  Flow: 50.5°C
+//   [2026-01-24 17:05:30] === DEFROST CYCLE STARTED ===
+//   [2026-01-24 17:05:30] State: HOT_WATER (defrosting)  PumpHK2: BLOCKED  PWM-in: 97.5%  PWM-out: OFF  Flow: 52.8°C
+//   [2026-01-24 17:10:00] State: HOT_WATER (defrosting)  PumpHK2: BLOCKED  PWM-in: 98.2%  PWM-out: OFF  Flow: 54.1°C
+//   [2026-01-24 17:15:45] === DEFROST CYCLE FINISHED ===
+//   [2026-01-24 17:15:45] State: HOT_WATER  PumpHK2: NORMAL  PWM-in: 82.0%  PWM-out: OFF  Flow: 51.2°C
+//
+// 9. DEFROST CYCLUS IN HEATING MODE:
+//   [2026-01-24 18:00:00] State: HEATING  PumpHK2: NORMAL  PWM-in: 65.0%  PWM-out: OFF  Flow: 35.2°C
+//   [2026-01-24 18:05:30] === DEFROST CYCLE STARTED ===
+//   [2026-01-24 18:05:30] State: HEATING (defrosting)  PumpHK2: BLOCKED  PWM-in: 96.8%  PWM-out: OFF  Flow: 38.1°C
+//   [2026-01-24 18:15:45] === DEFROST CYCLE FINISHED ===
+//   [2026-01-24 18:15:45] State: HEATING  PumpHK2: NORMAL  PWM-in: 68.0%  PWM-out: OFF  Flow: 36.8°C
+//
+// 10. MODE CHANGES HOT WATER → HEATING → COOLING:
+//   [2026-01-24 19:00:00] State: HOT_WATER  PumpHK2: NORMAL  PWM-in: 80.0%  PWM-out: OFF  Flow: 48.5°C
+//   [2026-01-24 19:10:00] === MODE CHANGE: Hot Water → Heating ===
+//   [2026-01-24 19:10:00] State: HEATING  PumpHK2: NORMAL  PWM-in: 60.0%  PWM-out: OFF  Flow: 38.2°C
+//   [2026-01-24 19:20:00] === MODE CHANGE: Heating → Cooling ===
+//   [2026-01-24 19:20:00] State: COOLING  PumpHK2: NORMAL  PWM-in: 100.0%  PWM-out: OFF  Flow: 18.5°C
+//
+// 11. MODE CHANGES COOLING → HEATING → HOT WATER:
+//   [2026-01-24 20:00:00] State: COOLING  PumpHK2: NORMAL  PWM-in: 100.0%  PWM-out: OFF  Flow: 20.2°C
+//   [2026-01-24 20:15:00] === MODE CHANGE: Cooling → Heating ===
+//   [2026-01-24 20:15:00] State: HEATING  PumpHK2: NORMAL  PWM-in: 65.0%  PWM-out: OFF  Flow: 30.5°C
+//   [2026-01-24 20:30:00] === MODE CHANGE: Heating → Hot Water ===
+//   [2026-01-24 20:30:00] State: HOT_WATER  PumpHK2: NORMAL  PWM-in: 75.0%  PWM-out: OFF  Flow: 46.8°C
+//
+// 12. STARTUP TIJDENS STARTUP (PWM UIT TIJDENS STARTUP):
+//   [2026-01-24 21:00:00] === HEATPUMP STARTED: Determining mode for 5 minutes... ===
+//   [2026-01-24 21:00:00] State: STARTUP  PumpHK2: NORMAL  PWM-in: 50.0%  PWM-out: OFF  Flow: 28.5°C
+//   [2026-01-24 21:02:30] === HEATPUMP STOPPED: Entering Standby ===
+//   [2026-01-24 21:02:30] State: STANDBY  PumpHK2: NORMAL  PWM-in: OFF  PWM-out: OFF  Flow: 26.2°C
+//
+// 13. STARTUP MET TEMPERATUUR SENSOR UITVAL:
+//   [2026-01-24 22:00:00] === HEATPUMP STARTED: Determining mode for 5 minutes... ===
+//   [2026-01-24 22:00:00] State: STARTUP  PumpHK2: NORMAL  PWM-in: 50.0%  PWM-out: OFF  Flow: --°C
+//   [2026-01-24 22:05:00] === MODE DETECTED: Hot Water Mode (temp sensor unavailable) ===
+//   [2026-01-24 22:05:00] State: HOT_WATER  PumpHK2: NORMAL  PWM-in: 75.0%  PWM-out: OFF  Flow: --°C
+//
+// 14. VOLLEDIGE CYCLUS (STANDBY → STARTUP → HOT WATER → POST-RUN → STANDBY):
+//   [2026-01-24 23:00:00] State: STANDBY  PumpHK2: NORMAL  PWM-in: OFF  PWM-out: OFF  Flow: 25.5°C
+//   [2026-01-24 23:05:00] === HEATPUMP STARTED: Determining mode for 5 minutes... ===
+//   [2026-01-24 23:05:00] State: STARTUP  PumpHK2: NORMAL  PWM-in: 45.0%  PWM-out: OFF  Flow: 28.5°C
+//   [2026-01-24 23:10:00] === MODE DETECTED: Hot Water Mode ===
+//   [2026-01-24 23:10:00] State: HOT_WATER  PumpHK2: NORMAL  PWM-in: 85.0%  PWM-out: OFF  Flow: 52.3°C
+//   [2026-01-24 23:45:00] State: HOT_WATER  PumpHK2: NORMAL  PWM-in: 82.0%  PWM-out: OFF  Flow: 51.5°C
+//   [2026-01-24 23:50:00] === HEATPUMP STOPPED: Post-Run Timer started (30.0 min) ===
+//   [2026-01-24 23:50:00] State: POST_RUN (30.0 min)  PumpHK2: FORCED  PWM-in: OFF  PWM-out: 30%  Flow: 48.2°C
+//   [2026-01-25 00:10:00] State: POST_RUN (10.0 min)  PumpHK2: FORCED  PWM-in: OFF  PWM-out: 30%  Flow: 35.5°C
+//   [2026-01-25 00:20:00] === POST-RUN TIMER FINISHED: Entering Standby ===
+//   [2026-01-25 00:20:00] State: STANDBY  PumpHK2: NORMAL  PWM-in: OFF  PWM-out: OFF  Flow: 28.5°C
+//
+// ALLE MOGELIJKE STATE TRANSITIES:
+// • STANDBY → STARTUP (PWM-in ON)
+// • STARTUP → HOT_WATER (5 min, temp >45°C)
+// • STARTUP → HEATING (5 min, temp 24-45°C)
+// • STARTUP → COOLING (5 min, temp <24°C)
+// • STARTUP → STANDBY (PWM-in OFF tijdens startup)
+// • HOT_WATER → POST_RUN (PWM-in OFF)
+// • HOT_WATER → HEATING (temp daalt onder 45°C)
+// • HOT_WATER → COOLING (temp daalt onder 24°C)
+// • HEATING → STANDBY (PWM-in OFF)
+// • HEATING → HOT_WATER (temp stijgt boven 45°C)
+// • HEATING → COOLING (temp daalt onder 24°C)
+// • COOLING → STANDBY (PWM-in OFF)
+// • COOLING → HEATING (temp stijgt boven 24°C)
+// • COOLING → HOT_WATER (temp stijgt boven 45°C)
+// • POST_RUN → STANDBY (timer afgelopen)
+// • POST_RUN → STARTUP (PWM-in ON tijdens post-run)
+//
+// DEFROST TRANSITIES (binnen states):
+// • HOT_WATER → HOT_WATER (defrosting) [duty ≥95%]
+// • HEATING → HEATING (defrosting) [duty ≥95%]
+// • HOT_WATER (defrosting) → HOT_WATER [duty <95%]
+// • HEATING (defrosting) → HEATING [duty <95%]
 //
 // ===== CONFIGURATION =====
 // All configurable parameters are centralized in include/Config.h
-// Edit Config.h to modify behavior (pin mappings, timings, WiFi credentials, etc.)
+// Edit Config.h to modify behavior (pin mappings, timings, WiFi credentials, thresholds, etc.)
 
 ESP8266WebServer server(80);
+
+// State machine and temperature sensor
+HeatPumpStateMachine stateMachine;
+TemperatureSensor tempSensor(PIN_TEMP_SENSOR);
 
 unsigned long lastBlink = 0;
 bool ledState = false;
@@ -85,19 +228,27 @@ String getTimestamp();
 String buildStatusLog();  // Build status log message for Serial and Web
 void addWebLogLine(String line);  // Add line to web log buffer
 void checkHeapAndWarn();          // Warn when heap is low
+void logDataLine();               // Log current data line
+void onStateMachineEvent(const char* event);  // State machine event callback
+void updatePumpControl();         // Update pump relay outputs
 
 // -----------------------------
 // Webpagina
 // -----------------------------
 void handleRoot() {
-  String html =
-    "<html><head><meta http-equiv='refresh' content='" + String(WEBSERVER_REFRESH_INTERVAL) + "' />"
-    "<style>body{font-family:monospace;margin:20px;font-size:12px;} pre{background:#f0f0f0;padding:10px;max-height:600px;overflow-y:auto;} .event{color:blue;margin:10px 0;}</style>"
-    "</head><body>"
-    "<h2>PWM Monitor</h2>";
+  // Build HTML header with single snprintf (eliminates String concatenations)
+  char htmlHeader[512];
+  snprintf(htmlHeader, sizeof(htmlHeader),
+    "<html><head><meta http-equiv='refresh' content='%d' />"
+    "<style>body{font-family:monospace;margin:20px;font-size:12px;} "
+    "pre{background:#f0f0f0;padding:10px;max-height:600px;overflow-y:auto;} "
+    ".event{color:blue;margin:10px 0;}</style></head><body>"
+    "<h2>PWM Monitor</h2><pre>",
+    WEBSERVER_REFRESH_INTERVAL);
+  
+  String html = String(htmlHeader);
   
   // Show log buffer
-  html += "<pre>";
   if (webLogCount == 0) {
     html += "No log entries yet...";
   } else {
@@ -108,7 +259,7 @@ void handleRoot() {
       html += webLogBuffer[idx] + "\n";
     }
   }
-  html += "</pre>";
+  html += "</pre></body></html>";
 
   server.send(200, "text/html; charset=utf-8", html);
 }
@@ -158,6 +309,11 @@ String getTimestamp() {
 void addWebLogLine(String line) {
   checkHeapAndWarn();
 
+  // Buffer overflow protection: truncate overly long lines
+  if (line.length() > 256) {
+    line = line.substring(0, 253) + "...";
+  }
+
   webLogBuffer[webLogIndex] = line;
   webLogIndex = (webLogIndex + 1) % WEB_LOG_BUFFER_SIZE;
   if (webLogCount < WEB_LOG_BUFFER_SIZE) {
@@ -165,37 +321,75 @@ void addWebLogLine(String line) {
   }
 }
 
+// State machine event callback
+void onStateMachineEvent(const char* event) {
+  String eventMsg = "[" + getTimestamp() + "] === " + String(event) + " ===";
+  Serial.println(eventMsg);
+  addWebLogLine(eventMsg);
+  lastStatusChange = eventMsg;
+  logDataLine();  // Log complete status line after event
+}
+
+// Update pump relay outputs based on state machine
+void updatePumpControl() {
+  PumpControlMode mode = stateMachine.getPumpControlMode();
+  
+  switch (mode) {
+    case PUMP_NORMAL:
+      digitalWrite(PIN_FORCE_PUMP_HK2, LOW);
+      digitalWrite(PIN_BLOCK_PUMP_HK2, LOW);
+      break;
+    case PUMP_BLOCKED:
+      digitalWrite(PIN_FORCE_PUMP_HK2, LOW);
+      digitalWrite(PIN_BLOCK_PUMP_HK2, HIGH);
+      break;
+    case PUMP_FORCED:
+      digitalWrite(PIN_FORCE_PUMP_HK2, HIGH);
+      digitalWrite(PIN_BLOCK_PUMP_HK2, LOW);
+      break;
+  }
+}
+
 // Function to build status log message (used by both Serial and Web)
 String buildStatusLog() {
+  char buffer[256];  // Increased buffer for new format
+  
   // PWM-in status
-  String pwmInStatus = pwmDetected ? String(dutyIn, 1) + "%" : "OFF";
+  char pwmInBuf[10];
+  if (pwmDetected) {
+    snprintf(pwmInBuf, sizeof(pwmInBuf), "%.1f%%", dutyIn);
+  } else {
+    strcpy(pwmInBuf, "OFF");
+  }
   
   // PWM-out status
-  String pwmOutStatus;
-  if (isPostRunTimerActive()) {
-    pwmOutStatus = String(PWM_OUTPUT_DUTY_POSTRUN) + "%";
+  char pwmOutBuf[10];
+  if (stateMachine.getCurrentState() == POST_RUN) {
+    snprintf(pwmOutBuf, sizeof(pwmOutBuf), "%d%%", PWM_OUTPUT_DUTY_POSTRUN);
   } else {
-    pwmOutStatus = "OFF";
+    strcpy(pwmOutBuf, "OFF");
   }
   
-  // Pump status
-  String pumpStatus = isPostRunTimerActive() ? "ON" : "OFF";
-  
-  // System status
-  String statusString;
-  if (isPostRunTimerActive()) {
-    statusString = "POST-RUN TIMER: " + getPostRunTimerTimeString() + " min";
-  } else if (pwmDetected) {
-    statusString = "HEATPUMP ACTIVE";
+  // Temperature status
+  char tempBuf[15];
+  if (tempSensor.isAvailable()) {
+    snprintf(tempBuf, sizeof(tempBuf), "%.1f", tempSensor.getTemperature());
   } else {
-    statusString = "STANDBY";
+    strcpy(tempBuf, "--");
   }
   
-  String timestamp = getTimestamp();
-  return "[" + timestamp + "] PWM-in: " + pwmInStatus + 
-         "  PWM-out: " + pwmOutStatus + 
-         "  Pump-HK2: " + pumpStatus + 
-         "  Status: " + statusString;
+  // Build complete log line with new format:
+  // [YYYY-MM-DD HH:MM:SS] State: <STATE>  PumpHK2: <STATUS>  PWM-in: <X%|OFF>  PWM-out: <X%|OFF>  Flow: <XX.X|-->°C
+  snprintf(buffer, sizeof(buffer), 
+           "[%s] State: %s  PumpHK2: %s  PWM-in: %s  PWM-out: %s  Flow: %s°C",
+           getTimestamp().c_str(), 
+           stateMachine.getStateString().c_str(),
+           stateMachine.getPumpStatusString().c_str(),
+           pwmInBuf, 
+           pwmOutBuf, 
+           tempBuf);
+  
+  return String(buffer);
 }
 
 // Function to log current data line to Serial
@@ -213,17 +407,21 @@ void setup() {
   delay(100);
   Serial.println("\n\n=== SYSTEM STARTUP ===");
 
-  pinMode(PIN_PWM_OUT, OUTPUT);      // PWM bron
-  pinMode(PIN_PUMP, OUTPUT);         // Pump HK2 control
+  pinMode(PIN_PWM_OUT, OUTPUT);         // PWM output
+  pinMode(PIN_FORCE_PUMP_HK2, OUTPUT);  // Force pump relay (D7)
+  pinMode(PIN_BLOCK_PUMP_HK2, OUTPUT);  // Block pump relay (D8)
   pinMode(LED_PIN, OUTPUT);
 
   if (DEBUG_MODE) {
-    Serial.print("DEBUG: PIN_PUMP = ");
-    Serial.println(PIN_PUMP);
+    Serial.print("DEBUG: PIN_FORCE_PUMP_HK2 = ");
+    Serial.println(PIN_FORCE_PUMP_HK2);
+    Serial.print("DEBUG: PIN_BLOCK_PUMP_HK2 = ");
+    Serial.println(PIN_BLOCK_PUMP_HK2);
   }
 
-  digitalWrite(LED_PIN, LOW);        // LED aan = script draait
-  digitalWrite(PIN_PUMP, LOW);       // Pump starts OFF
+  digitalWrite(LED_PIN, LOW);               // LED aan = script draait
+  digitalWrite(PIN_FORCE_PUMP_HK2, LOW);    // Force pump starts OFF
+  digitalWrite(PIN_BLOCK_PUMP_HK2, LOW);    // Block pump starts OFF
 
   // PWM op D1
   analogWriteRange(1023);
@@ -246,9 +444,15 @@ void setup() {
   // Initialize PWM detection on D6
   initPWMDetector(PIN_PWM_IN);
 
-  // Initialize post-run timer manager
-  initPostRunTimer(POSTRUN_TIMER_DURATION);
-  setPostRunTimerPumpPin(PIN_PUMP);
+  // Initialize state machine
+  stateMachine.begin();
+  stateMachine.setEventCallback(onStateMachineEvent);
+  Serial.println("State machine initialized");
+
+  // Initialize temperature sensor
+  tempSensor.begin();
+  Serial.print("Temperature sensor initialized: ");
+  Serial.println(tempSensor.getStateString());
 
   // Initialize WiFi connection
   initWiFi(WIFI_SSID, WIFI_PW);
@@ -290,52 +494,36 @@ void loop() {
   // Update PWM measurements from interrupt data
   updatePWMDetection();
 
-  // Handle post-run timer logic based on PWM-in state changes
-  if (pwmStateChanged()) {
-    if (pwmDetected) {
-      // PWM-in became active: stop post-run timer
-      stopPostRunTimer();
-      lastStatusChange = "[" + getTimestamp() + "] === PWM-in changed to ON. Post-Run Timer cancelled ===";
-      Serial.println(lastStatusChange);
-      addWebLogLine(lastStatusChange);
-      logDataLine();
-    } else {
-      // PWM-in was lost: start post-run timer
-      float timerMinutes = getPostRunTimerDuration() / 60000.0;
-      char msg[120];
-      snprintf(msg, sizeof(msg), "[%s] === PWM-in changed to OFF: Post-Run Timer started for %.1f minutes ===", 
-               getTimestamp().c_str(), timerMinutes);
-      lastStatusChange = msg;
-      Serial.println(msg);
-      addWebLogLine(lastStatusChange);
-      startPostRunTimer();
-      logDataLine();
-    }
+  // Update temperature sensor (non-blocking)
+  tempSensor.update();
+
+  // Update state machine with current conditions
+  stateMachine.update(pwmDetected, dutyIn, tempSensor.getTemperature(), tempSensor.isAvailable());
+
+  // Update pump relay outputs
+  updatePumpControl();
+
+  // Control PWM output based on state machine
+  // PWM output is only active during POST_RUN state
+  if (stateMachine.getCurrentState() == POST_RUN) {
+    setOutputPWM(PWM_OUTPUT_FREQ_POSTRUN, PWM_OUTPUT_DUTY_POSTRUN);
+  } else {
+    setOutputPWM(0, 0);  // PWM off
   }
 
-  // Update post-run timer
-  bool wasPostRunTimerActive = isPostRunTimerActive();
-  updatePostRunTimer();
-  
-  if (wasPostRunTimerActive && !isPostRunTimerActive()) {
-    lastStatusChange = "[" + getTimestamp() + "] === Post-Run Timer finished. Entering STANDBY mode ===";
-    Serial.println(lastStatusChange);
-    addWebLogLine(lastStatusChange);
-    logDataLine();
-  }
-
-  // LED gedrag: 3 verschillende snelheden
+  // LED gedrag based on state machine
   unsigned long currentTime = millis();
   unsigned long blinkInterval;
+  HeatPumpState currentState = stateMachine.getCurrentState();
   
-  if (isPostRunTimerActive()) {
+  if (currentState == POST_RUN) {
     // Post-run timer active: fast blink
     blinkInterval = LED_BLINK_FAST;
-  } else if (pwmDetected) {
-    // PWM-in active: slow blink
+  } else if (currentState != STANDBY) {
+    // Any active state (STARTUP, HOT_WATER, HEATING, COOLING): slow blink
     blinkInterval = LED_BLINK_SLOW;
   } else {
-    // Standby (no PWM-in, no post-run): short flashes
+    // Standby: short flashes
     blinkInterval = LED_BLINK_STANDBY;
   }
 

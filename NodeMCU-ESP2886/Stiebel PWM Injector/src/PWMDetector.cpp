@@ -146,12 +146,7 @@ void updatePWMDetection() {
   if (pwmDetected != lastPwmDetectedState) {
     pwmStateJustChanged = true;
     lastPwmDetectedState = pwmDetected;
-    
-    if (pwmDetected) {
-      Serial.println("PWM-in changed to ON");
-    } else {
-      Serial.println("PWM-in changed to OFF");
-    }
+    // State change detected - no logging here, handled by state machine
   }
 }
 
