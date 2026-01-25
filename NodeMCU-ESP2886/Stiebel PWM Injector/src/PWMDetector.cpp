@@ -127,51 +127,73 @@ void updatePWMDetection() {
     unsigned long timeSinceLastAnyEdge = currentTime - lastAnyEdgeTime;
     if (timeSinceLastAnyEdge < NO_EDGE_THRESHOLD) {
       // Still seeing edge activity, don't try DC detection yet
+      // BUT: keep updating lastValidMeasurement if we're currently detecting PWM
+      // This prevents timeout during the transition to DC level
+      if (pwmDetected) {
+        lastValidMeasurement = currentTime;
+      }
       return;
     }
     
     // Check if level is stable
     if (currentLevel == lastDCLevel) {
       unsigned long dcDuration = currentTime - dcLevelStartTime;
-      if (dcDuration > DC_DETECTION_THRESHOLD && dcDuration < PWM_DETECTION_TIMEOUT) {
+      
+      // CRITICAL: Update lastValidMeasurement immediately for LOW level
+      // This prevents timeout during the DC detection wait period
+      if (currentLevel == LOW && dcDuration > 100) {
+        lastValidMeasurement = currentTime;
+      }
+      
+      if (dcDuration > DC_DETECTION_THRESHOLD) {
         // Open collector inverts logic: LOW = active, HIGH = inactive
         // Constant LOW level = 100% duty (pump fully active)
         // Constant HIGH level = 0% duty (no signal)
         if (currentLevel == LOW) {
-          pwmDetected = true;
-          freqIn = 0.0;  // DC has no frequency
-          dutyIn = 100.0;
-          lastValidMeasurement = currentTime;
-          if (DEBUG_MODE) {
-            Serial.println("DEBUG: PWM DC level detected - constant LOW = 100% duty (defrost?)");
+          // Constant LOW = 100% duty (defrost mode)
+          if (!pwmDetected || dutyIn != 100.0) {
+            pwmDetected = true;
+            freqIn = 0.0;  // DC has no frequency
+            dutyIn = 100.0;
+            lastValidMeasurement = currentTime;  // Keep updating to prevent timeout
+            if (DEBUG_MODE) {
+              Serial.println("DEBUG: PWM DC level - constant LOW = 100% duty (defrost)");
+            }
+          } else {
+            // Already detected at 100%, keep updating lastValidMeasurement to prevent timeout
+            lastValidMeasurement = currentTime;
           }
         } else {
-          // HIGH = 0% = no signal
-          pwmDetected = false;
-          freqIn = 0.0;
-          dutyIn = 0.0;
-          if (DEBUG_MODE) {
-            Serial.println("DEBUG: PWM DC level detected - constant HIGH = 0% duty (no signal)");
+          // HIGH = 0% = no signal (only if we haven't timed out yet)
+          unsigned long timeSinceLastValid = currentTime - lastValidMeasurement;
+          if (timeSinceLastValid > PWM_DETECTION_TIMEOUT) {
+            // Timed out - truly no signal
+            if (pwmDetected) {
+              pwmDetected = false;
+              freqIn = 0.0;
+              dutyIn = 0.0;
+              if (DEBUG_MODE) {
+                Serial.print("DEBUG: PWM timeout - constant HIGH for ");
+                Serial.print(timeSinceLastValid);
+                Serial.println("ms, no signal detected");
+              }
+            }
           }
         }
       }
     } else {
       // Level changed, reset DC timer
-      lastDCLevel = currentLevel;
-      dcLevelStartTime = currentTime;
-    }
-    
-    // Check for timeout (no edges and not stable DC)
-    unsigned long timeSinceLastValid = currentTime - lastValidMeasurement;
-    if (timeSinceLastValid > PWM_DETECTION_TIMEOUT) {
-      pwmDetected = false;
-      freqIn = 0.0;
-      dutyIn = 0.0;
-      if (DEBUG_MODE) {
-        Serial.print("DEBUG: PWM timeout - no valid signal for ");
-        Serial.print(timeSinceLastValid);
+      if (DEBUG_MODE && (currentTime - dcLevelStartTime > 100)) {
+        Serial.print("DEBUG: PWM level changed from ");
+        Serial.print(lastDCLevel == LOW ? "LOW" : "HIGH");
+        Serial.print(" to ");
+        Serial.print(currentLevel == LOW ? "LOW" : "HIGH");
+        Serial.print(" after ");
+        Serial.print(currentTime - dcLevelStartTime);
         Serial.println("ms");
       }
+      lastDCLevel = currentLevel;
+      dcLevelStartTime = currentTime;
     }
   }
   

@@ -188,6 +188,46 @@
 // • HOT_WATER (defrosting) → HOT_WATER [duty <95%]
 // • HEATING (defrosting) → HEATING [duty <95%]
 //
+// ===== PWM-IN 100% DETECTIE PROBLEEM & OPLOSSING =====
+// PROBLEEM:
+// Tijdens defrost stuurt de warmtepomp 100% PWM (constant LOW signaal via open collector).
+// Bij afwezigheid van edges werd dit NIET gedetecteerd, en na 30 seconden triggerde de timeout,
+// waardoor het systeem dacht dat de warmtepomp gestopt was terwijl deze nog steeds draaide.
+//
+// Log voorbeeld van het probleem:
+// [2026-01-25 01:15:28] State: HEATING  PWM-in: 50.2%  ← laatste edge-based meting
+// [2026-01-25 01:15:54] === HEATPUMP STOPPED: Entering Standby ===  ← FOUT! WP draait nog
+// [2026-01-25 01:15:54] State: STANDBY  PWM-in: OFF  ← timeout na ~26 seconden
+//
+// DIAGNOSE:
+// 1. PWM gaat van 50% (edges) naar 100% (constant LOW, geen edges meer)
+// 2. NO_EDGE_THRESHOLD: Code wacht 1 seconde zonder edges voordat DC detectie start
+// 3. DC_DETECTION_THRESHOLD: Code wacht 500ms stabiel level voordat 100% gedetecteerd wordt
+// 4. Totaal 1.5 seconden delay - MAAR lastValidMeasurement werd NIET bijgewerkt tijdens deze periode
+// 5. Na ~26 sec totaal zonder lastValidMeasurement update → PWM_DETECTION_TIMEOUT (30s) triggert
+// 6. State machine denkt dat warmtepomp uit is en gaat naar STANDBY
+//
+// EERDERE POGINGEN DIE FAALDEN:
+// Commit 2180832: DC level detectie toegevoegd (constant LOW = 100%, constant HIGH = 0%)
+//                 → Werkte niet: timeout triggerde nog steeds tijdens 1.5 sec wachttijd
+// Commit 885f382: "PWM detectie fixes tijdens defrost"
+//                 → Werkte niet: lastValidMeasurement werd niet bijgewerkt tijdens overgang
+// Commit d525b66: Diverse verbeteringen aan debug output
+//                 → Hielp met diagnostiek maar loste timeout probleem niet op
+//
+// OPLOSSING (25-01-2026):
+// In PWMDetector.cpp, updatePWMDetection():
+// 1. Tijdens NO_EDGE_THRESHOLD wachttijd: Update lastValidMeasurement als pwmDetected nog waar is
+//    → Voorkomt timeout tijdens wachten op begin van DC detectie
+// 2. Bij stabiel LOW level >100ms: Update lastValidMeasurement ONMIDDELLIJK
+//    → Voorkomt timeout tijdens DC_DETECTION_THRESHOLD wachttijd
+// 3. Bij gedetecteerde 100% duty: Continue lastValidMeasurement updates
+//    → Voorkomt timeout tijdens langdurige defrost (kan >30 sec duren)
+//
+// RESULTAAT:
+// Er is nu GEEN ENKELE periode waarin lastValidMeasurement niet wordt bijgewerkt tijdens
+// de overgang PWM → 100% DC, waardoor timeout NOOIT meer onterecht triggert tijdens defrost.
+//
 // ===== CONFIGURATION =====
 // All configurable parameters are centralized in include/Config.h
 // Edit Config.h to modify behavior (pin mappings, timings, WiFi credentials, thresholds, etc.)
