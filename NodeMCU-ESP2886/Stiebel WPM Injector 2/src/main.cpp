@@ -1,14 +1,61 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
+#include <ESP8266WebServer.h>
 #include <ModbusIP_ESP8266.h>
 #include <time.h>
+#include <OneWire.h>
+#include <DallasTemperature.h>
 #include "config.h"
+
+/*
+ * Register 2501 (Modbus address 2500) Bit Mapping:
+ * D0: HK1 Pump
+ * D1: HK2 Pump
+ * D2: HK3 Pump
+ * D3: DHW Pump (Domestic Hot Water)
+ * D4: HEATING mode
+ * D5: HOT_WATER mode
+ * D6: COMPRESSOR status
+ * D7: PUMP_FORCED - Normal = LOW, HIGH - Forces pump HK2 ON during post-run timer
+ * D8: PUMP_BLOCKED - Normal = LOW, =HIGH - Blocks pump HK2 during defrost
+ * D9: DEFROSTING mode
+ * D10: (unknown)
+ * D11: (unknown)
+ */
+
+// GPIO pins
+#define PIN_FLOWTEMP_IN D2      // GPIO4  - Flow temperature input (met pull-up)
+#define PIN_PWM_OUT D5          // GPIO14 - PWM output
+#define PIN_PWM_IN D6           // GPIO12 - PWM input (zonder pull-up)
+#define PIN_PUMP_FORCED D7      // GPIO13 - Forces pump HK2 ON during post-run timer
+#define PIN_PUMP_BLOCKED D8     // GPIO15 - Blocks pump HK2 during defrost
+
+// OneWire en DS18B20 temperatuursensor op D2
+OneWire oneWire(PIN_FLOWTEMP_IN);
+DallasTemperature tempSensor(&oneWire);
+float flowTemp = -127.0;  // -127 = sensor error/niet beschikbaar
+float pwmInDutyCycle = 0.0;  // PWM-in duty cycle percentage (dummy, nog te implementeren)
 
 // Modbus client
 ModbusIP mb;
 
+// Webserver
+ESP8266WebServer server(80);
+
+// Log buffer (circular buffer voor laatste 60 regels)
+#define LOG_BUFFER_SIZE 60
+String logBuffer[LOG_BUFFER_SIZE];
+int logIndex = 0;
+int logCount = 0;
+
 // Timing
 unsigned long lastReadTime = 0;
+unsigned long lastWifiCheckTime = 0;
+unsigned long lastDetailLogTime = 0;
+unsigned long postRunTimerEnd = 0;
+bool postRunTimerActive = false;
+uint8_t wifiCheckCounter = 0;
+int logsSinceStateChange = 0;  // Teller voor regels sinds laatste state change
 
 // NTP configuratie
 const char* NTP_SERVER = "pool.ntp.org";
@@ -33,8 +80,81 @@ struct StateMachine {
 
 StateMachine stateMachine = {STANDBY, STANDBY, 0};
 
+void logMessage(const String& message) {
+  // Print naar Serial
+  Serial.println(message);
+  
+  // Voeg toe aan circular buffer
+  logBuffer[logIndex] = message;
+  logIndex = (logIndex + 1) % LOG_BUFFER_SIZE;
+  if (logCount < LOG_BUFFER_SIZE) {
+    logCount++;
+  }
+  
+  // Teller voor buffer overflow detectie
+  logsSinceStateChange++;
+}
+
+void logDebugMessage(const String& message) {
+  // Altijd naar Serial
+  Serial.println(message);
+  
+  // Alleen naar webserver buffer als DEBUG_ENABLED=true
+  if (DEBUG_ENABLED) {
+    logBuffer[logIndex] = message;
+    logIndex = (logIndex + 1) % LOG_BUFFER_SIZE;
+    if (logCount < LOG_BUFFER_SIZE) {
+      logCount++;
+    }
+  }
+}
+
+void handleRoot() {
+  String html = "<!DOCTYPE html><html><head>";
+  html += "<meta charset='UTF-8'>";
+  html += "<meta name='viewport' content='width=device-width, initial-scale=1.0'>";
+  html += "<title>WPM3 Logger</title>";
+  html += "<meta http-equiv='refresh' content='30'>";
+  html += "<style>";
+  html += "body { font-family: 'Courier New', monospace; background: #1e1e1e; color: #d4d4d4; margin: 20px; }";
+  html += "h1 { color: #4ec9b0; }";
+  html += ".log { background: #252526; padding: 10px; border-radius: 5px; overflow-x: auto; }";
+  html += ".log pre { margin: 0; white-space: pre-wrap; word-wrap: break-word; }";
+  html += ".info { color: #888; margin-bottom: 20px; }";
+  html += "</style>";
+  html += "</head><body>";
+  html += "<h1>🔥 WPM3 Modbus Logger</h1>";
+  html += "<div class='info'>";
+  html += "IP: " + WiFi.localIP().toString() + " | ";
+  html += "Uptime: " + String(millis() / 1000) + "s | ";
+  html += "Auto-refresh: 30s";
+  html += "</div>";
+  html += "<div class='log'><pre>";
+  
+  // Toon laatste 60 regels, nieuwste bovenaan
+  int startIdx = (logIndex - 1 + LOG_BUFFER_SIZE) % LOG_BUFFER_SIZE;
+  for (int i = 0; i < logCount; i++) {
+    int idx = (startIdx - i + LOG_BUFFER_SIZE) % LOG_BUFFER_SIZE;
+    html += logBuffer[idx] + "\n";
+  }
+  
+  html += "</pre></div>";
+  html += "</body></html>";
+  
+  server.send(200, "text/html", html);
+}
+
 void initTime() {
-  Serial.print("Synchroniseren met NTP server...");
+  // Controleer WiFi verbinding
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.println("WiFi niet verbonden! NTP synchronisatie overgeslagen.");
+    return;
+  }
+  
+  Serial.print("Synchronizing NTP server '");
+  Serial.print(NTP_SERVER);
+  Serial.print("'...");
+  
   configTime(GMT_OFFSET_SEC, DAYLIGHT_OFFSET_SEC, NTP_SERVER);
   
   // Wacht tot tijd is gesynchroniseerd (max 10 seconden)
@@ -47,17 +167,19 @@ void initTime() {
     timeout++;
   }
   
+  Serial.println();
+  
   if (now > 24 * 3600) {
     timeInitialized = true;
-    Serial.println(" OK!");
-    
     struct tm timeinfo;
     localtime_r(&now, &timeinfo);
-    Serial.print("Huidige tijd: ");
-    Serial.println(asctime(&timeinfo));
+    
+    String ntpMsg = "✅ NTP synchronized: ";
+    ntpMsg += asctime(&timeinfo);
+    ntpMsg.trim();
+    logMessage(ntpMsg);
   } else {
-    Serial.println(" TIMEOUT!");
-    Serial.println("Tijd niet gesynchroniseerd, gebruik uptime");
+    logMessage("❌ NTP synchronization failed!");
   }
 }
 
@@ -82,6 +204,112 @@ String getTimestamp() {
   }
   
   return String(buffer);
+}
+
+void logDebugStatusBits(uint16_t statusBits) {
+  String debugMsg = "[" + getTimestamp() + "] DEBUG: Modbus status register (2501) = 0x";
+  debugMsg += String(statusBits, HEX);
+  logDebugMessage(debugMsg);
+  
+  // Verklaar welke bits actief zijn
+  String explanation = "[" + getTimestamp() + "] DEBUG: Active bits: ";
+  bool hasActiveBits = false;
+  
+  if (statusBits & (1 << 0)) { explanation += "HK1_Pump "; hasActiveBits = true; }
+  if (statusBits & (1 << 1)) { explanation += "HK2_Pump "; hasActiveBits = true; }
+  if (statusBits & (1 << 2)) { explanation += "HK3_Pump "; hasActiveBits = true; }
+  if (statusBits & (1 << 3)) { explanation += "DHW_Pump "; hasActiveBits = true; }
+  if (statusBits & (1 << 4)) { explanation += "HEATING "; hasActiveBits = true; }
+  if (statusBits & (1 << 5)) { explanation += "HOT_WATER "; hasActiveBits = true; }
+  if (statusBits & (1 << 6)) { explanation += "COMPRESSOR "; hasActiveBits = true; }
+  if (statusBits & (1 << 7)) { explanation += "Aux_Heater "; hasActiveBits = true; }
+  if (statusBits & (1 << 8)) { explanation += "COOLING "; hasActiveBits = true; }
+  if (statusBits & (1 << 9)) { explanation += "DEFROSTING "; hasActiveBits = true; }
+  if (statusBits & (1 << 10)) { explanation += "B10 "; hasActiveBits = true; }
+  if (statusBits & (1 << 11)) { explanation += "B11 "; hasActiveBits = true; }
+  
+  if (!hasActiveBits) {
+    explanation += "(none)";
+  }
+  
+  logDebugMessage(explanation);
+}
+
+void readFlowTemp() {
+  tempSensor.requestTemperatures();
+  flowTemp = tempSensor.getTempCByIndex(0);
+  
+  // Error detectie: -127 = sensor error, 85 = power-on default
+  if (flowTemp == -127.0 || flowTemp == 85.0) {
+    flowTemp = -127.0;  // Markeer als invalid
+  }
+}
+
+void logDetailedStatus(bool toWeb) {
+  String detailMsg = "[" + getTimestamp() + "] State: ";
+  detailMsg += stateToString(stateMachine.currentState);
+  
+  // PumpHK2 status (obv D7 en D8)
+  detailMsg += "  PumpHK2: ";
+  if (digitalRead(PIN_PUMP_BLOCKED) == HIGH) {
+    detailMsg += "BLOCKED";
+  } else if (digitalRead(PIN_PUMP_FORCED) == HIGH) {
+    detailMsg += "FORCED";
+  } else {
+    detailMsg += "NORMAL";
+  }
+  
+  // PWM-in (dummy voor nu)
+  detailMsg += "  PWM-in: ";
+  detailMsg += String(pwmInDutyCycle, 1) + "%";
+  
+  // PWM-out status
+  detailMsg += "  PWM-out: ";
+  if (postRunTimerActive) {
+    detailMsg += String(PWM_DUTY_CYCLE) + "%";
+  } else {
+    detailMsg += "OFF";
+  }
+  
+  // Flow temperatuur
+  detailMsg += "  FlowTemp: ";
+  if (flowTemp != -127.0) {
+    detailMsg += String(flowTemp, 1) + "°C";
+  } else {
+    detailMsg += "ERR";
+  }
+  
+  if (toWeb) {
+    logMessage(detailMsg);  // Naar Serial + Web buffer
+  } else {
+    Serial.println(detailMsg);  // Alleen naar Serial
+  }
+}
+
+void updateGpioOutputs(WpmState state) {
+  // D5 (PWM_OUT): PWM signaal tijdens post-run timer, anders LOW
+  if (postRunTimerActive) {
+    // PWM: 150Hz, 30% duty cycle
+    // ESP8266 PWM range: 0-1023 (10-bit)
+    uint16_t pwmValue = (1023 * PWM_DUTY_CYCLE) / 100;
+    analogWrite(PIN_PWM_OUT, pwmValue);
+  } else {
+    analogWrite(PIN_PWM_OUT, 0);
+  }
+  
+  // D7 (PUMP_FORCED): HIGH tijdens post-run timer, anders LOW
+  if (postRunTimerActive) {
+    digitalWrite(PIN_PUMP_FORCED, HIGH);
+  } else {
+    digitalWrite(PIN_PUMP_FORCED, LOW);
+  }
+  
+  // D8 (PUMP_BLOCKED): HIGH tijdens DEFROST, anders LOW
+  if (state == DEFROSTING) {
+    digitalWrite(PIN_PUMP_BLOCKED, HIGH);
+  } else {
+    digitalWrite(PIN_PUMP_BLOCKED, LOW);
+  }
 }
 
 const char* stateToString(WpmState state) {
@@ -114,46 +342,139 @@ WpmState determineState(uint16_t statusBits) {
   return STANDBY;
 }
 
-void updateStateMachine(WpmState newState) {
+bool updateStateMachine(WpmState newState) {
   if (newState != stateMachine.currentState) {
     unsigned long timeInPreviousState = (millis() - stateMachine.stateEnteredAt) / 1000;
     
-    // Enkele log regel met timestamp
-    Serial.print("[");
-    Serial.print(getTimestamp());
-    Serial.print("] === STATE: ");
-    Serial.print(stateToString(stateMachine.currentState));
-    Serial.print(" → ");
-    Serial.print(stateToString(newState));
-    Serial.print(" (was ");
-    Serial.print(timeInPreviousState);
-    Serial.println(" sec in vorige state) ===");
+    // Formatteer tijd in state (seconden, minuten of uren)
+    String timeString;
+    if (timeInPreviousState < 60) {
+      // Minder dan 1 minuut: "ss sec"
+      if (timeInPreviousState < 10) timeString = "0";
+      timeString += String(timeInPreviousState) + " sec";
+    } else if (timeInPreviousState < 3600) {
+      // Minder dan 1 uur: "mm:ss min"
+      unsigned long minutes = timeInPreviousState / 60;
+      unsigned long seconds = timeInPreviousState % 60;
+      if (minutes < 10) timeString = "0";
+      timeString += String(minutes) + ":";
+      if (seconds < 10) timeString += "0";
+      timeString += String(seconds) + " min";
+    } else {
+      // 1 uur of meer: "hh:mm uur"
+      unsigned long hours = timeInPreviousState / 3600;
+      unsigned long minutes = (timeInPreviousState % 3600) / 60;
+      if (hours < 10) timeString = "0";
+      timeString += String(hours) + ":";
+      if (minutes < 10) timeString += "0";
+      timeString += String(minutes) + " uur";
+    }
     
+    // Annuleer post-run timer als compressor opnieuw start
+    if (postRunTimerActive && newState != STANDBY) {
+      postRunTimerActive = false;
+      digitalWrite(PIN_PUMP_FORCED, LOW);
+      
+      String cancelMsg = "[" + getTimestamp() + "] POST-RUN: Cancelled due to compressor start";
+      logMessage(cancelMsg);
+    }
+    
+    // Detecteer wanneer we HOT_WATER verlaten → start post-run timer
+    if (stateMachine.currentState == HOT_WATER && newState != HOT_WATER) {
+      postRunTimerActive = true;
+      postRunTimerEnd = millis() + (20 * 60 * 1000); // 20 minuten
+      
+      String timerMsg = "[" + getTimestamp() + "] POST-RUN: Timer started (20 min)";
+      logMessage(timerMsg);
+    }
+    
+    // Update GPIO outputs op basis van nieuwe state
+    updateGpioOutputs(newState);
+    
+    // State change log (currentState bevat nog de OUDE state op dit moment)
+    String stateMsg = "[" + getTimestamp() + "] === STATE: ";
+    stateMsg += stateToString(stateMachine.currentState);  // Oude state
+    stateMsg += " → ";
+    stateMsg += stateToString(newState);  // Nieuwe state
+    stateMsg += " (";
+    stateMsg += timeString;  // Tijd in vorige state (geformatteerd)
+    stateMsg += " in last state) ===";
+    logMessage(stateMsg);
+    
+    // Nu pas de state machine updaten
     stateMachine.previousState = stateMachine.currentState;
     stateMachine.currentState = newState;
     stateMachine.stateEnteredAt = millis();
+    
+    // Reset teller bij nieuwe state change
+    logsSinceStateChange = 0;
+    
+    return true;
   }
+  
+  // Controleer of state change regel uit buffer is verdwenen (>= 60 regels gelogd)
+  if (logsSinceStateChange >= LOG_BUFFER_SIZE) {
+    // Log state opnieuw zodat deze zichtbaar blijft in weblog
+    unsigned long timeInCurrentState = (millis() - stateMachine.stateEnteredAt) / 1000;
+    String timeString;
+    if (timeInCurrentState < 60) {
+      if (timeInCurrentState < 10) timeString = "0";
+      timeString += String(timeInCurrentState) + " sec";
+    } else if (timeInCurrentState < 3600) {
+      unsigned long minutes = timeInCurrentState / 60;
+      unsigned long seconds = timeInCurrentState % 60;
+      if (minutes < 10) timeString = "0";
+      timeString += String(minutes) + ":";
+      if (seconds < 10) timeString += "0";
+      timeString += String(seconds) + " min";
+    } else {
+      unsigned long hours = timeInCurrentState / 3600;
+      unsigned long minutes = (timeInCurrentState % 3600) / 60;
+      if (hours < 10) timeString = "0";
+      timeString += String(hours) + ":";
+      if (minutes < 10) timeString += "0";
+      timeString += String(minutes) + " uur";
+    }
+    
+    String stateMsg = "[" + getTimestamp() + "] === STATE: ";
+    stateMsg += stateToString(stateMachine.currentState);
+    stateMsg += " (" + timeString + " in current state) ===";
+    logMessage(stateMsg);
+  }
+  
+  return false;
 }
 
 void connectWiFi() {
-  Serial.println();
-  Serial.print("Verbinden met WiFi: ");
-  Serial.println(WIFI_SSID);
+  Serial.print("Connecting WiFi '");
+  Serial.print(WIFI_SSID);
+  Serial.print("'...");
   
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   
-  while (WiFi.status() != WL_CONNECTED) {
+  int timeout = 0;
+  while (WiFi.status() != WL_CONNECTED && timeout < 60) {
     delay(500);
     Serial.print(".");
+    timeout++;
   }
   
   Serial.println();
-  Serial.println("WiFi verbonden!");
-  Serial.print("IP adres: ");
-  Serial.println(WiFi.localIP());
+  
+  if (WiFi.status() == WL_CONNECTED) {
+    logMessage("✅ WiFi connection established: IP address " + WiFi.localIP().toString());
+  } else {
+    logMessage("❌ WiFi connection failed!");
+  }
 }
 
 void connectModbus() {
+  // Controleer WiFi verbinding
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.println("WiFi niet verbonden! Modbus verbinding overgeslagen.");
+    return;
+  }
+  
   Serial.print("Verbinden met ISG-web op ");
   Serial.print(ISG_HOST);
   Serial.println("...");
@@ -165,24 +486,27 @@ void connectModbus() {
     
     mb.client();
     if (mb.connect(isgIP, ISG_PORT)) {
-      Serial.println("Modbus TCP verbonden!");
+      logMessage("✅ Modbus TCP verbonden!");
     } else {
-      Serial.println("Modbus verbinding mislukt!");
+      logMessage("❌ Modbus verbinding mislukt!");
     }
   } else {
-    Serial.println("DNS lookup mislukt!");
+    logMessage("❌ DNS lookup mislukt!");
   }
 }
 
-void readModbusRegister2500() {
-  // Controleer verbinding
+void readInputValues() {
+  // 1. Lees FlowTemp sensor (DS18B20 op D2)
+  readFlowTemp();
+  
+  // 2. Controleer Modbus TCP verbinding met ISG-web
   if (!mb.isConnected(IPAddress())) {
     Serial.println("Modbus niet verbonden, opnieuw verbinden...");
     connectModbus();
     return;
   }
   
-  // Lees status register 2500
+  // 3. Lees WPM3 status register 2501 (Modbus address 2500)
   uint16_t res = mb.readHreg(IPAddress(), 2500, nullptr, 1, nullptr, ISG_SLAVE_ID);
   
   if (res == 0) {
@@ -191,86 +515,129 @@ void readModbusRegister2500() {
     
     // Bepaal en update state
     WpmState newState = determineState(statusBits);
-    updateStateMachine(newState);
+    bool stateChanged = updateStateMachine(newState);
     
-    bool compressorRunning = (statusBits & (1 << 6)) != 0;
-    unsigned long timeInState = (millis() - stateMachine.stateEnteredAt) / 1000;
+    // Debug logging bij state change
+    if (stateChanged) {
+      logDebugStatusBits(statusBits);
+    }
     
-    Serial.println("\n╔════════════════════════════════════╗");
-    Serial.println("║     WPM3 Status                    ║");
-    Serial.println("╚════════════════════════════════════╝");
-    
-    Serial.print("State:      ");
-    Serial.println(stateToString(stateMachine.currentState));
-    Serial.print("Compressor: ");
+    // Log detailed status naar Serial (elke 15 seconden)
+    logDetailedStatus(false);
+  } else {
+    logMessage("❌ FOUT: Kan register 2500 niet lezen");
+  }
+}
+
+void setup() {
+  // Configureer PWM frequentie voor D5
+  analogWriteFreq(PWM_FREQUENCY);
   
-  initTime();
+  // Initialiseer GPIO pins
+  pinMode(PIN_FLOWTEMP_IN, INPUT_PULLUP);  // D2: Flow temp input met pull-up
+  pinMode(PIN_PWM_OUT, OUTPUT);            // D5: PWM output
+  pinMode(PIN_PWM_IN, INPUT);              // D6: PWM input zonder pull-up
+  pinMode(PIN_PUMP_FORCED, OUTPUT);        // D7: Pump forced output
+  pinMode(PIN_PUMP_BLOCKED, OUTPUT);       // D8: Pump blocked output
+  
+  analogWrite(PIN_PWM_OUT, 0);             // PWM uit bij startup
+  digitalWrite(PIN_PUMP_FORCED, LOW);
+  digitalWrite(PIN_PUMP_BLOCKED, LOW);
+  
+  // Initialiseer DS18B20 temperatuursensor op D2
+  tempSensor.begin();
+  tempSensor.setResolution(12);  // 12-bit resolutie (0.0625°C, ~750ms conversie)
+  tempSensor.setWaitForConversion(false);  // Async temperatuur conversie
+  
+  Serial.begin(115200);
   delay(1000);
   
-    Serial.println(compressorRunning ? "ACTIEF ●" : "UIT ○");
-    Serial.print("Tijd:       ");
-    Serial.print(timeInState);
-    Serial.println(" sec in huidige state");
-    
-    Serial.print("\nBits:       0b");
-    Serial.print(statusBits, BIN);
-    Serial.print(" (0x");
-    Serial.print(statusBits, HEX);
-    Serial.println(")");
-    
-    // Toon alleen actieve bits
-    Serial.println("\nActieve bits:");
-    if (statusBits & (1 << 0)) Serial.println("  B0  HK1 Pomp");
-    if (statusBits & (1 << 1)) Serial.println("  B1  HK2 Pomp");
-    if (statusBits & (1 << 2)) Serial.println("  B2  Opwarmprogramma");
-    if (statusBits & (1 << 3)) Serial.println("  B3  NHZ (bijverwarming)");
-    if (statusBits & (1 << 4)) Serial.println("  B4  Verwarmingsmodus");
-    if (statusBits & (1 << 5)) Serial.println("  B5  Warmwatermodus");
-    if (statusBits & (1 << 6)) Serial.println("  B6  Compressor");
-    if (statusBits & (1 << 7)) Serial.println("  B7  Zomerbedrijf");
-    if (statusBits & (1 << 8)) Serial.println("  B8  Koeling");
-    if (statusBits & (1 << 9)) Serial.println("  B9  Ontdooien");
-    if (statusBits & (1 << 10)) Serial.println("  B10 Silent mode 1");
-    if (statusBits & (1 << 11)) Serial.println("  B11 Silent mode 2");
-    
-    Serial.println("════════════════════════════════════\n");
-  } else {
-    Serial.println("❌ FOUT: Kan register 2500 niet lezen");
-  }
-}╔════════════════════════════════════╗");
+  Serial.println("\n\n╔════════════════════════════════════╗");
   Serial.println("║   WPM3 Modbus Register 2500       ║");
   Serial.println("║   Status Reader                    ║");
   Serial.println("╚════════════════════════════════════╝\n");
   
+  // Stap 1: WiFi verbinding
   connectWiFi();
-  delay(1000);
-  connectModbus();
   
-  Serial.println("\n✓ Setup voltooid!");
-  Serial.println("Eerste uitlezing over 5 seconden...\n");
+  // Als WiFi verbonden is, initialiseer NTP en Modbus
+  if (WiFi.status() == WL_CONNECTED) {
+    delay(1000);
+    
+    Serial.println();
+    // Stap 2: NTP tijd synchronisatie (vereist WiFi)
+    initTime();
+    delay(1000);
+    
+    // Stap 3: Modbus verbinding (vereist WiFi)
+    connectModbus();
+    
+    // Stap 4: Webserver opstarten
+    server.on("/", handleRoot);
+    server.begin();
+    Serial.println();
+    Serial.print("✅ Webserver gestart op http://");
+    Serial.println(WiFi.localIP());
+    
+    Serial.println("\n✅ Setup voltooid!");
+    Serial.println("Eerste uitlezing over 5 seconden...\n");
+  } else {
+    Serial.println("\nSetup continues without WiFi. Will retry every 60 seconds...\n");
+  }
+  
   lastReadTime = millis() - READ_INTERVAL + 5000;
+  lastWifiCheckTime = millis();
 }
 
 void loop() {
   mb.task();
+  server.handleClient();
   
-  // Periodiek uitlezen
-  if (millis() - lastReadTime >= READ_INTERVAL) {
-    readModbusRegister2500();
+  // Check post-run timer
+  if (postRunTimerActive && millis() >= postRunTimerEnd) {
+    postRunTimerActive = false;
+    digitalWrite(PIN_PUMP_FORCED, LOW);
+    
+    String timerMsg = "[" + getTimestamp() + "] POST-RUN: Timer expired";
+    logMessage(timerMsg);
+  }
+  
+  // Check elke 60 seconden of WiFi nog verbonden is
+  if (millis() - lastWifiCheckTime >= 60000) {
+    lastWifiCheckTime = millis();
+    wifiCheckCounter++;
+    
+    if (WiFi.status() != WL_CONNECTED) {
+      Serial.println();
+      Serial.println("WiFi connection lost. Reconnecting...");
+      connectWiFi();
+      
+      // Als WiFi nu verbonden is, herinitialiseer NTP en Modbus
+      if (WiFi.status() == WL_CONNECTED) {
+        delay(1000);
+        initTime();
+        wifiCheckCounter = 0; // Reset teller na reconnect
+        delay(1000);
+        connectModbus();
+      }
+    } else if (wifiCheckCounter >= 60) {
+      // Elk uur (60 × 60 seconden): NTP resync
+      Serial.println();
+      initTime();
+      wifiCheckCounter = 0;
+    }
+  }
+  
+  // Periodiek uitlezen (alleen als WiFi verbonden is)
+  if (WiFi.status() == WL_CONNECTED && millis() - lastReadTime >= READ_INTERVAL) {
+    readInputValues();  // Lees Modbus register 2501 + FlowTemp sensor
     lastReadTime = millis();
   }
   
-  // Controleer WiFi verbinding
-  if (WiFi.status() != WL_CONNECTED) {
-    Serial.println("⚠ 
-    lastReadTime = millis();
-  }
-  
-  // Controleer WiFi verbinding
-  if (WiFi.status() != WL_CONNECTED) {
-    Serial.println("WiFi verbinding verloren, opnieuw verbinden...");
-    connectWiFi();
-    connectModbus();
+  // Periodiek detail logging naar webserver (elke 30 seconden)
+  if (millis() - lastDetailLogTime >= 30000) {
+    logDetailedStatus(true);  // Naar Serial + Web buffer
+    lastDetailLogTime = millis();
   }
   
   delay(10);
