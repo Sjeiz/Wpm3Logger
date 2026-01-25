@@ -244,9 +244,9 @@ void handleRoot() {
   if (webLogCount == 0) {
     html += "No log entries yet...";
   } else {
-    // Show all log entries in order
+    // Show all log entries in reverse order (newest first)
     int startIdx = (webLogCount < WEB_LOG_BUFFER_SIZE) ? 0 : webLogIndex;
-    for (int i = 0; i < webLogCount; i++) {
+    for (int i = webLogCount - 1; i >= 0; i--) {
       int idx = (startIdx + i) % WEB_LOG_BUFFER_SIZE;
       html += webLogBuffer[idx] + "\n";
     }
