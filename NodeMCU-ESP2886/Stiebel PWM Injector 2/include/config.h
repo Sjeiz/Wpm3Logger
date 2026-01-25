@@ -2,18 +2,43 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+// Sentinel value for Modbus read failure
+#define ISG_MODBUS_READ_ERROR 0xFFFF 
+
+// Modbus slave ID
+#define ISG_SLAVE_ID 1
+
+// State for controlling hardware outputs
+enum State {
+  ERROR,
+  STANDBY,
+  DEFROST,
+  COOLING,
+  HOT_WATER,
+  HEATING,
+  POST_RUN
+};
+
+// Log level for serial output
+enum LogLevel { LOG_NORMAL, LOG_VERBOSE, LOG_DEBUG };
+
 // Post-run timer
 extern const int POST_RUN_DURATION_MIN;
 // Logging configuration
 extern const bool DEBUG;
 extern const bool VERBOSE;
 
+
 // GPIO pin definitions
 #define PIN_FLOW_TEMP    D2 // Input with pullup
-#define PIN_PWM_OUT      D5 // Output PWM signal, 150Hz, duty 30%
+#define PIN_PWM_OUT      D5 // Output PWM signal
 #define PIN_PWM_IN       D6 // Input, no pullup
 #define PIN_PUMP_ON      D7 // Output, normal low
 #define PIN_PUMP_BLOCKED D8 // Output, normal low
+
+// PWM configuratie
+extern const int PWM_OUT_FREQUENCY_HZ;   // PWM frequentie (Hz)
+extern const int PWM_OUT_DUTY_PERCENT;   // PWM duty cycle (%)
 
 // ISG_OPERATING_STATUS bitflag definitions
 #define ISG_STATUS_HK1_PUMP           0x0001 // B0

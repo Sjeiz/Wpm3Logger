@@ -1,5 +1,10 @@
-
+// Always include headers first!
 #include "config.h"
+
+
+// PWM configuratie
+const int PWM_OUT_FREQUENCY_HZ = 150;
+const int PWM_OUT_DUTY_PERCENT = 30;
 // Post-run timer
 const int POST_RUN_DURATION_MIN = 3;
 // Logging configuration
