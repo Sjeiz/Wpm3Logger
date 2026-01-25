@@ -18,3 +18,12 @@ Notes:
 - As soon as the status is no longer STANDBY, POST_RUN is immediately cancelled.
 - DEFROST (B9) always has priority if compressor is on.
 - Bit numbers: B4=HEATING, B5=HOT_WATER, B6=COMPRESSOR, B8=COOLING, B9=DEFROST.
+
+
+Logging strategie:
+Elke statuswijziging (state change) wordt direct gelogd naar zowel de seriële monitor als de web-logbuffer.
+Elke 30 seconden wordt een gedetailleerde statusregel gelogd (periodieke statusupdate).
+Warnings en errors worden direct gelogd naar beide outputs.
+De web-log gebruikt een circulaire buffer (grootte gedefinieerd via LOG_BUFFER_SIZE), waarbij de nieuwste berichten vooraan staan en oude berichten automatisch worden overschreven.
+Als een belangrijke logregel (zoals een state change of warning/error) uit de buffer dreigt te verdwijnen, wordt deze opnieuw gelogd zodat deze zichtbaar blijft.
+De logica voor serieel en web is zoveel mogelijk samengevoegd, zodat dubbele code wordt voorkomen.

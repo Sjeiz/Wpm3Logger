@@ -493,7 +493,7 @@ void setup() {
   Serial.println("Webserver gestart op poort 80");
   
   // Configure NTP for time synchronization
-  configTime(1 * 3600, 0, "pool.ntp.org", "time.nist.gov");
+  configTime(GMT_OFFSET_SEC, DAYLIGHT_OFFSET_SEC, NTP_SERVER, NTP_SERVER_BACKUP);
   Serial.println("NTP gestart, wachtend op tijdsynchronisatie...");
 }
 
@@ -513,7 +513,7 @@ void loop() {
   unsigned long resyncInterval = timeValid ? NTP_RESYNC_INTERVAL_VALID : NTP_RESYNC_INTERVAL;
   
   if (currentMillis - lastNTPSyncAttempt >= resyncInterval) {
-    configTime(1 * 3600, 0, "pool.ntp.org", "time.nist.gov");
+    configTime(GMT_OFFSET_SEC, DAYLIGHT_OFFSET_SEC, NTP_SERVER, NTP_SERVER_BACKUP);
     lastNTPSyncAttempt = currentMillis;
     if (DEBUG_MODE) {
       Serial.print("DEBUG: NTP resync poging (");
