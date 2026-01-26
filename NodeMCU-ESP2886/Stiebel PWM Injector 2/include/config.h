@@ -1,3 +1,7 @@
+// Interval voor temperatuur uitlezen (ms)
+extern const unsigned long TEMP_READ_INTERVAL_MS;
+// Interval voor NTP resync (ms)
+extern const unsigned long NTP_RESYNC_INTERVAL_MS;
 
 #ifndef CONFIG_H
 #define CONFIG_H
@@ -68,12 +72,18 @@ extern const int ISG_OPERATING_STATUS_ADDR;
 extern const int ISG_POLL_INTERVAL_SEC;
 
 // WiFi configuration
+extern const char* HOSTNAME;
 extern const char* WIFI_SSID;
 extern const char* WIFI_PASSWORD;
 extern const int WIFI_TIMEOUT_SEC;
 extern const int WIFI_RETRY_SEC;
 
 // NTP configuration
+// OTA password configuration
+extern const char* OTA_PASSWORD;
+
+// DNS suffix configuration
+extern const char* DNS_SUFFIX;
 extern const char* NTP_SERVER;
 extern const long GMT_OFFSET_SEC;
 extern const int DAYLIGHT_OFFSET_SEC;
