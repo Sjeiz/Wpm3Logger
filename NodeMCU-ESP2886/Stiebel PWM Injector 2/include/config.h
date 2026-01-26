@@ -9,7 +9,7 @@
 #define ISG_SLAVE_ID 1
 
 // State for controlling hardware outputs
-enum State {
+enum class State {
   ERROR,
   STANDBY,
   DEFROST,
@@ -19,8 +19,15 @@ enum State {
   POST_RUN
 };
 
+// Utility: get state name as string
+const char* stateName(State state);
+
 // Log level for serial output
-enum LogLevel { LOG_NORMAL, LOG_VERBOSE, LOG_DEBUG };
+enum class LogLevel {
+  LOG_NORMAL,
+  LOG_VERBOSE,
+  LOG_DEBUG
+};
 
 // Post-run timer
 extern const int POST_RUN_DURATION_MIN;

@@ -1,3 +1,4 @@
+
 // Always include headers first!
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
@@ -6,6 +7,7 @@
 #include "config.h"
 #include <OneWire.h>
 #include <DallasTemperature.h>
+
 
 // Globale ModbusTCP client
 ModbusTCP mb;
@@ -34,20 +36,19 @@ uint16_t getISGOperatingStatus() {
 
 
 
-void logMessage(const String& message, LogLevel level = LOG_NORMAL);
-// (logCombinedStatus/logOperatingStatusFlags: not used)
+
+
+void logMessage(const String& message, const LogLevel level = LogLevel::LOG_NORMAL);
 float readFlowTemp();
-const char* outputStatusName(State state);
-State evaluateState(uint16_t status, bool wifiOk);
-void handleOutputState(State newState, uint16_t status);
-// void logOperatingStatusFlags(uint16_t status); // not used
+const char* outputStatusName(const State state);
+const char* stateName(const State state);
+State evaluateState(const uint16_t status);
+void handleOutputState(const State newState, const uint16_t status);
 void syncTimeWithNTP();
 void tryConnectWiFi();
-// int myFunction(int x, int y); // not used
 
 
 float readPWMIn() { return 75.0; }
-String readPWMOut() { return "OFF"; }
 
 // Temperature sensor on D2 (PIN_FLOW_TEMP)
 OneWire oneWire(PIN_FLOW_TEMP);
@@ -66,20 +67,20 @@ float readFlowTemp() {
   return lastFlowTemp;
 }
 
-const char* outputStatusName(State state) {
+const char* outputStatusName(const State state) {
   switch (state) {
-    case DEFROST: return "BLOCKED";
-    case POST_RUN: return "FORCED";
+    case State::DEFROST: return "BLOCKED";
+    case State::POST_RUN: return "FORCED";
     default: return "NORMAL";
   }
 }
 
-void logMessage(const String& message, LogLevel level) {
+void logMessage(const String& message, const LogLevel level) {
   // Show everything from the chosen minimum log level and lower (so DEBUG also shows VERBOSE and NORMAL)
-  int minLevel = LOG_NORMAL;
-  if (DEBUG) minLevel = LOG_DEBUG;
-  else if (VERBOSE) minLevel = LOG_VERBOSE;
-  if (level > minLevel) return;
+  LogLevel minLevel = LogLevel::LOG_NORMAL;
+  if (DEBUG) minLevel = LogLevel::LOG_DEBUG;
+  else if (VERBOSE) minLevel = LogLevel::LOG_VERBOSE;
+  if (static_cast<int>(level) > static_cast<int>(minLevel)) return;
   time_t now = time(nullptr);
   char buf[20];
   if (now > 100000) {
@@ -90,50 +91,45 @@ void logMessage(const String& message, LogLevel level) {
   Serial.print("[");
   Serial.print(buf);
   Serial.print("] ");
-  if (level == LOG_VERBOSE) Serial.print("[VERBOSE] ");
-  else if (level == LOG_DEBUG) Serial.print("[DEBUG] ");
+  if (level == LogLevel::LOG_VERBOSE) Serial.print("[VERBOSE] ");
+  else if (level == LogLevel::LOG_DEBUG) Serial.print("[DEBUG] ");
   Serial.println(message);
 }
 
 
-// OutputState currentOutputState = ERROR; // not used
-// State currentState = ERROR; // not used
 unsigned long postRunStart = 0;
 const unsigned long POST_RUN_DURATION_MS = POST_RUN_DURATION_MIN * 60000UL;
 
 // State machine tracking
-static State previousState = ERROR;
-static State currentState = ERROR;
-// bool lastHotWater = false; // not used
+static State previousState = State::ERROR;
+static State currentState = State::ERROR;
 
 
-State evaluateState(uint16_t status, bool wifiOk) {
-  if (!wifiOk || status == ISG_MODBUS_READ_ERROR) return ERROR;
+State evaluateState(const uint16_t status) {
+  if (status == ISG_MODBUS_READ_ERROR) return State::ERROR;
   bool compressor = status & ISG_STATUS_COMPRESSOR;
   bool defrost    = status & ISG_STATUS_DEFROSTING;
   bool cooling    = status & ISG_STATUS_COOLING;
   bool hotwater   = status & ISG_STATUS_HOT_WATER;
   bool heating    = status & ISG_STATUS_HEATING;
 
-  if (!compressor) return STANDBY;
-  if (defrost)     return DEFROST;
-  if (cooling)     return COOLING;
-  if (hotwater)    return HOT_WATER;
-  if (heating)     return HEATING;
-  return STANDBY;
+  if (!compressor) return State::STANDBY;
+  if (defrost)     return State::DEFROST;
+  if (cooling)     return State::COOLING;
+  if (hotwater)    return State::HOT_WATER;
+  if (heating)     return State::HEATING;
+  return State::STANDBY;
 }
 
-void handleOutputState(State newState, uint16_t status) {
-  static bool lastWasHotWater = false;
-
+void handleOutputState(const State newState, const uint16_t status) {
   // Set hardware outputs directly based on newState
   switch (newState) {
-    case DEFROST:
+    case State::DEFROST:
       digitalWrite(PIN_PUMP_ON, LOW);
       digitalWrite(PIN_PUMP_BLOCKED, HIGH);
       analogWrite(PIN_PWM_OUT, 0);
       break;
-    case POST_RUN:
+    case State::POST_RUN:
       digitalWrite(PIN_PUMP_ON, HIGH);
       digitalWrite(PIN_PUMP_BLOCKED, LOW);
       analogWrite(PIN_PWM_OUT, (int)(PWM_OUT_DUTY_PERCENT * 1023 / 100));
@@ -144,7 +140,6 @@ void handleOutputState(State newState, uint16_t status) {
       analogWrite(PIN_PWM_OUT, 0);
       break;
   }
-  lastWasHotWater = (newState == HOT_WATER);
 }
 
 
@@ -222,9 +217,9 @@ void setup() {
   // Initialize currentState after WiFi/Modbus setup
   bool modbusOk = wifiConnected; // Simuleer: Modbus OK als WiFi OK
   if (wifiConnected && modbusOk) {
-    currentState = STANDBY;
+    currentState = State::STANDBY;
   } else {
-    currentState = ERROR;
+    currentState = State::ERROR;
   }
 }
 
@@ -259,53 +254,48 @@ void loop() {
 
   // 3. Read inputs
   // a. ISG_OPERATING_STATUS uitlezen via Modbus
-  uint16_t isgStatus = getISGOperatingStatus();
+  const uint16_t isgStatus = getISGOperatingStatus();
   // b. Read PWM-in via GPIO (dummy function)
-  float pwmInVal = readPWMIn();
+  const float pwmInVal = readPWMIn();
   // c. Read FlowTemp via GPIO
-  float flowTempVal = readFlowTemp();
+  const float flowTempVal = readFlowTemp();
 
-  // 4. Determine state and transitions
-  currentState = evaluateState(isgStatus, wifiConnected);
-
-  // 4b. POST_RUN logic and transitions
+  // 4. Determine state and transitions, including POST_RUN
   static unsigned long postRunStart = 0;
-  static bool lastWasHotWater = false;
+
+  State newState = evaluateState(isgStatus);
+
   // POST_RUN: HOT_WATER -> STANDBY
-  State outputState = currentState;
-  if (lastWasHotWater && currentState == STANDBY) {
-    outputState = POST_RUN;
+  if (currentState == State::HOT_WATER && newState == State::STANDBY) {
+    currentState = State::POST_RUN;
     postRunStart = millis();
-    logMessage("Output state: POST_RUN (forced)");
+    logMessage("State: POST_RUN (forced)");
+  } else if (currentState == State::POST_RUN) {
+    // End POST_RUN after duration
+    if (millis() - postRunStart > POST_RUN_DURATION_MS) {
+      currentState = State::STANDBY;
+      logMessage("State: POST_RUN ended");
+    }
+    // Cancel POST_RUN als ISG niet meer STANDBY is
+    else if (newState != State::STANDBY) {
+      currentState = newState;
+      logMessage("State: POST_RUN cancelled");
+    }
+    // else: blijf in POST_RUN
+  } else {
+    currentState = newState;
   }
-  // Cancel POST_RUN if status is no longer STANDBY
-  if (previousState == POST_RUN && currentState != STANDBY) {
-    // outputState remains as determined
-    logMessage("Output state: POST_RUN cancelled");
-  }
-  // End POST_RUN after duration
-  if (outputState == POST_RUN && millis() - postRunStart > POST_RUN_DURATION_MS) {
-    outputState = STANDBY;
-    logMessage("Output state: POST_RUN ended");
-  }
-  lastWasHotWater = (currentState == HOT_WATER);
 
   // 5. Set outputs
-  handleOutputState(outputState, isgStatus);
+  handleOutputState(currentState, isgStatus);
 
   // 6. Log status (with current values)
-  static State previousLoggedState = ERROR;
-  String pwmOutVal = readPWMOut();
-  if (currentState != previousLoggedState || VERBOSE) {
+  // PWM-out is only active during POST_RUN
+  String pwmOutVal = (currentState == State::POST_RUN) ? String(PWM_OUT_DUTY_PERCENT) + "%" : "OFF";
+  if (currentState != previousState || VERBOSE) {
     char buf[128];
     snprintf(buf, sizeof(buf), "State:%s  Output:%s  PWM-in:%.1f%%  PWM-out:%s  Flow:%.1f°C  WiFi:%s  Modbus:%s",
-      currentState == ERROR ? "ERROR" :
-      currentState == STANDBY ? "STANDBY" :
-      currentState == DEFROST ? "DEFROST" :
-      currentState == COOLING ? "COOLING" :
-      currentState == HOT_WATER ? "HOT_WATER" :
-      currentState == HEATING ? "HEATING" :
-      currentState == POST_RUN ? "POST_RUN" : "UNKNOWN",
+      stateName(currentState),
       outputStatusName(currentState),
       pwmInVal,
       pwmOutVal.c_str(),
@@ -314,11 +304,9 @@ void loop() {
       (isgStatus == ISG_MODBUS_READ_ERROR ? "FAIL" : "OK")
     );
     logMessage(buf);
-    previousLoggedState = currentState;
   }
 
   delay(ISG_POLL_INTERVAL_SEC * 1000UL);
 }
 
-// Put function definitions here:
-// int myFunction(int x, int y) { return x + y; } // not used
+// End of main.cpp

@@ -1,6 +1,20 @@
 // Always include headers first!
 #include "config.h"
 
+const char* stateName(State state) {
+	switch (state) {
+		case State::ERROR: return "ERROR";
+		case State::STANDBY: return "STANDBY";
+		case State::DEFROST: return "DEFROST";
+		case State::COOLING: return "COOLING";
+		case State::HOT_WATER: return "HOT_WATER";
+		case State::HEATING: return "HEATING";
+		case State::POST_RUN: return "POST_RUN";
+		default: return "UNKNOWN";
+	}
+}
+
+
 
 // PWM configuratie
 const int PWM_OUT_FREQUENCY_HZ = 150;
