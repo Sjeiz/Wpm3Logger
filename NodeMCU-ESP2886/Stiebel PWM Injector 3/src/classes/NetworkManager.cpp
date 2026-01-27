@@ -91,8 +91,7 @@ void NetworkManager::handleTelnet() {
         }
     }
     if (telnetClient && telnetClient.connected() && telnetClient.available()) {
-        String line = telnetClient.readStringUntil('\n');
-        telnetClient.print("Echo: ");
-        telnetClient.println(line);
+        // Invoer ontvangen, maar niet echoën
+        telnetClient.readStringUntil('\n');
     }
 }

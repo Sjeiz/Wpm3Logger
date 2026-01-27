@@ -1,0 +1,35 @@
+Hier is een concreet migratieplan om jouw codebase stap voor stap objectgeoriënteerd te maken, zonder alles in één keer te herschrijven:
+
+1. Identificeer logische modules
+PumpController: regelt states, outputs, post-run, flowtemp.
+ModbusManager: regelt Modbus communicatie en status.
+WebLogger: webserver en logbuffer.
+TelnetLogger: Telnet logfunctionaliteit.
+WiFiManager: WiFi connectie en reconnect.
+OTAHandler: OTA updates.
+2. Maak voor elke module een klasse aan
+Begin met de module die het makkelijkst te isoleren is (bijv. WebLogger of ModbusManager).
+Maak een header (.h) en implementatie (.cpp) bestand per klasse.
+3. Verplaats gerelateerde variabelen en functies
+Zet alle variabelen en functies die bij een module horen als members/methods in de klasse.
+Maak waar mogelijk members private en alleen noodzakelijke methoden public.
+4. Pas main.cpp aan
+Maak in main.cpp één object per module aan.
+Roep in setup() en loop() alleen nog methoden van deze objecten aan.
+Verwijder globale variabelen die nu in klassen zitten.
+5. Test na elke stap
+Test na het migreren van elke module of alles nog werkt.
+Begin met WebLogger of ModbusManager, daarna PumpController, dan WiFi/OTA, dan TelnetLogger.
+6. Voorbeeld volgorde migratie
+WebLogger: verplaats logBuffer, logMessage, setupWebServer, AJAX-log endpoint.
+ModbusManager: verplaats isgStatus, handleModbusData, handleModbusError, Modbus-init.
+PumpController: verplaats state, evaluateState, handleOutputState, post-run, flowtemp.
+WiFiManager: verplaats wifiConnected, tryConnectWiFi, reconnect-logica.
+OTAHandler: verplaats OTA setup en callbacks.
+TelnetLogger: verplaats telnetServer, telnetClient, log-output.
+7. Refactoren en uitbreiden
+Voeg waar nodig interfaces toe voor logging (zodat WebLogger en TelnetLogger dezelfde logMessage-interface kunnen delen).
+Maak gebruik van dependency injection: geef bijvoorbeeld een logger-object aan de PumpController.
+8. Documentatie en onderhoud
+Documenteer elke klasse kort (doel, belangrijkste methoden).
+Houd de klassen klein en verantwoordelijk voor één taak.

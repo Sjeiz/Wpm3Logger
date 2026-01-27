@@ -2,14 +2,15 @@
 #define WEBLOGGER_H
 
 #include <Arduino.h>
+#include "../loggers/Logger.h"
 
-class WebLogger {
+class WebLogger : public Logger {
 public:
     WebLogger(size_t bufferSize = 2048);
     ~WebLogger();
 
     void begin();
-    void log(const String& message);
+    void log(const String& message) override;
     String getLogHtml() const;
     String getLogText() const;
     void clear();

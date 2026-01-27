@@ -1,3 +1,7 @@
+#include "loggers/Logger.h"
+#include "loggers/SerialLogger.h"
+#include "loggers/TelnetLogger.h"
+#include "classes/LoggingManager.h"
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include "classes/NetworkManager.h"
@@ -6,11 +10,13 @@
 #include <ArduinoOTA.h>
 #include <time.h>
 #include "config.h"
+#include "sensors/FlowTempSensor.h"
 #include <OneWire.h>
 #include <DallasTemperature.h>
 #include <ESP8266WebServer.h>
 #include "classes/WebServerManager.h"
 #include "classes/WebLogger.h"
+#include "classes/OutputManager.h"
 #include "classes/states/State.h"
 #include "classes/states/StandbyState.h"
 #include "classes/states/ErrorState.h"
@@ -22,37 +28,38 @@
 
 // === GLOBAL CONSTANTS & VARIABLES ===
 NetworkManager networkManager;
+
+SerialLogger serialLogger;
+TelnetLogger telnetLogger(&networkManager.telnetServer);
+WebLogger webLogger(8192); // 8kB buffer
+LoggingManager loggingManager;
+
 ModbusManager modbusManager;
-OneWire oneWire(PIN_FLOW_TEMP);
-DallasTemperature sensors(&oneWire);
+FlowTempSensor flowTempSensor(PIN_FLOW_TEMP);
+
+WebServerManager webServerManager(&webLogger);
+
+OutputManager outputManager;
+
 float lastFlowTemp = NAN;
 unsigned long lastTempRead = 0;
 unsigned long postRunStart = 0;
 const unsigned long POST_RUN_DURATION_MS = POST_RUN_DURATION_MIN * 60000UL;
 State* previousState = nullptr;
 State* currentState = nullptr;
-WebLogger webLogger(8192); // 8kB buffer
-WebServerManager webServerManager(&webLogger);
+
 
 
 // === FUNCTION PROTOTYPES ===
 void logMessage(const String& message, const LogLevel level = LogLevel::LOG_NORMAL);
 float readFlowTemp();
-// ...verwijderd: dubbele definities...
 State* evaluateState(const uint16_t status);
 void handleOutputState(State* newState, const uint16_t status);
-// NetworkManager verzorgt WiFi, OTA, NTP, Telnet
 float readPWMIn();
 
 float readPWMIn() { return 75.0; }
 float readFlowTemp() {
-  unsigned long now = millis();
-  if (now - lastTempRead > TEMP_READ_INTERVAL_MS || isnan(lastFlowTemp)) {
-    sensors.requestTemperatures();
-    lastFlowTemp = sensors.getTempCByIndex(0);
-    lastTempRead = now;
-  }
-  return lastFlowTemp;
+  return flowTempSensor.read();
 }
 
 const char* outputStatusName(State* state) {
@@ -79,49 +86,44 @@ void logMessage(const String& message, const LogLevel level) {
   if (level == LogLevel::LOG_VERBOSE) logLine += "[VERBOSE] ";
   else if (level == LogLevel::LOG_DEBUG) logLine += "[DEBUG] ";
   logLine += message + "\r\n";
-  Serial.print(logLine);
-  webLogger.log(logLine);
-  if (webLogger.getLogHtml().length() > 8000) {
-    // buffer management is handled in WebLogger
-  }
-  networkManager.logToTelnet(logLine);
+  loggingManager.log(logLine);
 }
 
 State* evaluateState(const uint16_t status) {
-  // Hier hoort de state machine logica, placeholder:
-  // Return een nieuwe StandbyState als voorbeeld
-  return new StandbyState();
+  // Eenvoudige state machine: alleen nieuwe state bij status-wijziging
+  if (!currentState) {
+    return new StandbyState();
+  }
+  // Hier kun je logica toevoegen voor andere states
+  // Voorbeeld: als status == foutcode, ga naar ErrorState
+  // if (status == ERROR_CODE) return new ErrorState();
+  // Anders: blijf in huidige state
+  return currentState;
 }
 
 void handleOutputState(State* newState, const uint16_t status) {
   if (!newState) return;
   const char* n = newState->name();
   if (strcmp(n, "DEFROST") == 0) {
-    digitalWrite(PIN_PUMP_ON, LOW);
-    digitalWrite(PIN_PUMP_BLOCKED, HIGH);
-    analogWrite(PIN_PWM_OUT, 0);
+    outputManager.setDefrost();
   } else if (strcmp(n, "POST_RUN") == 0) {
-    digitalWrite(PIN_PUMP_ON, HIGH);
-    digitalWrite(PIN_PUMP_BLOCKED, LOW);
-    analogWrite(PIN_PWM_OUT, (int)(PWM_OUT_DUTY_PERCENT * 1023 / 100));
+    outputManager.setPostRun(PWM_OUT_DUTY_PERCENT);
   } else {
-    digitalWrite(PIN_PUMP_ON, LOW);
-    digitalWrite(PIN_PUMP_BLOCKED, LOW);
-    analogWrite(PIN_PWM_OUT, 0);
+    outputManager.setNormal();
   }
 }
 
 void setup() {
+    loggingManager.addLogger(&serialLogger);
+    loggingManager.addLogger(&telnetLogger);
+    loggingManager.addLogger(&webLogger);
   Serial.begin(115200);
   delay(10);
   pinMode(LED_BUILTIN, OUTPUT);
-  pinMode(PIN_PUMP_ON, OUTPUT);
-  pinMode(PIN_PUMP_BLOCKED, OUTPUT);
+  outputManager.begin();
   // Activeer interne pull-up op OneWire pin (indien ondersteund)
   pinMode(PIN_FLOW_TEMP, INPUT_PULLUP);
-  sensors.begin();
-  // Initialize PWM output
-  pinMode(PIN_PWM_OUT, OUTPUT);
+  flowTempSensor.begin();
   analogWriteFreq(PWM_OUT_FREQUENCY_HZ);
   int pwmValue = (int)(PWM_OUT_DUTY_PERCENT * 1023 / 100);
   analogWrite(PIN_PWM_OUT, pwmValue);
@@ -131,14 +133,16 @@ void setup() {
   logMessage("Setup complete", LogLevel::LOG_NORMAL);
   // Telnet wordt nu door networkManager beheerd
   // ModbusManager initialisatie (na WiFi)
-  if (networkManager.isWiFiConnected()) {
-    IPAddress isg_ip;
-    WiFi.hostByName(ISG_HOST, isg_ip);
-    modbusManager.begin(isg_ip, ISG_MODBUS_PORT);
-    currentState = new StandbyState();
-  } else {
-    currentState = new ErrorState();
-  }
+    if (networkManager.isWiFiConnected()) {
+      IPAddress isg_ip;
+      WiFi.hostByName(ISG_HOST, isg_ip);
+      modbusManager.begin(isg_ip, ISG_MODBUS_PORT);
+      delete currentState;
+      currentState = new StandbyState();
+    } else {
+      delete currentState;
+      currentState = new ErrorState();
+    }
   // Initialize currentState na WiFi/Modbus setup
   if (networkManager.isWiFiConnected()) {
     IPAddress isg_ip;
@@ -151,7 +155,9 @@ void setup() {
 }
 
 void loop() {
+    telnetLogger.handleClient();
   networkManager.loop();
+  modbusManager.poll();
   previousState = currentState;
 
   // Debug: begin loop
@@ -163,7 +169,10 @@ void loop() {
 
   // POST_RUN: HOT_WATER -> STANDBY
   // Hier moet de state machine transitie logica komen
-  currentState = newState;
+    if (newState != currentState) {
+      delete currentState;
+      currentState = newState;
+    }
   logMessage(String("[DEBUG] currentState: ") + (currentState ? currentState->name() : "nullptr"), LogLevel::LOG_DEBUG);
 
   // 5. Set outputs
@@ -175,7 +184,7 @@ void loop() {
   String pwmOutVal = (currentState && strcmp(currentState->name(), "POST_RUN") == 0) ? String(PWM_OUT_DUTY_PERCENT) + "%" : "OFF";
   if (millis() - lastLogTime >= ISG_POLL_INTERVAL_SEC * 1000UL) {
     char buf[200];
-    String flowStr = "?";
+    String flowStr = String(readFlowTemp(), 1);
     String modbusStr;
     uint16_t isgStatus = modbusManager.getStatus();
     if (isgStatus == ISG_MODBUS_READ_ERROR) {
@@ -185,10 +194,11 @@ void loop() {
       snprintf(hexbuf, sizeof(hexbuf), "0x%04X", isgStatus);
       modbusStr = hexbuf;
     }
-    snprintf(buf, sizeof(buf), "State:%s  Output:%s  PWM-out:%s  WiFi:%s  Modbus:%s",
+    snprintf(buf, sizeof(buf), "State:%s  Output:%s  PWM-out:%s  FlowTemp:%s  WiFi:%s  Modbus:%s",
       currentState ? currentState->name() : "UNKNOWN",
       outputStatusName(currentState),
       pwmOutVal.c_str(),
+      flowStr.c_str(),
       networkManager.isWiFiConnected() ? "OK" : "FAIL",
       modbusStr.c_str()
     );
