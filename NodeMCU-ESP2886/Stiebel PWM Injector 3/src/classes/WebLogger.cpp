@@ -40,15 +40,50 @@ void WebLogger::appendToBuffer(const String& message) {
 }
 
 
+
+// Helper: return log lines in reverse order (newest first)
+static String reverseLines(const char* buf) {
+    // Collect pointers to the start of each line
+    const int maxLines = 512; // Performance limit
+    const char* lines[maxLines];
+    int lineCount = 0;
+    const char* p = buf;
+    lines[0] = p;
+    while (*p && lineCount < maxLines-1) {
+        if (*p == '\n') {
+            if (*(p+1)) {
+                lines[++lineCount] = p+1;
+            }
+        }
+        ++p;
+    }
+    // Build string in reverse order
+    String out;
+    for (int i = lineCount; i >= 0; --i) {
+        const char* start = lines[i];
+        const char* end = (i == lineCount) ? p : lines[i+1]-1;
+        int len = end - start;
+        if (len > 0) {
+            char tmp[512];
+            if (len > (int)sizeof(tmp)-2) len = sizeof(tmp)-2;
+            memcpy(tmp, start, len);
+            tmp[len] = '\0';
+            out += tmp;
+            out += "\r\n";
+        }
+    }
+    return out;
+}
+
 String WebLogger::getLogHtml() const {
     String html = F("<pre style='font-family:monospace;font-size:12px;'>");
-    html += buffer;
+    html += reverseLines(buffer);
     html += F("</pre>");
     return html;
 }
 
 String WebLogger::getLogText() const {
-    return String(buffer);
+    return reverseLines(buffer);
 }
 
 void WebLogger::clear() {

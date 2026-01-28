@@ -8,16 +8,21 @@
 class ModbusManager {
 public:
     ModbusManager();
-    void begin(IPAddress isg_ip, uint16_t port);
+    void begin(const String& hostOrIp, uint16_t port);
     void poll();
     void setOnStatusUpdate(void (*callback)(uint16_t));
     void loop();
     uint16_t getStatus() const;
+    bool isBusy() const { return busy; }
+    bool isInitialized() const { return initialized; }
 
 private:
     ModbusClientTCPasync* modbusClient;
     uint16_t isgStatus;
     void (*statusUpdateCallback)(uint16_t) = nullptr;
+    bool busy = false;
+    bool initialized = false;
+    unsigned long lastPoll = 0;
     void handleModbusData(ModbusMessage response, uint32_t token);
     void handleModbusError(Error error, uint32_t token);
     static void onDataThunk(ModbusMessage response, uint32_t token, void* arg);

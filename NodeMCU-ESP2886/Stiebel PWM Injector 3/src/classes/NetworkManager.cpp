@@ -1,9 +1,8 @@
-//
+#include <ESP8266WiFi.h>
 #include "NetworkManager.h"
-#include <Arduino.h>
 
 NetworkManager::NetworkManager()
-    : wifiConnected(false), lastWiFiAttempt(0), lastNTPSync(0), telnetServer(23) {}
+    : wifiConnected(false), lastWiFiAttempt(0), lastNTPSync(0), telnetServer(23), telnetLogger(&telnetServer), webLogger() {}
 
 void NetworkManager::logToTelnet(const String& msg) {
     if (telnetClient && telnetClient.connected()) {
@@ -25,7 +24,11 @@ void NetworkManager::begin() {
 void NetworkManager::loop() {
     ArduinoOTA.handle();
     handleTelnet();
-    // evt. WiFi reconnect/NTP herhalen
+    // NTP resync op basis van interval in minuten
+    const unsigned long ntpResyncIntervalMs = NTP_RESYNC_INTERVAL_MIN * 60000UL;
+    if (wifiConnected && millis() - lastNTPSync >= ntpResyncIntervalMs) {
+        syncTimeWithNTP();
+    }
 }
 
 bool NetworkManager::isWiFiConnected() const {
@@ -54,7 +57,8 @@ void NetworkManager::tryConnectWiFi() {
 }
 
 void NetworkManager::syncTimeWithNTP() {
-    configTime(GMT_OFFSET_SEC, DAYLIGHT_OFFSET_SEC, NTP_SERVER);
+    // Alleen NTP-tijd synchroniseren (timezone is al gezet in setup)
+    configTime(0, 0, NTP_SERVER);
     lastNTPSync = millis();
 }
 
@@ -91,7 +95,16 @@ void NetworkManager::handleTelnet() {
         }
     }
     if (telnetClient && telnetClient.connected() && telnetClient.available()) {
-        // Invoer ontvangen, maar niet echoën
+        // Input received, but do not echo
         telnetClient.readStringUntil('\n');
+    }
+}
+
+IPAddress NetworkManager::resolveHostName(const char* host) const {
+    IPAddress ip;
+    if (WiFi.hostByName(host, ip)) {
+        return ip;
+    } else {
+        return IPAddress(0, 0, 0, 0);
     }
 }

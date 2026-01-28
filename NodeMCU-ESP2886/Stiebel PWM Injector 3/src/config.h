@@ -6,9 +6,8 @@
 
 
 // Interval voor temperatuur uitlezen (ms)
-extern const unsigned long TEMP_READ_INTERVAL_MS;
-// Interval voor NTP resync (ms)
-extern const unsigned long NTP_RESYNC_INTERVAL_MS;
+// Interval voor NTP resync (min)
+extern const int NTP_RESYNC_INTERVAL_MIN;
 
 // Sentinel value for Modbus read failure
 #define ISG_MODBUS_READ_ERROR 0xFFFF 
@@ -17,7 +16,7 @@ extern const unsigned long NTP_RESYNC_INTERVAL_MS;
 #define ISG_SLAVE_ID 1
 
 // State for controlling hardware outputs
-// State enum verwijderd, nu alleen State class uit State.h gebruiken
+// State enum verwijderd, nu alleen State class uit StateManager.h gebruiken
 
 // Log level for serial output
 enum class LogLevel {
@@ -62,7 +61,6 @@ extern const int PWM_OUT_DUTY_PERCENT;   // PWM duty cycle (%)
 extern const char* ISG_HOST;
 extern const int ISG_MODBUS_PORT;
 extern const int ISG_OPERATING_STATUS_ADDR;
-extern const int ISG_POLL_INTERVAL_SEC;
 
 // WiFi configuration
 extern const char* HOSTNAME;
@@ -71,14 +69,26 @@ extern const char* WIFI_PASSWORD;
 extern const int WIFI_TIMEOUT_SEC;
 extern const int WIFI_RETRY_SEC;
 
-// NTP configuration
+
+// NTP & tijdzone configuratie
+extern const char* NTP_SERVER;
+extern const char* TIMEZONE; // bv. "CET-1CEST,M3.5.0/2,M10.5.0/3" voor Europa/Amsterdam
+
 // OTA password configuration
 extern const char* OTA_PASSWORD;
 
 // DNS suffix configuration
 extern const char* DNS_SUFFIX;
-extern const char* NTP_SERVER;
-extern const long GMT_OFFSET_SEC;
-extern const int DAYLIGHT_OFFSET_SEC;
+
+
+// State pointers (voor centralTransition)
+class State;
+extern State* errorState;
+extern State* defrostState;
+extern State* coolingState;
+extern State* heatingState;
+extern State* hotWaterState;
+extern State* standbyState;
+extern State* postRunState;
 
 #endif // CONFIG_H

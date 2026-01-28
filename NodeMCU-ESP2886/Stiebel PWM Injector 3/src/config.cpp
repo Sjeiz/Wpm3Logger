@@ -1,35 +1,11 @@
-// Always include headers first!
+// Only include the required headers for time/NTP on ESP8266
+#include <Arduino.h>
+#include <time.h>
 #include "config.h"
 
-// Interval voor temperatuur uitlezen (ms)
-const unsigned long TEMP_READ_INTERVAL_MS = 5000;
-// Interval voor NTP resync (ms)
-const unsigned long NTP_RESYNC_INTERVAL_MS = 3600000UL;
-
-
-
-
-// PWM configuratie
-const int PWM_OUT_FREQUENCY_HZ = 150;
-const int PWM_OUT_DUTY_PERCENT = 30;
-
-// Post-run timer
-const int POST_RUN_DURATION_MIN = 3;
-
 // Logging configuration
-const bool DEBUG = false;
+const bool DEBUG = true;
 const bool VERBOSE = false;
-
-// Modbus/ISG configuration
-const char* ISG_HOST = "servicewelt.iot.cheizoo.lan";
-const int ISG_MODBUS_PORT = 502;
-const int ISG_OPERATING_STATUS_ADDR = 2500;
-const int ISG_POLL_INTERVAL_SEC = 10;
-
-// NTP configuration
-const char* NTP_SERVER = "pool.ntp.org";
-const long GMT_OFFSET_SEC = 3600;
-const int DAYLIGHT_OFFSET_SEC = 3600;
 
 // WiFi credentials
 const char* HOSTNAME = "stiebelpumpcontrol";
@@ -40,3 +16,22 @@ const int WIFI_RETRY_SEC = 60;
 
 // OTA password configuration
 const char* OTA_PASSWORD = "StiebelPumpControl";
+
+// Modbus/ISG configuration
+const char* ISG_HOST = "servicewelt.iot.cheizoo.lan";
+const int ISG_MODBUS_PORT = 502;
+const int ISG_OPERATING_STATUS_ADDR = 2500;
+
+// PWM configuration
+const int PWM_OUT_FREQUENCY_HZ = 150;
+const int PWM_OUT_DUTY_PERCENT = 30;
+
+// Post-run timer
+const int POST_RUN_DURATION_MIN = 1;
+
+// Time configuration
+const char* TIMEZONE = "CET-1CEST,M3.5.0/2,M10.5.0/3"; // Europe/Amsterdam
+const char* NTP_SERVER = "pool.ntp.org";
+const int NTP_RESYNC_INTERVAL_MIN = 60;
+
+

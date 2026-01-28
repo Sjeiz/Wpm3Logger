@@ -1,3 +1,5 @@
+#include "../loggers/TelnetLogger.h"
+#include "WebLogger.h"
 #ifndef NETWORKMANAGER_H
 #define NETWORKMANAGER_H
 
@@ -10,10 +12,13 @@
 class NetworkManager {
 public:
     NetworkManager();
+    TelnetLogger* getTelnetLogger() { return &telnetLogger; }
+    WebLogger* getWebLogger() { return &webLogger; }
     void begin();
     void loop();
     bool isWiFiConnected() const;
     IPAddress getLocalIP() const;
+    IPAddress resolveHostName(const char* host) const;
     void syncTimeWithNTP();
     void setupTelnet();
     void handleTelnet();
@@ -24,6 +29,8 @@ public:
     unsigned long lastNTPSync;
     WiFiServer telnetServer;
     WiFiClient telnetClient;
+    TelnetLogger telnetLogger;
+    WebLogger webLogger;
     void tryConnectWiFi();
     void setupOTA();
     bool otaActive = false;

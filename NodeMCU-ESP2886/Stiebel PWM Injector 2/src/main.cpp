@@ -478,7 +478,7 @@ void loop() {
   String pwmOutVal = (currentState == State::POST_RUN) ? String(PWM_OUT_DUTY_PERCENT) + "%" : "OFF";
   if (now - lastLogTime >= ISG_POLL_INTERVAL_SEC * 1000UL) {
     char buf[200];
-    String flowStr = (flowTempVal <= -126.9 && flowTempVal >= -127.1) ? "ERROR" : String(flowTempVal, 1) + "°C";
+    String flowStr = (flowTempSensor.read() <= -126.9 && flowTempSensor.read() >= -127.1) ? "ERROR" : String(flowTempSensor.read(), 1) + "°C";
     String modbusStr;
     if (isgStatus == ISG_MODBUS_READ_ERROR) {
       modbusStr = "FAIL";
