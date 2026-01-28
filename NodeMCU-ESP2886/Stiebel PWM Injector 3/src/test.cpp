@@ -1,8 +1,7 @@
 // src/test.cpp
 // Serial test interface for the state machine
 #include <Arduino.h>
-#include "classes/StateManager.h"
-#include "classes/ModbusManager.h"
+#include "globals.h"
 
 struct BitName {
   const char* name;
@@ -65,6 +64,12 @@ void handleSerialTestCommand(const String& line) {
     } else if (rest.equalsIgnoreCase("off")) {
       overrideActive = false;
       Serial.println(F("[TEST] Override disabled."));
+      // Force state machine update with real Modbus status if ModbusManager is initialized
+      if (modbusManager.isInitialized()) {
+        uint16_t realStatus = modbusManager.getStatus();
+        extern StateManager stateManager;
+        stateManager.update(realStatus);
+      }
     } else {
       overrideBits = parseModbusBits(rest);
       overrideActive = true;

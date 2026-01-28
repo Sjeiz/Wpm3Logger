@@ -1,5 +1,6 @@
 #include <ESP8266WiFi.h>
 #include "NetworkManager.h"
+#include "helpers.h"
 
 NetworkManager::NetworkManager()
     : wifiConnected(false), lastWiFiAttempt(0), lastNTPSync(0), telnetServer(23) {}
@@ -40,6 +41,7 @@ IPAddress NetworkManager::getLocalIP() const {
 }
 
 void NetworkManager::tryConnectWiFi() {
+    logMessage("\xE2\x8C\x9B Initializing WiFi...");
     WiFi.disconnect();
     WiFi.mode(WIFI_STA);
     WiFi.hostname(HOSTNAME);
@@ -51,14 +53,28 @@ void NetworkManager::tryConnectWiFi() {
     }
     wifiConnected = (WiFi.status() == WL_CONNECTED);
     if (wifiConnected) {
+        logMessage("\xE2\x9C\x85 WiFi connected: " + WiFi.localIP().toString());
         syncTimeWithNTP();
+    } else {
+        logMessage("\xE2\x9D\x8C WiFi connection failed!");
     }
     lastWiFiAttempt = millis();
 }
 
 void NetworkManager::syncTimeWithNTP() {
     // Alleen NTP-tijd synchroniseren (timezone is al gezet in setup)
+    logMessage("\xE2\x8C\x9B Synchronizing time with NTP...");
     configTime(0, 0, NTP_SERVER);
+    delay(1000); // Geef tijd voor NTP sync
+    time_t now = time(nullptr);
+    if (now > 24 * 3600) {
+        char buf[32];
+        strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", localtime(&now));
+        String msg = String("\xE2\x9C\x85 NTP time: ") + buf;
+        logMessage(msg);
+    } else {
+        logMessage("\xE2\x9D\x8C NTP sync failed!");
+    }
     lastNTPSync = millis();
 }
 

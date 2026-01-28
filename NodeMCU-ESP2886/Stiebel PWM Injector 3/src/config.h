@@ -1,8 +1,12 @@
 
 
 
+//
 #ifndef CONFIG_H
 #define CONFIG_H
+
+// WebLogger buffer size (in bytes)
+extern const int WEBLOGGER_BUFFER_SIZE;
 
 
 // Interval voor temperatuur uitlezen (ms)

@@ -14,10 +14,22 @@ void WebServerManager::setup() {
         <title>Stiebel PWM Injector Log</title>
         <style>
           body { font-family: monospace; background: #222; color: #eee; margin: 0; padding: 0; }
-          #log { white-space: pre-wrap; background: #111; padding: 1em; margin: 0; font-size: 1em; }
+          #log { background: #111; padding: 1em; margin: 0; font-size: 1em; }
           .header {
             background: #333;
             margin: 0;
+          }
+          .statuslog {
+            background: #222;
+            border: 1px solid #444;
+            border-radius: 6px;
+            margin: 0.5em 0;
+            padding: 0.5em 1em;
+            color: #fff;
+            box-shadow: 0 2px 6px #0004;
+            font-family: inherit;
+            font-size: 1em;
+            display: block;
           }
         </style>
       </head>
@@ -27,7 +39,7 @@ void WebServerManager::setup() {
         <script>
           function fetchLog() {
             fetch('/log').then(r => r.text()).then(t => {
-              document.getElementById('log').textContent = t;
+              document.getElementById('log').innerHTML = t;
             });
           }
           setInterval(fetchLog, 2000);
@@ -39,8 +51,8 @@ void WebServerManager::setup() {
         server.send(200, "text/html", html);
     });
     server.on("/log", [this]() {
-      String reversedLog = webLogger ? webLogger->getLogText() : "";
-      server.send(200, "text/plain", reversedLog);
+      String htmlLog = webLogger ? webLogger->getLogHtml() : "";
+      server.send(200, "text/html", htmlLog);
     });
     server.begin();
 }

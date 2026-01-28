@@ -1,8 +1,11 @@
+
 #ifndef WEBLOGGER_H
 #define WEBLOGGER_H
 
 #include <Arduino.h>
 #include "../loggers/Logger.h"
+
+class StatusInfo;
 
 class WebLogger : public Logger {
 public:
@@ -16,6 +19,7 @@ public:
     String getLogHtml() const;
     String getLogText() const;
     void clear();
+
 
 private:
     char* buffer;

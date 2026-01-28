@@ -16,9 +16,10 @@ State* heatingState    = nullptr;
 State* hotWaterState   = nullptr;
 State* standbyState    = nullptr;
 
+// postRunEndTime moet extern gedeeld worden voor correcte logging
+unsigned long postRunEndTime = 0;
 // Central transition function
 State* centralTransition(uint16_t modbusStatus, State* previousState) {
-    static unsigned long postRunEndTime = 0;
     const unsigned long postRunTimeout = POST_RUN_DURATION_MIN * 60000UL;
 
     // ERROR overrules everything
@@ -115,7 +116,6 @@ void StateManager::update(uint16_t modbusStatus) {
 
         char logLine[160];
         if (strcmp(nextState->name(), "POST_RUN") == 0) {
-            static unsigned long postRunEndTime = 0;
             float min = 0.0f;
             if (postRunEndTime > millis()) {
                 min = (postRunEndTime - millis()) / 60000.0f;
@@ -133,6 +133,10 @@ void StateManager::update(uint16_t modbusStatus) {
             char exitBuf[64];
             snprintf(exitBuf, sizeof(exitBuf), "Exiting %s", currentState->name());
             logMessage(exitBuf, LogLevel::LOG_DEBUG);
+        }
+        // Callback voor state change
+        if (stateChangeCallback) {
+            stateChangeCallback(nextState->name(), currentState->name(), modbusStatus);
         }
         currentState->exit();
         if (DEBUG) {

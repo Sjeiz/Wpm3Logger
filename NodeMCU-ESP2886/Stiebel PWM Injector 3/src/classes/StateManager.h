@@ -58,12 +58,17 @@ private:
 // --- StateManager ---
 class StateManager {
 public:
+    using StateChangeCallback = std::function<void(const char* newState, const char* oldState, uint16_t modbusStatus)>;
+
     StateManager();
     ~StateManager();
     void begin(State* initialState);
     void update(uint16_t modbusStatus);
     const char* currentStateName() const;
     State* getCurrentStatePtr() const { return currentState; }
+    void setStateChangeCallback(StateChangeCallback cb) { stateChangeCallback = cb; }
 private:
     State* currentState = nullptr;
+    StateChangeCallback stateChangeCallback = nullptr;
+    uint16_t lastModbusStatus = 0;
 };

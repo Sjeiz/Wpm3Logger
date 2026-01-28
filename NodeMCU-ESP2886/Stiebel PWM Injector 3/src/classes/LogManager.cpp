@@ -9,7 +9,7 @@
 LogManager::LogManager()
     : count(0), lastStatusLog(0) {
     telnetLogger = new TelnetLogger(new WiFiServer(23));
-    webLogger = new WebLogger();
+    webLogger = new WebLogger(WEBLOGGER_BUFFER_SIZE);
 }
 
 TelnetLogger* LogManager::getTelnetLogger() {

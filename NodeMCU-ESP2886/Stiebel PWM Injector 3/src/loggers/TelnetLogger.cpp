@@ -4,8 +4,12 @@ extern "C" {
 }
 
 void TelnetLogger::logStatus(const StatusInfo& statusInfo) {
-    char buf[220];
-    snprintf(buf, sizeof(buf), "State:%s%s  PumpHK2:%s  Compressor:%s  PWM-out:%s  FlowTemp:%.1f  WiFi:%s  Modbus:%s\n",
+    char timebuf[20];
+    time_t now = time(nullptr);
+    strftime(timebuf, sizeof(timebuf), "%Y-%m-%d %H:%M:%S", localtime(&now));
+    char buf[256];
+    snprintf(buf, sizeof(buf), "[%s] State:%s%s  PumpHK2:%s  Compressor:%s  PWM-out:%s  FlowTemp:%.1f  WiFi:%s  Modbus:%s\n",
+        timebuf,
         statusInfo.stateName.c_str(),
         statusInfo.stateTimeStr.c_str(),
         statusInfo.outputStatus.c_str(),
@@ -15,14 +19,16 @@ void TelnetLogger::logStatus(const StatusInfo& statusInfo) {
         statusInfo.wifiOk ? "OK" : "FAIL",
         statusInfo.modbusStr.c_str()
     );
-    log(String("[INFO] ") + buf);
+    log(String(buf));
 }
+
 TelnetLogger::TelnetLogger(WiFiServer* server) : _server(server) {}
 void TelnetLogger::log(const String& msg) {
     if (_client && _client.connected()) {
         _client.print(msg);
     }
 }
+
 void TelnetLogger::handleClient() {
     if (_server->hasClient()) {
         if (!_client || !_client.connected()) {

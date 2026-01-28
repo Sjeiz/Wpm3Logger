@@ -34,4 +34,5 @@ const char* TIMEZONE = "CET-1CEST,M3.5.0/2,M10.5.0/3"; // Europe/Amsterdam
 const char* NTP_SERVER = "pool.ntp.org";
 const int NTP_RESYNC_INTERVAL_MIN = 60;
 
-
+// WebLogger buffer size
+const int WEBLOGGER_BUFFER_SIZE = 8192;
