@@ -2,7 +2,7 @@
 #include "classes/LogManager.h"
 #include "loggers/SerialLogger.h"
 #include "loggers/TelnetLogger.h"
-#include "classes/WebLogger.h"
+#include "loggers/WebLogger.h"
 #include "classes/OutputManager.h"
 #include "sensors/FlowTempSensor.h"
 #include "classes/NetworkManager.h"

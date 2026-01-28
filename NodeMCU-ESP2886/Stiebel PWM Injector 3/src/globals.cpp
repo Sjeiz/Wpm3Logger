@@ -1,7 +1,7 @@
 #include "classes/LogManager.h"
 #include "loggers/SerialLogger.h"
 #include "loggers/TelnetLogger.h"
-#include "classes/WebLogger.h"
+#include "loggers/WebLogger.h"
 #include "classes/OutputManager.h"
 #include "sensors/FlowTempSensor.h"
 #include "classes/NetworkManager.h"
@@ -16,7 +16,7 @@ SerialLogger serialLogger;
 OutputManager outputManager;
 FlowTempSensor flowTempSensor(PIN_FLOW_TEMP);
 NetworkManager networkManager;
-WebServerManager webServerManager(&networkManager.webLogger);
+WebServerManager webServerManager(logManager.getWebLogger());
 ModbusManager modbusManager;
 StateManager stateManager;
 unsigned long stateEnterTime = 0;

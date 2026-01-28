@@ -2,7 +2,7 @@
 #include "NetworkManager.h"
 
 NetworkManager::NetworkManager()
-    : wifiConnected(false), lastWiFiAttempt(0), lastNTPSync(0), telnetServer(23), telnetLogger(&telnetServer), webLogger() {}
+    : wifiConnected(false), lastWiFiAttempt(0), lastNTPSync(0), telnetServer(23) {}
 
 void NetworkManager::logToTelnet(const String& msg) {
     if (telnetClient && telnetClient.connected()) {

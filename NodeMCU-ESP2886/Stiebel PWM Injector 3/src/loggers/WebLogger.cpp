@@ -1,6 +1,21 @@
+
 #include "WebLogger.h"
+#include "../classes/StatusInfo.h"
 #include <Arduino.h>
 #include <string.h>
+
+void WebLogger::logStatus(const StatusInfo& statusInfo) {
+    String html = "<div class='statuslog'>";
+    html += "<b>State:</b> " + statusInfo.stateName + statusInfo.stateTimeStr + "<br>";
+    html += "<b>Pomp HK2:</b> " + statusInfo.outputStatus + "<br>";
+    html += "<b>Compressor:</b> " + statusInfo.compressorStr + "<br>";
+    html += "<b>PWM-out:</b> " + statusInfo.pwmOutVal + "<br>";
+    html += "<b>FlowTemp:</b> " + String(statusInfo.flowTemp, 1) + "<br>";
+    html += "<b>WiFi:</b> " + String(statusInfo.wifiOk ? "OK" : "FAIL") + "<br>";
+    html += "<b>Modbus:</b> " + statusInfo.modbusStr + "<br>";
+    html += "</div>\n";
+    this->log(html);
+}
 
 WebLogger::WebLogger(size_t bufferSize)
     : bufferSize(bufferSize), writePos(0)

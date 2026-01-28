@@ -6,6 +6,8 @@ class TelnetLogger : public Logger {
 public:
     TelnetLogger(WiFiServer* server);
     void log(const String& msg) override;
+    void log(const String& msg, LogLevel level) override { log(msg); }
+    void logStatus(const StatusInfo& statusInfo) override;
     void handleClient();
 private:
     WiFiServer* _server;

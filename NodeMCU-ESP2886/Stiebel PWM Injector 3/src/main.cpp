@@ -1,4 +1,10 @@
 // --- Includes ---
+#include "globals.h"
+#include "config.h"
+#include "helpers.h"
+#include "test.h"
+#include "loggers/Logger.h"
+#include "classes/StatusInfo.h"
 #include <Arduino.h>
 #include <ArduinoOTA.h>
 #include <ESP8266WiFi.h>
@@ -7,11 +13,7 @@
 #include <ModbusClientTCPasync.h>
 #include <DallasTemperature.h>
 #include <OneWire.h>
-#include "globals.h"
-#include "config.h"
-#include "helpers.h"
-#include "test.h"
-#include "loggers/Logger.h"
+
 
 
 void setup() {
@@ -29,8 +31,8 @@ void setup() {
   networkManager.begin();
   
   // Add network based loggers to logging manager
-  logManager.addLogger(networkManager.getTelnetLogger());
-  logManager.addLogger(networkManager.getWebLogger());
+  logManager.addLogger(logManager.getTelnetLogger());
+  logManager.addLogger(logManager.getWebLogger());
 
   // Initialize GPIOs
   pinMode(LED_BUILTIN, OUTPUT);
@@ -70,18 +72,22 @@ void loop() {
       handleOutputState(stateManager.currentStateName(), isgStatus);
     }
 
-    networkManager.getTelnetLogger()->handleClient();
+    logManager.getTelnetLogger()->handleClient();
     
-    // Status logging (log every loop iteration)
-    char buf[220];
-    String flowStr = String(flowTempSensor.read(), 1);
-    String modbusStr;
+    // StatusInfo vullen en logManager.loop() aanroepen
+    StatusInfo statusInfo;
+    statusInfo.stateName = stateManager.currentStateName();
+    statusInfo.outputStatus = outputStatusName(statusInfo.stateName.c_str());
+    statusInfo.compressorStr = (isgStatus & ISG_STATUS_COMPRESSOR) ? "ON" : "OFF";
+    statusInfo.pwmOutVal = (strcmp(statusInfo.stateName.c_str(), "POST_RUN") == 0) ? String(PWM_OUT_DUTY_PERCENT) + "%" : "OFF";
+    statusInfo.flowTemp = flowTempSensor.read();
+    statusInfo.wifiOk = networkManager.isWiFiConnected();
     if (isgStatus == ISG_MODBUS_READ_ERROR) {
-      modbusStr = "FAIL";
+      statusInfo.modbusStr = "FAIL";
     } else {
       char hexbuf[12];
       snprintf(hexbuf, sizeof(hexbuf), "0x%04X", isgStatus);
-      modbusStr = hexbuf;
+      statusInfo.modbusStr = hexbuf;
     }
     unsigned long elapsedMs = millis() - stateEnterTime;
     char stateTimeStr[24] = "";
@@ -95,19 +101,8 @@ void loop() {
       unsigned long mins = totalMin % 60;
       snprintf(stateTimeStr, sizeof(stateTimeStr), " (%lu:%02lu)", hours, mins);
     }
-    const char* compressorStr = (isgStatus & ISG_STATUS_COMPRESSOR) ? "ON" : "OFF";
-    String pwmOutVal = (strcmp(stateManager.currentStateName(), "POST_RUN") == 0) ? String(PWM_OUT_DUTY_PERCENT) + "%" : "OFF";
-    snprintf(buf, sizeof(buf), "State:%s%s  PumpHK2:%s  Compressor:%s  PWM-out:%s  FlowTemp:%s  WiFi:%s  Modbus:%s",
-      stateManager.currentStateName(),
-      stateTimeStr,
-      outputStatusName(stateManager.currentStateName()),
-      compressorStr,
-      pwmOutVal.c_str(),
-      flowStr.c_str(),
-      networkManager.isWiFiConnected() ? "OK" : "FAIL",
-      modbusStr.c_str()
-    );
-    logMessage(String("[INFO] ") + buf, LogLevel::LOG_NORMAL);
+    statusInfo.stateTimeStr = stateTimeStr;
+    logManager.loop(statusInfo);
     webServerManager.handleClient();
     ArduinoOTA.handle();
   } else if (networkManager.isWiFiConnected()) {

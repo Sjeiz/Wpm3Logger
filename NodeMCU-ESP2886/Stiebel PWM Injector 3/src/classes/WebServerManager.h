@@ -4,7 +4,7 @@
 #include <ESP8266WebServer.h>
 #include <Arduino.h>
 #include "config.h"
-#include "WebLogger.h"
+#include "../loggers/WebLogger.h"
 
 class WebServerManager {
 public:
