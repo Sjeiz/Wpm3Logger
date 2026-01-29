@@ -25,31 +25,35 @@ ModbusManager::~ModbusManager() {
 }
 
 void ModbusManager::begin(const String& hostOrIp, uint16_t port) {
+    
+
     if (modbusClient) {
         delete modbusClient;
         modbusClient = nullptr;
         busy = false;
     }
-    IPAddress ip;
-    if (ip.fromString(hostOrIp)) {
-        // Direct IP-adres
-    } else {
+    IPAddress ip = ip.fromString(hostOrIp);
+    if (!ip) {
         ip = networkManager.resolveHostName(hostOrIp.c_str());
         if (ip == IPAddress(0,0,0,0)) {
             initialized = false;
-            logMessage(String("[ERROR] Hostname resolve failed: ") + hostOrIp, LogLevel::LOG_NORMAL);
+            logMessage(String("[ERROR] Hostname resolve failed: ") + hostOrIp, LogLevel::LOG_DEBUG);
             return;
         }
     }
+    logMessage("[DEBUG] Creating ModbusClientTCPasync for " + ip.toString() + ":" + String(port), LogLevel::LOG_DEBUG);
     modbusClient = new ModbusClientTCPasync(ip, port);
     modbusClient->onDataHandler([this](ModbusMessage response, uint32_t token) {
+        //logMessage("[DEBUG] ModbusManager onDataHandler called for token: " + String(token), LogLevel::LOG_DEBUG);
         this->handleModbusData(response, token);
     });
     modbusClient->onErrorHandler([this](Error error, uint32_t token) {
+        logMessage("[DEBUG] ModbusManager onErrorHandler called for token: " + String(token) + " error: " + String((uint8_t)error), LogLevel::LOG_DEBUG);
         this->handleModbusError(error, token);
     });
     modbusClient->setTimeout(500);
     modbusClient->setIdleTimeout(60000);
+    //modbusClient->connect(ip, port);
     initialized = true;
 }
 
@@ -91,6 +95,7 @@ bool ModbusManager::isInitialized() const {
 uint16_t ModbusManager::getByName(const char* name) const {
     for (uint8_t i = 0; i < cfg.count; i++) {
         if (strcmp(cfg.regs[i].name, name) == 0) {
+            //logMessage("[DEBUG] ModbusManager getByName: " + String(name) + " found value: " + String(values[i]), LogLevel::LOG_DEBUG);
             return values[i];
         }
     }
@@ -114,13 +119,24 @@ void ModbusManager::startAsyncRead(uint8_t index) {
     uint16_t addr = cfg.regs[index].address;
 
     // transactionId = index zodat we weten welk register het is
-    modbusClient->addRequest(index, READ_HOLD_REGISTER, addr, 1);
+    modbusClient->addRequest(
+        index,               // transaction ID
+        ISG_SLAVE_ID,        // unit ID = 1
+        READ_INPUT_REGISTER, // function code
+        addr,                // register address
+        1                    // count
+    );
+    logMessage("[DEBUG] ModbusManager starting async read of register: " + String(cfg.regs[index].name) + " (addr " + String(addr) + ")", LogLevel::LOG_DEBUG);
 }
 
 void ModbusManager::handleModbusData(ModbusMessage response, uint32_t token) {
+    logMessage("[DEBUG] ModbusManager received response for token: " + String(token), LogLevel::LOG_DEBUG);
     if (token < cfg.count) {
         uint16_t val;
-        response.get(3, val);   // offset 3 = eerste register
+        uint8_t dataHi = response[3];
+        uint8_t dataLo = response[4];
+        val = (dataHi << 8) | dataLo;
+        logMessage("[DEBUG] ModbusManager received data for register: " + String(cfg.regs[token].name) + " value: " + String(val) + " dataHi:" + String(dataHi) + " dataLo:" + String(dataLo), LogLevel::LOG_DEBUG);
         values[token] = val;
     }
 
