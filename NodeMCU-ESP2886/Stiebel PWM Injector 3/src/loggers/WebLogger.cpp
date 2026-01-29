@@ -4,18 +4,23 @@
 #include <stdio.h>
 
 
-// Log alleen als relevante statusInfo-velden verschillen van vorige (excl. stateTimeStr)
+// Only log if relevant statusInfo fields differ from previous (excluding stateTimeStr)
 void WebLogger::logStatus(const StatusInfo& statusInfo) {
-    static StatusInfo lastStatusInfo; // default init, eerste keer altijd anders
+    static StatusInfo lastStatusInfo; // default init, always different the first time
+    static unsigned long lastDetailLogMs = 0;
     bool changed = false;
     changed |= statusInfo.stateName != lastStatusInfo.stateName;
     changed |= statusInfo.outputStatus != lastStatusInfo.outputStatus;
     changed |= statusInfo.compressorStr != lastStatusInfo.compressorStr;
     changed |= statusInfo.pwmOutVal != lastStatusInfo.pwmOutVal;
-    changed |= statusInfo.flowTemp != lastStatusInfo.flowTemp;
+    // Only log significant temperature changes (margin ±0.2)
+    changed |= fabs(statusInfo.flowTemp - lastStatusInfo.flowTemp) > WEBLOGGER_TEMP_MARGE;
     changed |= statusInfo.wifiOk != lastStatusInfo.wifiOk;
     changed |= statusInfo.modbusStr != lastStatusInfo.modbusStr;
-    if (changed) {
+    unsigned long nowMs = millis();
+    unsigned long intervalMs = WEBLOGGER_DETAIL_INTERVAL_MIN * 60UL * 1000UL;
+    bool timeElapsed = (nowMs - lastDetailLogMs) >= intervalMs;
+    if (changed || timeElapsed) {
         char timebuf[20];
         time_t now = time(nullptr);
         strftime(timebuf, sizeof(timebuf), "%Y-%m-%d %H:%M:%S", localtime(&now));
@@ -34,6 +39,7 @@ void WebLogger::logStatus(const StatusInfo& statusInfo) {
         );
         this->log(String(buf) + "\n");
         lastStatusInfo = statusInfo;
+        lastDetailLogMs = nowMs;
     }
 }
 
@@ -59,27 +65,27 @@ void WebLogger::log(const String& message) {
 void WebLogger::appendToBuffer(const String& message) {
     size_t msgLen = message.length();
     if (msgLen >= bufferSize) {
-        // Regel is te groot voor de buffer, sla hem over
+        // Line is too large for the buffer, skip it
         return;
     }
 
-    // Verwijder onderaan oude regels tot er ruimte is
+    // Remove oldest lines at the bottom until there is space
     while (writePos + msgLen >= bufferSize) {
-        // Zoek laatste newline (onderste/oudste regel)
+        // Find last newline (oldest line at the bottom)
         char* lastNewline = strrchr(buffer, '\n');
         if (lastNewline) {
             size_t removeLen = (buffer + writePos) - lastNewline;
             writePos -= removeLen;
             buffer[writePos] = '\0';
         } else {
-            // Geen newline, buffer leegmaken
+            // No newline, clear buffer
             buffer[0] = '\0';
             writePos = 0;
             break;
         }
     }
 
-    // Schuif bestaande buffer op om ruimte te maken aan het begin
+    // Shift existing buffer to make space at the beginning
     memmove(buffer + msgLen, buffer, writePos);
     memcpy(buffer, message.c_str(), msgLen);
     writePos += msgLen;

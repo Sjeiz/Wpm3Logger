@@ -56,8 +56,13 @@ void ModbusManager::loop() {
     }
 }
 
-uint16_t ModbusManager::getStatus() const {
-    return isgStatus;
+uint16_t ModbusManager::readInputRegister(uint16_t address) const {
+    // For now, just return isgStatus if address matches ISG_OPERATING_STATUS_ADDR, else error
+    if (address == ISG_OPERATING_STATUS_ADDR) {
+        return isgStatus;
+    } else {
+        return ISG_MODBUS_READ_ERROR;
+    }
 }
 
 void ModbusManager::handleModbusData(ModbusMessage response, uint32_t token) {

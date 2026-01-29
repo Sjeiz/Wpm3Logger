@@ -286,7 +286,7 @@ void setup() {
   tryConnectWiFi();
   lastNTPSync = millis();
   setupWebServer();
-  logMessage("Setup complete", LogLevel::LOG_NORMAL);
+  logMessage("Setup complete");
   telnetServer.begin();
   telnetServer.setNoDelay(true);
   // Modbus async initialisatie (ESP8266)
@@ -309,12 +309,12 @@ void setup() {
   ArduinoOTA.onStart([]() {
     otaActive = true;
     digitalWrite(LED_BUILTIN, LOW); // LED aan
-    logMessage("OTA Update Start", LogLevel::LOG_NORMAL);
+    logMessage("OTA Update Start");
   });
   ArduinoOTA.onEnd([]() {
     otaActive = false;
     digitalWrite(LED_BUILTIN, HIGH); // LED uit
-    logMessage("OTA Update End", LogLevel::LOG_NORMAL);
+    logMessage("OTA Update End");
   });
   ArduinoOTA.onError([](ota_error_t error) {
     otaActive = false;
@@ -325,7 +325,7 @@ void setup() {
     else if (error == OTA_CONNECT_ERROR) errMsg += "Connect Failed";
     else if (error == OTA_RECEIVE_ERROR) errMsg += "Receive Failed";
     else if (error == OTA_END_ERROR) errMsg += "End Failed";
-    logMessage(errMsg, LogLevel::LOG_NORMAL);
+    logMessage(errMsg);
   });
   ArduinoOTA.begin();
 
@@ -339,12 +339,12 @@ void setup() {
     ArduinoOTA.onStart([]() {
       otaActive = true;
       digitalWrite(LED_BUILTIN, LOW); // LED aan
-      logMessage("OTA Update Start", LogLevel::LOG_NORMAL);
+      logMessage("OTA Update Start");
     });
     ArduinoOTA.onEnd([]() {
       otaActive = false;
       digitalWrite(LED_BUILTIN, HIGH); // LED uit
-      logMessage("OTA Update End", LogLevel::LOG_NORMAL);
+      logMessage("OTA Update End");
     });
     ArduinoOTA.onError([](ota_error_t error) {
       otaActive = false;
@@ -355,7 +355,7 @@ void setup() {
       else if (error == OTA_CONNECT_ERROR) errMsg += "Connect Failed";
       else if (error == OTA_RECEIVE_ERROR) errMsg += "Receive Failed";
       else if (error == OTA_END_ERROR) errMsg += "End Failed";
-      logMessage(errMsg, LogLevel::LOG_NORMAL);
+      logMessage(errMsg);
     });
     ArduinoOTA.begin();
   } else {

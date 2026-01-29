@@ -2,18 +2,18 @@
 #include "StatusInfo.h"
 
 
-#include "../loggers/TelnetLogger.h"
+#include "../loggers/TelnetBridge.h"
 #include "../loggers/WebLogger.h"
 #include <ESP8266WiFi.h>
 
 LogManager::LogManager()
     : count(0), lastStatusLog(0) {
-    telnetLogger = new TelnetLogger(new WiFiServer(23));
+    telnetBridge = new TelnetBridge(new WiFiServer(23));
     webLogger = new WebLogger(WEBLOGGER_BUFFER_SIZE);
 }
 
-TelnetLogger* LogManager::getTelnetLogger() {
-    return telnetLogger;
+TelnetBridge* LogManager::getTelnetBridge() {
+    return telnetBridge;
 }
 
 WebLogger* LogManager::getWebLogger() {

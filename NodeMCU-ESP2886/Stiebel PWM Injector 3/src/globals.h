@@ -1,7 +1,7 @@
 #pragma once
 #include "classes/LogManager.h"
 #include "loggers/SerialLogger.h"
-#include "loggers/TelnetLogger.h"
+#include "loggers/TelnetBridge.h"
 #include "loggers/WebLogger.h"
 #include "classes/OutputManager.h"
 #include "sensors/FlowTempSensor.h"

@@ -104,14 +104,15 @@ void StateManager::update(uint16_t modbusStatus) {
         // Smart time display
         char durationStr[24] = "";
         if (lastStateDuration < 60000UL) {
-            snprintf(durationStr, sizeof(durationStr), "%lus", lastStateDuration / 1000UL);
+            snprintf(durationStr, sizeof(durationStr), "%lu sec", lastStateDuration / 1000UL);
         } else if (lastStateDuration < 3600000UL) {
             snprintf(durationStr, sizeof(durationStr), "%.1f min", lastStateDuration / 60000.0f);
         } else {
-            unsigned long totalMin = lastStateDuration / 60000UL;
-            unsigned long hours = totalMin / 60;
-            unsigned long mins = totalMin % 60;
-            snprintf(durationStr, sizeof(durationStr), "%lu:%02lu", hours, mins);
+            unsigned long totalSec = lastStateDuration / 1000UL;
+            unsigned long hours = totalSec / 3600;
+            unsigned long mins = (totalSec % 3600) / 60;
+            unsigned long secs = totalSec % 60;
+            snprintf(durationStr, sizeof(durationStr), "%lu:%02lu:%02lu", hours, mins, secs);
         }
 
         char logLine[160];
@@ -121,7 +122,7 @@ void StateManager::update(uint16_t modbusStatus) {
                 min = (postRunEndTime - millis()) / 60000.0f;
             }
             snprintf(logLine, sizeof(logLine),
-                "[STATE] %s → %s (%s in last state, timer for %.1f minutes)",
+                "[STATE] %s → %s (%s in last state. Starting timer for %.1f minutes)",
                 currentState->name(), nextState->name(), durationStr, min);
         } else {
             snprintf(logLine, sizeof(logLine),
@@ -136,7 +137,7 @@ void StateManager::update(uint16_t modbusStatus) {
         }
         // Callback voor state change
         if (stateChangeCallback) {
-            stateChangeCallback(nextState->name(), currentState->name(), modbusStatus);
+            stateChangeCallback(nextState->name(), modbusStatus);
         }
         currentState->exit();
         if (DEBUG) {

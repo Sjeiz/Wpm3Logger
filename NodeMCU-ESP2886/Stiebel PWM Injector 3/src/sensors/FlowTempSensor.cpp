@@ -5,6 +5,7 @@ FlowTempSensor::FlowTempSensor(uint8_t pin)
     : _pin(pin), _oneWire(pin), _sensors(&_oneWire), _lastValue(NAN), _lastRead(0) {}
 
 void FlowTempSensor::begin() {
+    pinMode(_pin, INPUT_PULLUP);
     _sensors.begin();
 }
 

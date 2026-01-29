@@ -12,7 +12,7 @@ public:
     void poll();
     void setOnStatusUpdate(void (*callback)(uint16_t));
     void loop();
-    uint16_t getStatus() const;
+    uint16_t readInputRegister(uint16_t address) const;
     bool isBusy() const { return busy; }
     bool isInitialized() const { return initialized; }
 

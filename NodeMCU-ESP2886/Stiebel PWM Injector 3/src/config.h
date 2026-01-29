@@ -7,6 +7,10 @@
 
 // WebLogger buffer size (in bytes)
 extern const int WEBLOGGER_BUFFER_SIZE;
+// WebLogger temperature margin for logging
+extern const float WEBLOGGER_TEMP_MARGE;
+// WebLogger minimum detailregel interval (minuten)
+extern const int WEBLOGGER_DETAIL_INTERVAL_MIN;
 
 
 // Interval voor temperatuur uitlezen (ms)
@@ -40,7 +44,7 @@ extern const bool VERBOSE;
 #define PIN_FLOW_TEMP    D2 // Input with pullup
 #define PIN_PWM_OUT      D5 // Output PWM signal
 #define PIN_PWM_IN       D6 // Input, no pullup
-#define PIN_PUMP_ON      D7 // Output, normal low
+#define PIN_PUMP_FORCE   D7 // Output, normal low
 #define PIN_PUMP_BLOCKED D8 // Output, normal low
 
 // PWM configuratie

@@ -16,30 +16,21 @@
 
 
 void setup() {
-    // Link output action to state change
-    stateManager.setStateChangeCallback([](const char* newState, const char* /*oldState*/, uint16_t modbusStatus) {
-      handleOutputState(newState, modbusStatus);
-    });
-
-  // Initialize timezone
-  setenv("TZ", TIMEZONE, 1); tzset();
-
+  Serial.println("\n--- Starting Stiebel PWM Injector 3 ---\n");
+  
   // Initialize serial, wait for it to settle and add to logging manager
   Serial.begin(115200);
   delay(10);
   logManager.addLogger(&serialLogger);
-
-  logMessage("[INFO] Initialization started", LogLevel::LOG_NORMAL);
+  logMessage("[INFO] Initialization started");
+  
+  // Initialize timezone
+  configTime(TIMEZONE, NTP_SERVER);
 
   // Initialize network and related services (WiFi, OTA, NTP)
   networkManager.begin();
-  logManager.addLogger(logManager.getTelnetLogger());
 
-  // Initialize GPIOs
-  pinMode(LED_BUILTIN, OUTPUT);
-  pinMode(PIN_FLOW_TEMP, INPUT_PULLUP);
-
-  // Initialize other managers and services
+  // Initialize other managers, services, sensors
   ArduinoOTA.begin();                              // Enable Over-the-Air (OTA) firmware updates
   outputManager.begin();                           // Initialize output manager  
   webServerManager.setup();                        // Initialize web server for status/logging
@@ -47,7 +38,7 @@ void setup() {
   stateManager.begin(errorState);                  // Initialize state machine, starting in error state
   flowTempSensor.begin();                          // Initialize flow temperature sensor
 
-  logMessage("[INFO] Initialization completed", LogLevel::LOG_NORMAL);
+  logMessage("[INFO] Initialization completed");
 }
 
 
@@ -59,20 +50,24 @@ void loop() {
   ArduinoOTA.handle(); 
 
   // Handle inputs and clients
-  handleSerialTestInput(); // Can override Modbus status for testing
-  logManager.getTelnetLogger()->handleClient();
+  handleSerialTestInput(); // Can override Modbus status bits for testing purposes
+  logManager.getTelnetBridge()->handleClient();
   webServerManager.handleClient();
   
   // Only poll Modbus when ModbusManager is initialized
   if(modbusManager.isInitialized()) modbusManager.loop(); // Poll Modbus data
   else tryInitModbusManager();
 
-  // Get latest Modbus status value (or overridden value from serial console for testing purposes)
-  uint16_t isgStatus = readModbusRegister(modbusManager.getStatus()); 
+  // Get latest Modbus status value or overridden value from serial console for testing purposes
+  uint16_t isgStatus;
+  if(!modbusOverrideFlag & modbusManager.isInitialized())
+    isgStatus = modbusManager.readInputRegister(2500);
+  else
+    isgStatus = modbusOverrideBits;
 
   // State machine update based on Modbus status or test override
   stateManager.update(isgStatus);
-  
+
   // Fill StatusInfo with latest data
   StatusInfo statusInfo;
   statusInfo.stateName     = stateManager.currentStateName();
@@ -85,6 +80,6 @@ void loop() {
   unsigned long elapsedMs  = millis() - stateEnterTime;
   statusInfo.stateTimeStr  = elapsedTimeToString(elapsedMs);
 
+  outputManager.loop(statusInfo.stateName.c_str());
   logManager.loop(statusInfo);
-  
 }

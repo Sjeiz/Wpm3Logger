@@ -34,5 +34,7 @@ const char* TIMEZONE = "CET-1CEST,M3.5.0/2,M10.5.0/3"; // Europe/Amsterdam
 const char* NTP_SERVER = "pool.ntp.org";
 const int NTP_RESYNC_INTERVAL_MIN = 60;
 
-// WebLogger buffer size
-const int WEBLOGGER_BUFFER_SIZE = 8192;
+// WebLogger configuration
+const int WEBLOGGER_BUFFER_SIZE = 8192;  // Approx. 50 lines
+const float WEBLOGGER_TEMP_MARGE  = 0.2; // Temperatuur verschil marge voor logging
+const int WEBLOGGER_DETAIL_INTERVAL_MIN = 15; // Minimaal elke 15 minuten een detailregel

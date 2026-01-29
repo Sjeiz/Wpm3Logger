@@ -1,4 +1,4 @@
-#include "../loggers/TelnetLogger.h"
+
 #include "../loggers/WebLogger.h"
 #ifndef NETWORKMANAGER_H
 #define NETWORKMANAGER_H

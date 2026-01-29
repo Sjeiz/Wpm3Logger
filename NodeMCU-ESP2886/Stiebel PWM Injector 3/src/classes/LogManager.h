@@ -5,7 +5,7 @@
 #include "../classes/StatusInfo.h"
 
 // Forward declarations to avoid include order issues
-class TelnetLogger;
+class TelnetBridge;
 class WebLogger;
 #define MAX_LOGGERS 3
 class LogManager : public Logger {
@@ -17,7 +17,7 @@ public:
     void logStatus(const StatusInfo& statusInfo);
     void loop(const StatusInfo& statusInfo);
 
-    TelnetLogger* getTelnetLogger();
+    TelnetBridge* getTelnetBridge();
     WebLogger* getWebLogger();
 
 private:
@@ -25,7 +25,7 @@ private:
     int count;
     unsigned long lastStatusLog = 0;
     const unsigned long statusInterval = 5000; // 5 seconden
-    TelnetLogger* telnetLogger;
+    TelnetBridge* telnetBridge;
     WebLogger* webLogger;
 };
 #endif // LOGMANAGER_H

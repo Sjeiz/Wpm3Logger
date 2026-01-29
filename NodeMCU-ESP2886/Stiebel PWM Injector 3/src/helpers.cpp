@@ -18,9 +18,9 @@ void tryInitModbusManager() {
   if (networkManager.isWiFiConnected()) {
     modbusManager.begin(ISG_HOST, ISG_MODBUS_PORT);
     if (modbusManager.isInitialized()) {
-      logMessage("[INFO] ModbusManager initialized (WiFi connected)", LogLevel::LOG_NORMAL);
+      logMessage("[INFO] ModbusManager initialized (WiFi connected)");
     } else {
-      logMessage("[WARN] ModbusManager init failed (host unresolved)", LogLevel::LOG_NORMAL);
+      logMessage("[WARN] ModbusManager init failed (host unresolved)");
     }
   }
 }
@@ -60,28 +60,20 @@ const char* outputStatusName(const char* stateName) {
 }
 
 
-void handleOutputState(const char* stateName, const uint16_t status) {
-  if (!stateName) return;
-  if (strcmp(stateName, "DEFROST") == 0) {
-    outputManager.setDefrost();
-  } else if (strcmp(stateName, "POST_RUN") == 0) {
-    outputManager.setPostRun(PWM_OUT_DUTY_PERCENT);
-  } else {
-    outputManager.setNormal();
-  }
-}
+// ...handleOutputState is nu verplaatst naar OutputManager::loop(stateName)...
 
 void logMessage(const String& message, const LogLevel level) {
-  LogLevel minLevel = LogLevel::LOG_NORMAL;
-  if (DEBUG) minLevel = LogLevel::LOG_DEBUG;
-  else if (VERBOSE) minLevel = LogLevel::LOG_VERBOSE;
-  if (static_cast<int>(level) > static_cast<int>(minLevel)) return;
-  time_t now = time(nullptr);
-  char buf[20];
-  strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", localtime(&now));
-  String logLine = "[" + String(buf) + "] ";
-  logLine += message + "\r\n";
-  logManager.log(logLine);
+  // LogLevel minLevel = LogLevel::LOG_NORMAL;
+  // if (DEBUG) minLevel = LogLevel::LOG_DEBUG;
+  // else if (VERBOSE) minLevel = LogLevel::LOG_VERBOSE;
+  // if (static_cast<int>(level) > static_cast<int>(minLevel)) return;
+  // time_t now = time(nullptr);
+  // char buf[20];
+  // strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", localtime(&now));
+  // String logLine = "[" + String(buf) + "] ";
+  // logLine += message + "\r\n";
+  // //logManager.log(logLine);
+  Serial.print(message);
 }
 
 void handleSerialTestInput() {
