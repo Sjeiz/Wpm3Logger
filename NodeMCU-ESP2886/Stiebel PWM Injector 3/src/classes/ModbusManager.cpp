@@ -24,7 +24,7 @@ ModbusManager::~ModbusManager() {
     if (values) delete[] values;
 }
 
-void ModbusManager::begin(const String& hostOrIp, uint16_t port = 502) {
+void ModbusManager::begin(const String& hostOrIp, uint16_t port) {
     if (modbusClient) {
         delete modbusClient;
         modbusClient = nullptr;

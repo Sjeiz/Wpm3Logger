@@ -60,7 +60,7 @@ extern const int PWM_OUT_DUTY_PERCENT;   // PWM duty cycle (%)
 
 // Modbus/ISG configuration
 extern const char* ISG_HOST;
-extern const int ISG_MODBUS_PORT;
+extern const int ISG_PORT;
 extern const int ISG_OPERATING_STATUS_ADDR;
 extern const int ISG_POLL_INTERVAL_SEC;
 #define ISG_MODBUS_READ_ERROR 0xFFFF 
