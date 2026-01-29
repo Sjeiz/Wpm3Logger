@@ -63,10 +63,15 @@ void loop() {
 
   // Get latest Modbus status value or overridden value from serial console for testing purposes
   uint16_t isgStatus;
-  if(!modbusOverrideFlag & modbusManager.isInitialized())
+  uint16_t isgFlowRate;
+  if(!modbusOverrideFlag & modbusManager.isInitialized()) {
     isgStatus = modbusManager.getByName("OPERATING_STATUS");
-  else
+    isgFlowRate = modbusManager.getByName("FLOW_RATE");
+  } else {
     isgStatus = modbusOverrideBits;
+    isgFlowRate = 0;
+  }
+
 
   // State machine update based on Modbus status or test override
   stateManager.update(isgStatus);
@@ -78,6 +83,7 @@ void loop() {
   statusInfo.compressorStr = (isgStatus & ISG_STATUS_COMPRESSOR) ? "ON" : "OFF";
   statusInfo.pwmOutVal     = (stateManager.getCurrentStatePtr() == postRunState) ? String(PWM_OUT_DUTY_PERCENT) + "%" : "OFF";
   statusInfo.flowTemp      = flowTempSensor.read();
+  statusInfo.flowRate      = isgFlowRate;
   statusInfo.wifiOk        = networkManager.isWiFiConnected();
   statusInfo.modbusStr     = evaluateIsgStatus(isgStatus);
   unsigned long elapsedMs  = millis() - stateEnterTime;

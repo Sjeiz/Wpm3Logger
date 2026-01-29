@@ -115,18 +115,18 @@ void StateManager::update(uint16_t modbusStatus) {
             snprintf(durationStr, sizeof(durationStr), "%lu:%02lu:%02lu", hours, mins, secs);
         }
 
-        char logLine[160];
+        char logLine[200];
         if (strcmp(nextState->name(), "POST_RUN") == 0) {
             float min = 0.0f;
             if (postRunEndTime > millis()) {
                 min = (postRunEndTime - millis()) / 60000.0f;
             }
             snprintf(logLine, sizeof(logLine),
-                "[STATE] %s → %s (%s in last state. Starting timer for %.1f minutes)",
+                "StateChange: %s → %s (%s in last state. Starting timer for %.1f minutes) ====================",
                 currentState->name(), nextState->name(), durationStr, min);
         } else {
             snprintf(logLine, sizeof(logLine),
-                "[STATE] %s → %s (%s in last state)",
+                "StateChange: %s → %s (%s in last state) ====================",
                 currentState->name(), nextState->name(), durationStr);
         }
         logMessage(logLine, LogLevel::LOG_NORMAL);

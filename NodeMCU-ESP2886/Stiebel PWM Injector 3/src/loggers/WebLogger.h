@@ -14,7 +14,7 @@ public:
 
     void begin();
     void log(const String& message) override;
-    void log(const String& message, LogLevel level) override { log(message); }
+    void log(const String& message, LogLevel level) override;
     void logStatus(const StatusInfo& statusInfo) override;
     String getLogHtml() const;
     String getLogText() const;

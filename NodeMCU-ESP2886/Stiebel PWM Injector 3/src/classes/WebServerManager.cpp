@@ -52,8 +52,12 @@ void WebServerManager::setup() {
     });
     server.on("/log", [this]() {
       String htmlLog = webLogger ? webLogger->getLogText() : "";
-      htmlLog.replace("\n", "<br>");
-      server.send(200, "text/html", htmlLog);
+      // Preserve all spaces and line breaks using a styled div, no <br> replacement
+      htmlLog.replace("&", "&amp;");
+      htmlLog.replace("<", "&lt;");
+      htmlLog.replace(">", "&gt;");
+      String styledLog = "<div style='white-space: pre; font-family: monospace;'>" + htmlLog + "</div>";
+      server.send(200, "text/html", styledLog);
     });
     server.begin();
 }

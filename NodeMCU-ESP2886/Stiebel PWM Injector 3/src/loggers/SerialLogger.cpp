@@ -1,30 +1,34 @@
+
 #include "SerialLogger.h"
 #include <Arduino.h>
 #include "../globals.h"
+#include "../helpers.h"
+
 
 void SerialLogger::log(const String& msg) {
-    Serial.print(msg);
+    String ts = timeStamp();
+    String out = "[" + ts + "] " + msg;
+    Serial.print(out);
     // Stuur log ook naar Telnet, indien beschikbaar
     if (logManager.getTelnetBridge()) {
-        logManager.getTelnetBridge()->writeToClient(msg.c_str());
+        logManager.getTelnetBridge()->writeToClient(out.c_str());
     }
 }
 
+void SerialLogger::log(const String& msg, LogLevel level) {
+    if(level == LogLevel::LOG_DEBUG && !DEBUG) return;
+    if(level == LogLevel::LOG_VERBOSE && !(VERBOSE || DEBUG)) return;
+    String ts = timeStamp();
+    String levelStr;
+    switch (level) {
+        case LogLevel::LOG_DEBUG: levelStr = "[DEBUG] "; break;
+        case LogLevel::LOG_VERBOSE: levelStr = "[VERBOSE] "; break;
+        case LogLevel::LOG_NORMAL:
+        default: levelStr = ""; break;
+    }
+    log("[" + ts + "] " + levelStr + msg);
+}
+
 void SerialLogger::logStatus(const StatusInfo& statusInfo) {
-    char timebuf[20];
-    time_t now = time(nullptr);
-    strftime(timebuf, sizeof(timebuf), "%Y-%m-%d %H:%M:%S", localtime(&now));
-    char buf[256];
-    snprintf(buf, sizeof(buf), "[%s] State:%s%s  PumpHK2:%s  Compressor:%s  PWM-out:%s  FlowTemp:%.1f  WiFi:%s  Modbus:%s\n",
-        timebuf,
-        statusInfo.stateName.c_str(),
-        statusInfo.stateTimeStr.c_str(),
-        statusInfo.outputStatus.c_str(),
-        statusInfo.compressorStr.c_str(),
-        statusInfo.pwmOutVal.c_str(),
-        statusInfo.flowTemp,
-        statusInfo.wifiOk ? "OK" : "FAIL",
-        statusInfo.modbusStr.c_str()
-    );
-    log(String(buf));
+    this->log(formatStatusLogLine(statusInfo));
 }

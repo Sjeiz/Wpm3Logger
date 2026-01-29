@@ -4,7 +4,7 @@
 class SerialLogger : public Logger {
 public:
     void log(const String& msg) override;
-    void log(const String& msg, LogLevel level) override { log(msg); }
+    void log(const String& msg, LogLevel level) override;
     void logStatus(const StatusInfo& statusInfo) override;
 };
 #endif // SERIALLOGGER_H

@@ -1,31 +1,35 @@
+
 #include "TelnetLogger.h"
 #include <Arduino.h>
 #include "../classes/StatusInfo.h"
 #include <stdio.h>
 #include <time.h>
+#include "../helpers.h"
+
 
 void TelnetLogger::log(const String& msg) {
+    String ts = timeStamp();
+    String out = "[" + ts + "] " + msg;
     if (_bridge) {
-        _bridge->writeToClient(msg.c_str());
+        _bridge->writeToClient(out.c_str());
     }
 }
 
+void TelnetLogger::log(const String& msg, LogLevel level) {
+    if(level == LogLevel::LOG_DEBUG && !DEBUG) return;
+    if(level == LogLevel::LOG_VERBOSE && !(VERBOSE || DEBUG)) return;
+    String ts = timeStamp();
+    String levelStr;
+    switch (level) {
+        case LogLevel::LOG_DEBUG: levelStr = "[DEBUG] "; break;
+        case LogLevel::LOG_VERBOSE: levelStr = "[VERBOSE] "; break;
+        case LogLevel::LOG_NORMAL:
+        default: levelStr = ""; break;
+    }
+    log("[" + ts + "] " + levelStr + msg);
+}
+
 void TelnetLogger::logStatus(const StatusInfo& statusInfo) {
-    char timebuf[20];
-    time_t now = time(nullptr);
-    strftime(timebuf, sizeof(timebuf), "%Y-%m-%d %H:%M:%S", localtime(&now));
-    char buf[256];
-    snprintf(buf, sizeof(buf), "[%s] State:%s%s  PumpHK2:%s  Compressor:%s  PWM-out:%s  FlowTemp:%.1f  WiFi:%s  Modbus:%s\n",
-        timebuf,
-        statusInfo.stateName.c_str(),
-        statusInfo.stateTimeStr.c_str(),
-        statusInfo.outputStatus.c_str(),
-        statusInfo.compressorStr.c_str(),
-        statusInfo.pwmOutVal.c_str(),
-        statusInfo.flowTemp,
-        statusInfo.wifiOk ? "OK" : "FAIL",
-        statusInfo.modbusStr.c_str()
-    );
-    log(String(buf));
+    this->log(formatStatusLogLine(statusInfo));
 }
 

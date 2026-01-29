@@ -7,6 +7,7 @@ struct StatusInfo {
     String compressorStr;
     String pwmOutVal;
     float flowTemp;
+    float flowRate = 0.0f;
     bool wifiOk;
     String modbusStr;
     String stateTimeStr;

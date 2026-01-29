@@ -7,7 +7,7 @@
 
 
 // Logging configuration
-const bool DEBUG = true;
+const bool DEBUG = false;
 const bool VERBOSE = false;
 
 // WiFi credentials
@@ -47,4 +47,4 @@ const int NTP_RESYNC_INTERVAL_MIN = 60;
 // WebLogger configuration
 const int WEBLOGGER_BUFFER_SIZE = 8192;  // Approx. 50 lines
 const float WEBLOGGER_TEMP_MARGE  = 0.2; // Temperatuur verschil marge voor logging
-const int WEBLOGGER_DETAIL_INTERVAL_MIN = 15; // Minimaal elke 15 minuten een detailregel
+const int WEBLOGGER_DETAIL_INTERVAL_MIN = 1; // Minimaal elke 15 minuten een detailregel

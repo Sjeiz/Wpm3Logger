@@ -1,8 +1,15 @@
+
+#pragma once
+#include <Arduino.h>
+#include "classes/StatusInfo.h"
+
+// Formatteert een StatusInfo tot een logregel (zonder newline)
+String formatStatusLogLine(const StatusInfo& statusInfo);
+
+String timeStamp(time_t t = 0);
 // Overload: logMessage(message) gebruikt standaard LOG_NORMAL
 void logMessage(const String& message);
-#pragma once
 
-#include <Arduino.h>
 #include "config.h"
 
 const char* outputStatusName(const char* stateName);
