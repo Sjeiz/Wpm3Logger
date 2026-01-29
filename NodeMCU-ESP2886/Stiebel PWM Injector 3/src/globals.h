@@ -3,6 +3,7 @@
 #include "loggers/SerialLogger.h"
 #include "loggers/TelnetBridge.h"
 #include "loggers/WebLogger.h"
+#include "loggers/TelnetLogger.h"
 #include "classes/OutputManager.h"
 #include "sensors/FlowTempSensor.h"
 #include "classes/NetworkManager.h"
@@ -13,6 +14,7 @@
 
 extern LogManager logManager;
 extern SerialLogger serialLogger;
+extern TelnetLogger telnetLogger;
 extern OutputManager outputManager;
 extern FlowTempSensor flowTempSensor;
 extern NetworkManager networkManager;

@@ -1,32 +1,44 @@
-#ifndef MODBUSMANAGER_H
-#define MODBUSMANAGER_H
+#pragma once
+
 
 #include <Arduino.h>
 #include <ModbusClientTCPasync.h>
 #include "config.h"
 
+#ifndef MODBUSMANAGER_H
+#define MODBUSMANAGER_H
+
 class ModbusManager {
+
 public:
-    ModbusManager();
-    void begin(const String& hostOrIp, uint16_t port);
-    void poll();
-    void setOnStatusUpdate(void (*callback)(uint16_t));
+    ModbusManager(const ModbusConfig& cfg);
+    ~ModbusManager();
+
+    void begin(const String& hostOrIp, uint16_t port = 502);
     void loop();
-    uint16_t readInputRegister(uint16_t address) const;
-    bool isBusy() const { return busy; }
-    bool isInitialized() const { return initialized; }
+
+    bool isBusy() const;
+    bool isInitialized() const;
+    uint16_t getByName(const char* name) const;
+    uint16_t getByAddress(uint16_t address) const;
 
 private:
-    ModbusClientTCPasync* modbusClient;
-    uint16_t isgStatus;
-    void (*statusUpdateCallback)(uint16_t) = nullptr;
-    bool busy = false;
-    bool initialized = false;
-    unsigned long lastPoll = 0;
+    void startAsyncRead(uint8_t index);
     void handleModbusData(ModbusMessage response, uint32_t token);
     void handleModbusError(Error error, uint32_t token);
-    static void onDataThunk(ModbusMessage response, uint32_t token, void* arg);
-    static void onErrorThunk(Error error, uint32_t token, void* arg);
+    void advance();
+
+    const ModbusConfig& cfg;
+    ModbusClientTCPasync* modbusClient;
+
+    uint16_t* values;
+
+    bool busy;
+    uint32_t busySince;
+    uint32_t lastPoll;
+    uint8_t currentIndex;
+
+    bool initialized;
 };
 
 #endif // MODBUSMANAGER_H

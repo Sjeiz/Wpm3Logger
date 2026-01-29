@@ -1,4 +1,3 @@
-
 // --- Includes ---
 #include <Arduino.h>
 #include "helpers.h"
@@ -16,7 +15,7 @@ void logMessage(const String& message) {
 // Tries to initialize ModbusManager if WiFi is connected and logs the result
 void tryInitModbusManager() {
   if (networkManager.isWiFiConnected()) {
-    modbusManager.begin(ISG_HOST, ISG_MODBUS_PORT);
+    modbusManager.begin();
     if (modbusManager.isInitialized()) {
       logMessage("[INFO] ModbusManager initialized (WiFi connected)");
     } else {
@@ -63,17 +62,8 @@ const char* outputStatusName(const char* stateName) {
 // ...handleOutputState is nu verplaatst naar OutputManager::loop(stateName)...
 
 void logMessage(const String& message, const LogLevel level) {
-  // LogLevel minLevel = LogLevel::LOG_NORMAL;
-  // if (DEBUG) minLevel = LogLevel::LOG_DEBUG;
-  // else if (VERBOSE) minLevel = LogLevel::LOG_VERBOSE;
-  // if (static_cast<int>(level) > static_cast<int>(minLevel)) return;
-  // time_t now = time(nullptr);
-  // char buf[20];
-  // strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", localtime(&now));
-  // String logLine = "[" + String(buf) + "] ";
-  // logLine += message + "\r\n";
-  // //logManager.log(logLine);
-  Serial.print(message);
+  // Stuur alle loglevels via logManager zodat alles (ook debug) op serial, telnet en web komt
+  logManager.log(message, level);
 }
 
 void handleSerialTestInput() {

@@ -1,0 +1,140 @@
+
+
+
+
+
+#include "ModbusManager.h"
+#include "../config.h"
+#include "../helpers.h"
+#include "../globals.h"
+
+
+ModbusManager::ModbusManager() {}
+
+ModbusManager::ModbusManager(const ModbusConfig& cfg) {
+    this->cfg = &cfg;
+    busy = false;
+    busySince = 0;
+    busyTimeoutMs = ISG_MODBUS_TIMEOUT_MS;
+    lastPoll = 0;
+    initialized = true;
+    values = new uint16_t[cfg.count];
+    for (uint8_t i = 0; i < cfg.count; i++) {
+        values[i] = ISG_MODBUS_READ_ERROR;
+    }
+}
+
+
+ModbusManager::~ModbusManager() {
+    if (values) delete[] values;
+}
+
+
+
+
+void ModbusManager::begin(const String& hostOrIp, uint16_t port) {
+    if (modbusClient) {
+        delete modbusClient;
+        modbusClient = nullptr;
+        busy = false;
+    }
+    IPAddress ip;
+    if (ip.fromString(hostOrIp)) {
+        // Direct IP-adres
+    } else {
+        ip = networkManager.resolveHostName(hostOrIp.c_str());
+        if (ip == IPAddress(0,0,0,0)) {
+            initialized = false;
+            logMessage(String("[ERROR] Hostname resolve failed: ") + hostOrIp, LogLevel::LOG_NORMAL);
+            return;
+        }
+    }
+    modbusClient = new ModbusClientTCPasync(ip, port);
+    modbusClient->onDataHandler([this](ModbusMessage response, uint32_t token) {
+        this->handleModbusData(response, token);
+    });
+    modbusClient->onErrorHandler([this](Error error, uint32_t token) {
+        this->handleModbusError(error, token);
+    });
+    modbusClient->setTimeout(ISG_MODBUS_TIMEOUT_MS);
+    modbusClient->setIdleTimeout(60000);
+    initialized = true;
+}
+
+
+
+
+void ModbusManager::loop() {
+    if (!cfg) return;
+    uint32_t now = millis();
+    if (busy && (now - busySince > busyTimeoutMs)) {
+        busy = false;
+    }
+    if (busy) return;
+    if (now - lastPoll < ISG_POLL_INTERVAL_SEC * 1000UL) return;
+    lastPoll = now;
+    busy = true;
+    busySince = now;
+    for (uint8_t i = 0; i < cfg->count; i++) {
+        uint16_t v = readRegister(cfg->regs[i].address);
+        logMessage("[DEBUG] ModbusManager polling register: " + String(cfg->regs[i].name) + " (addr " + String(cfg->regs[i].address) + "): value = " + String(v, HEX), LogLevel::LOG_DEBUG);
+
+        if (v == ISG_MODBUS_READ_ERROR) {
+            values[i] = ISG_MODBUS_READ_ERROR;
+        } else {
+            values[i] = v;
+        }
+        if (i < cfg->count - 1) {
+            delay(ISG_MODBUS_RETRY_MS);
+        }
+    }
+    busy = false;
+}
+
+
+bool ModbusManager::isBusy() const {
+    return busy;
+}
+
+bool ModbusManager::isInitialized() const {
+    return initialized;
+}
+
+
+uint16_t ModbusManager::getByName(const char* name) const {
+    if (!cfg) return ISG_MODBUS_READ_ERROR;
+    for (uint8_t i = 0; i < cfg->count; i++) {
+        if (strcmp(cfg->regs[i].name, name) == 0) {
+            return values[i];
+        }
+    }
+    return ISG_MODBUS_READ_ERROR;
+}
+
+uint16_t ModbusManager::getByAddress(uint16_t address) const {
+    if (!cfg) return ISG_MODBUS_READ_ERROR;
+    for (uint8_t i = 0; i < cfg->count; i++) {
+        if (cfg->regs[i].address == address) {
+            return values[i];
+        }
+    }
+    return ISG_MODBUS_READ_ERROR;
+}
+
+
+uint16_t ModbusManager::readRegister(uint16_t addr) {
+    if (!modbusClient) return ISG_MODBUS_READ_ERROR;
+    // Stuur een async Modbus request voor het opgegeven input register
+    // Token = address (uniek per register)
+    modbusClient->addRequest(addr, READ_INPUT_REGISTER, ISG_SLAVE_ID, addr, 1);
+    // Waarde wordt later via callback gezet, hier altijd sentinel teruggeven
+    return ISG_MODBUS_READ_ERROR;
+}
+
+uint16_t ModbusManager::readInputRegister(uint16_t address) const {
+    return getByAddress(address);
+}
+
+uint16_t ModbusManager::readInputRegisterByName(const char* name) const {
+    return getByName(name);
+}

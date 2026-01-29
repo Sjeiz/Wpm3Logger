@@ -1,10 +1,30 @@
 #include "ModbusManager.h"
-#include "../globals.h"   // for networkManager
-#include "../helpers.h"   // for logMessage
+#include "../config.h"
+#include "../helpers.h"
+#include "../globals.h"
 
-ModbusManager::ModbusManager() : modbusClient(nullptr), isgStatus(ISG_MODBUS_READ_ERROR), initialized(false) {}
 
-void ModbusManager::begin(const String& hostOrIp, uint16_t port) {
+ModbusManager::ModbusManager(const ModbusConfig& cfg)
+    : cfg(cfg),
+      modbusClient(nullptr),
+      busy(false),
+      busySince(0),
+      lastPoll(0),
+      currentIndex(0),
+      initialized(false)
+{
+    values = new uint16_t[cfg.count];
+    for (uint8_t i = 0; i < cfg.count; i++) {
+        values[i] = ISG_MODBUS_READ_ERROR;
+    }
+}
+
+
+ModbusManager::~ModbusManager() {
+    if (values) delete[] values;
+}
+
+void ModbusManager::begin(const String& hostOrIp, uint16_t port = 502) {
     if (modbusClient) {
         delete modbusClient;
         modbusClient = nullptr;
@@ -28,58 +48,100 @@ void ModbusManager::begin(const String& hostOrIp, uint16_t port) {
     modbusClient->onErrorHandler([this](Error error, uint32_t token) {
         this->handleModbusError(error, token);
     });
-    modbusClient->setTimeout(10000);
+    modbusClient->setTimeout(500);
     modbusClient->setIdleTimeout(60000);
     initialized = true;
 }
 
-void ModbusManager::poll() {
-    if (modbusClient && !busy) {
-        Error err = modbusClient->addRequest(millis(), ISG_SLAVE_ID, READ_INPUT_REGISTER, ISG_OPERATING_STATUS_ADDR, 1);
-        if (err == SUCCESS) {
-            busy = true;
-        }
-        // Error handling/logging can be done here
-    }
-}
-
-void ModbusManager::setOnStatusUpdate(void (*callback)(uint16_t)) {
-    statusUpdateCallback = callback;
-}
 
 void ModbusManager::loop() {
-    const unsigned long POLL_INTERVAL_MS = 1000; // evt. uit config.h halen
-    unsigned long now = millis();
-    if (!busy && modbusClient && (now - lastPoll >= POLL_INTERVAL_MS)) {
-        poll();
+    // check if modbus client is initialized
+    if (!initialized) return;
+    
+    uint32_t now = millis();
+
+    // Fail-safe busy timeout
+    if (busy && (now - busySince > 500)) {
+        busy = false;
+    }
+
+    // No polling if busy
+    if (busy) return;
+
+    // Check if it's time to poll
+    if (now - lastPoll < ISG_POLL_INTERVAL_SEC * 1000UL) return;
+    
+    // Start new polling cycle
+    if (currentIndex == 0) {
         lastPoll = now;
     }
+    startAsyncRead(currentIndex);
 }
 
-uint16_t ModbusManager::readInputRegister(uint16_t address) const {
-    // For now, just return isgStatus if address matches ISG_OPERATING_STATUS_ADDR, else error
-    if (address == ISG_OPERATING_STATUS_ADDR) {
-        return isgStatus;
-    } else {
-        return ISG_MODBUS_READ_ERROR;
+
+bool ModbusManager::isBusy() const {
+    return busy;
+}
+
+bool ModbusManager::isInitialized() const {
+    return initialized;
+}
+
+
+uint16_t ModbusManager::getByName(const char* name) const {
+    for (uint8_t i = 0; i < cfg.count; i++) {
+        if (strcmp(cfg.regs[i].name, name) == 0) {
+            return values[i];
+        }
     }
+    return ISG_MODBUS_READ_ERROR;
+}
+
+uint16_t ModbusManager::getByAddress(uint16_t address) const {
+    for (uint8_t i = 0; i < cfg.count; i++) {
+        if (cfg.regs[i].address == address) {
+            return values[i];
+        }
+    }
+    return ISG_MODBUS_READ_ERROR;
+}
+
+
+void ModbusManager::startAsyncRead(uint8_t index) {
+    busy = true;
+    busySince = millis();
+
+    uint16_t addr = cfg.regs[index].address;
+
+    // transactionId = index zodat we weten welk register het is
+    modbusClient->addRequest(index, READ_HOLD_REGISTER, addr, 1);
 }
 
 void ModbusManager::handleModbusData(ModbusMessage response, uint32_t token) {
-    busy = false;
-    if (response.getFunctionCode() == 4 && response.size() >= 5) {
-        uint8_t dataHi = response[3];
-        uint8_t dataLo = response[4];
-        isgStatus = (dataHi << 8) | dataLo;
-        if (statusUpdateCallback) statusUpdateCallback(isgStatus);
-    } else {
-        isgStatus = ISG_MODBUS_READ_ERROR;
-        if (statusUpdateCallback) statusUpdateCallback(isgStatus);
+    if (token < cfg.count) {
+        uint16_t val;
+        response.get(3, val);   // offset 3 = eerste register
+        values[token] = val;
     }
+
+    busy = false;
+    advance();
 }
 
 void ModbusManager::handleModbusError(Error error, uint32_t token) {
+    if (token < cfg.count) {
+        values[token] = ISG_MODBUS_READ_ERROR;
+    }
+
     busy = false;
-    isgStatus = ISG_MODBUS_READ_ERROR;
-    if (statusUpdateCallback) statusUpdateCallback(isgStatus);
+    advance();
 }
+
+void ModbusManager::advance() {
+    currentIndex++;
+    if (currentIndex >= cfg.count) {
+        currentIndex = 0;
+    }
+}
+
+

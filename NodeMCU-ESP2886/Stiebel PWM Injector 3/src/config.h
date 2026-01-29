@@ -1,9 +1,6 @@
-
-
-
-//
 #ifndef CONFIG_H
 #define CONFIG_H
+#include <stdint.h>
 
 // WebLogger buffer size (in bytes)
 extern const int WEBLOGGER_BUFFER_SIZE;
@@ -17,14 +14,10 @@ extern const int WEBLOGGER_DETAIL_INTERVAL_MIN;
 // Interval voor NTP resync (min)
 extern const int NTP_RESYNC_INTERVAL_MIN;
 
-// Sentinel value for Modbus read failure
-#define ISG_MODBUS_READ_ERROR 0xFFFF 
 
-// Modbus slave ID
-#define ISG_SLAVE_ID 1
+// Modbus register addresses en namen (voor gebruik in ModbusManager)
 
-// State for controlling hardware outputs
-// State enum verwijderd, nu alleen State class uit StateManager.h gebruiken
+
 
 // Log level for serial output
 enum class LogLevel {
@@ -69,6 +62,14 @@ extern const int PWM_OUT_DUTY_PERCENT;   // PWM duty cycle (%)
 extern const char* ISG_HOST;
 extern const int ISG_MODBUS_PORT;
 extern const int ISG_OPERATING_STATUS_ADDR;
+extern const int ISG_POLL_INTERVAL_SEC;
+#define ISG_MODBUS_READ_ERROR 0xFFFF 
+#define ISG_SLAVE_ID 1
+struct ModbusRegDef {const char* name; uint16_t address;};
+struct ModbusConfig {const ModbusRegDef* regs; uint8_t count;};
+extern const ModbusRegDef MODBUS_REGS[];
+extern const ModbusConfig MODBUS_CONFIG;
+
 
 // WiFi configuration
 extern const char* HOSTNAME;

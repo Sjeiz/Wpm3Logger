@@ -51,7 +51,8 @@ void WebServerManager::setup() {
         server.send(200, "text/html", html);
     });
     server.on("/log", [this]() {
-      String htmlLog = webLogger ? webLogger->getLogHtml() : "";
+      String htmlLog = webLogger ? webLogger->getLogText() : "";
+      htmlLog.replace("\n", "<br>");
       server.send(200, "text/html", htmlLog);
     });
     server.begin();

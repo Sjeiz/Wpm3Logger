@@ -1,8 +1,13 @@
 #include "SerialLogger.h"
 #include <Arduino.h>
+#include "../globals.h"
 
 void SerialLogger::log(const String& msg) {
     Serial.print(msg);
+    // Stuur log ook naar Telnet, indien beschikbaar
+    if (logManager.getTelnetBridge()) {
+        logManager.getTelnetBridge()->writeToClient(msg.c_str());
+    }
 }
 
 void SerialLogger::logStatus(const StatusInfo& statusInfo) {

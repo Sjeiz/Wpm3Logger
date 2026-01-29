@@ -1,7 +1,10 @@
-// Only include the required headers for time/NTP on ESP8266
+
 #include <Arduino.h>
 #include <time.h>
 #include "config.h"
+
+
+
 
 // Logging configuration
 const bool DEBUG = true;
@@ -19,8 +22,15 @@ const char* OTA_PASSWORD = "StiebelPumpControl";
 
 // Modbus/ISG configuration
 const char* ISG_HOST = "servicewelt.iot.cheizoo.lan";
-const int ISG_MODBUS_PORT = 502;
+const int ISG_PORT = 502;
 const int ISG_OPERATING_STATUS_ADDR = 2500;
+const int ISG_POLL_INTERVAL_SEC = 5;
+const ModbusRegDef MODBUS_REGS[] = {
+	{"OPERATING_STATUS", 2500},
+	{"FLOW_RATE", 520}
+};
+const ModbusConfig MODBUS_CONFIG = {MODBUS_REGS, sizeof(MODBUS_REGS) / sizeof(ModbusRegDef)};
+
 
 // PWM configuration
 const int PWM_OUT_FREQUENCY_HZ = 150;

@@ -37,7 +37,7 @@ void WebLogger::logStatus(const StatusInfo& statusInfo) {
             statusInfo.wifiOk ? "OK" : "FAIL",
             statusInfo.modbusStr.c_str()
         );
-        this->log(String(buf) + "\n");
+        this->log(String(buf) + "<br>");
         lastStatusInfo = statusInfo;
         lastDetailLogMs = nowMs;
     }
@@ -63,7 +63,9 @@ void WebLogger::log(const String& message) {
 }
 
 void WebLogger::appendToBuffer(const String& message) {
-    size_t msgLen = message.length();
+    String msg = message;
+    if (!msg.endsWith("<br>")) msg += "<br>";
+    size_t msgLen = msg.length();
     if (msgLen >= bufferSize) {
         // Line is too large for the buffer, skip it
         return;
@@ -71,14 +73,14 @@ void WebLogger::appendToBuffer(const String& message) {
 
     // Remove oldest lines at the bottom until there is space
     while (writePos + msgLen >= bufferSize) {
-        // Find last newline (oldest line at the bottom)
-        char* lastNewline = strrchr(buffer, '\n');
-        if (lastNewline) {
-            size_t removeLen = (buffer + writePos) - lastNewline;
+        // Find last <br> (oldest line at the bottom)
+        char* lastBr = strstr(buffer, "<br>");
+        if (lastBr) {
+            size_t removeLen = (buffer + writePos) - lastBr;
             writePos -= removeLen;
             buffer[writePos] = '\0';
         } else {
-            // No newline, clear buffer
+            // No <br>, clear buffer
             buffer[0] = '\0';
             writePos = 0;
             break;
@@ -87,7 +89,7 @@ void WebLogger::appendToBuffer(const String& message) {
 
     // Shift existing buffer to make space at the beginning
     memmove(buffer + msgLen, buffer, writePos);
-    memcpy(buffer, message.c_str(), msgLen);
+    memcpy(buffer, msg.c_str(), msgLen);
     writePos += msgLen;
     buffer[writePos] = '\0';
 }
@@ -102,7 +104,9 @@ String WebLogger::getLogHtml() const {
 }
 
 String WebLogger::getLogText() const {
-    return String(buffer);
+    String text = String(buffer);
+    text.replace("<br>", "\n");
+    return text;
 }
 
 void WebLogger::clear() {

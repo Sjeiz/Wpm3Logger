@@ -16,12 +16,15 @@
 
 
 void setup() {
+    // Start Telnet server
+    logManager.getTelnetBridge()->begin();
   Serial.println("\n--- Starting Stiebel PWM Injector 3 ---\n");
   
   // Initialize serial, wait for it to settle and add to logging manager
   Serial.begin(115200);
   delay(10);
   logManager.addLogger(&serialLogger);
+  logManager.addLogger(&telnetLogger);
   logMessage("[INFO] Initialization started");
   
   // Initialize timezone
@@ -61,7 +64,7 @@ void loop() {
   // Get latest Modbus status value or overridden value from serial console for testing purposes
   uint16_t isgStatus;
   if(!modbusOverrideFlag & modbusManager.isInitialized())
-    isgStatus = modbusManager.readInputRegister(2500);
+    isgStatus = modbusManager.getByName("OPERATING_STATUS");
   else
     isgStatus = modbusOverrideBits;
 

@@ -1,0 +1,39 @@
+
+#ifndef MODBUSMANAGER_H
+#define MODBUSMANAGER_H
+
+#include <Arduino.h>
+#include <ModbusClientTCPasync.h>
+#include "config.h"
+
+class ModbusManager {
+public:
+    ModbusManager();
+    ModbusManager(const ModbusConfig& cfg);
+    ~ModbusManager();
+    void begin(const String& hostOrIp, uint16_t port);
+    void loop();
+    void poll(uint16_t regAddr);
+    bool isBusy() const;
+    bool isInitialized() const;
+    uint16_t getByName(const char* name) const;
+    uint16_t getByAddress(uint16_t address) const;
+    uint16_t readRegister(uint16_t addr);
+    uint16_t readInputRegister(uint16_t address) const;
+    uint16_t readInputRegisterByName(const char* name) const;
+
+private:
+    const ModbusConfig* cfg = nullptr;
+    uint16_t* values = nullptr;
+    bool busy = false;
+    bool initialized = false;
+    unsigned long busySince = 0;
+    unsigned long lastPoll = 0;
+    unsigned long busyTimeoutMs = 0;
+    ModbusClientTCPasync* modbusClient = nullptr;
+
+    void handleModbusData(ModbusMessage response, uint32_t token);
+    void handleModbusError(Error error, uint32_t token);
+};
+
+
