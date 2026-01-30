@@ -7,7 +7,7 @@
 LogManager::LogManager()
     : count(0), lastStatusLog(0) {
     telnetBridge = new TelnetBridge(new WiFiServer(23));
-    webLogger = new WebLogger(WEBLOGGER_BUFFER_LINES);
+    webLogger = new WebLogger();
 }
 
 TelnetBridge* LogManager::getTelnetBridge() {

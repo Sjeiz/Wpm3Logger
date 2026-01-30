@@ -1,3 +1,14 @@
+/*
+ * WebServerManager - Log Webinterface (ESP8266)
+ *
+ * - Gebruikt een statische ringbuffer van LOG_LINES regels, elk maximaal LOG_LINE_LEN tekens.
+ * - Elke logregel wordt bij toevoegen afgekapt op LOG_LINE_LEN-1 tekens (inclusief '\0').
+ * - De webserver stuurt bij elke refresh de inhoud van de ringbuffer direct naar de client,
+ *   regel voor regel, via streaming (server.sendContent of vergelijkbaar).
+ * - Hierdoor staat de logging niet dubbel in het geheugen: de logregels staan alleen in de ringbuffer,
+ *   en worden bij het opvragen direct naar de webclient gestuurd zonder een extra grote tijdelijke string te maken.
+ * - Dit minimaliseert RAM-gebruik en voorkomt dubbele opslag van logregels.
+ */
 #include "WebServerManager.h"
 
 WebServerManager::WebServerManager(WebLogger* logger)
@@ -33,7 +44,7 @@ void WebServerManager::setup() {
           }
         </style>
         <script>
-          var refreshInterval = %REFRESH_INTERVAL% * 60 * 1000;
+          var refreshInterval = %REFRESH_INTERVAL% * 1000;
         </script>
       </head>
       <body>
@@ -55,8 +66,14 @@ void WebServerManager::setup() {
         server.send(200, "text/html", html);
     });
     server.on("/log", [this]() {
-      String htmlLog = webLogger ? webLogger->getLogHtml() : "";
-      server.send(200, "text/html", htmlLog);
+      // Streaming logbuffer direct naar client, geen dubbele opslag in RAM
+      if (webLogger) {
+        server.setContentLength(CONTENT_LENGTH_UNKNOWN); // Chunked transfer
+        server.send(200, "text/html", ""); // Start response
+        webLogger->streamLogHtml(server); // Streamt logregels direct
+      } else {
+        server.send(200, "text/html", "No log available");
+      }
     });
     server.begin();
 }

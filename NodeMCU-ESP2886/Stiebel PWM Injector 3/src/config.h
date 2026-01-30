@@ -5,10 +5,9 @@
 #include <stdint.h>
 
 // WebLogger
-extern const int WEBLOGGER_BUFFER_LINES;
 extern const float WEBLOGGER_TEMP_DELTA;
 extern const int WEBLOGGER_REFRESH_PAGE_SEC;
-extern const int WEBLOGGER_DETAIL_INTERVAL_MIN;
+extern const int WEBLOGGER_DETAIL_INTERVAL_SEC;
 
 
 // Interval voor temperatuur uitlezen (ms)

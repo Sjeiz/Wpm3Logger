@@ -24,5 +24,5 @@ String elapsedTimeToString(unsigned long elapsedMs);
 void tryInitModbusManager();
 const char* evaluateIsgStatus(uint16_t isgStatus);
 
-// Fills StatusInfo struct using global managers and sensors
-void updateStatusInfo(StatusInfo &info);
+// Returns StatusInfo struct using provided values
+StatusInfo updateStatusInfo(uint16_t isgStatus, uint16_t isgFlowRate, float pwmIn, int pwmOut, bool pumpBlocked, bool pumpForced);

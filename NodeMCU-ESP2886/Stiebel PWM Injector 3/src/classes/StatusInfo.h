@@ -6,6 +6,7 @@ struct StatusInfo {
     char outputStatus[8];
     char compressorStr[4];
     char pwmOutVal[8];
+    char pwmInVal[8];
     float flowTemp;
     uint16_t flowRate;
     bool wifiOk;

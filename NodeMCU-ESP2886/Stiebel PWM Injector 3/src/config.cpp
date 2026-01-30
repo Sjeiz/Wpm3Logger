@@ -43,7 +43,8 @@ const char* NTP_SERVER            = "pool.ntp.org";
 const int NTP_RESYNC_INTERVAL_MIN = 60;
 
 // WebLogger configuration
-const int WEBLOGGER_BUFFER_LINES         = 10;  // 1KB buffer
+// Note: WEBLOGGER_LINES_COUNT must be defined in WebLogger.h due to compiler constraints
+// Note: WEBLOGGER_LINES_LENGTH must be defined in WebLogger.h due to compiler constraints
 const float WEBLOGGER_TEMP_DELTA         = 0.2; // Temperatuur verschil delta voor logging
-const int WEBLOGGER_DETAIL_INTERVAL_MIN  = 1; // Minimaal elke 15 minuten een detailregel
-const int WEBLOGGER_REFRESH_PAGE_SEC     = 15; // WebLogger page refresh interval (seconden)
+const int WEBLOGGER_DETAIL_INTERVAL_SEC  = 10;  // Minimaal elke 60 seconden een detailregel
+const int WEBLOGGER_REFRESH_PAGE_SEC     = 15;  // WebLogger page refresh interval (seconden)

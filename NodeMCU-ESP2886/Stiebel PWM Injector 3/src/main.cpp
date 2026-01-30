@@ -12,10 +12,14 @@
 #include <time.h>
 #include <ModbusClientTCPasync.h>
 #include <DallasTemperature.h>
-#include <OneWire.h>
+
+#include "sensors/PwmInSensor.h"
+// PWM input sensor
+PwmInSensor pwmInSensor(PIN_PWM_IN);
 
 
 void setup() {
+      pwmInSensor.begin();
     // Start Telnet server
     logManager.getTelnetBridge()->begin();
   Serial.println("\n--- Starting Stiebel PWM Injector 3 ---\n");
@@ -59,11 +63,14 @@ void setup() {
   // Start ModbusManager met IP-adres
   modbusManager.begin(isgIp, ISG_PORT);
 
-  logMessage("[INFO] Initialization completed");
+  char heapMsg[64];
+  snprintf(heapMsg, sizeof(heapMsg), "[INFO] Initialization completed (free heap: %.1f KB)", ESP.getFreeHeap() / 1024.0);
+  logMessage(heapMsg);
 }
 
 
 void loop() {
+    
   // Handle network tasks (WiFi connectivity, OTA, NTP)
   networkManager.loop();
 
@@ -93,6 +100,9 @@ void loop() {
     isgFlowRate = 0;
   }
 
+  // 1b. Read PwmIn sensor
+  pwmInSensor.update();
+  float pwmIn = pwmInSensor.getDutyCycle();
 
   // 2. State machine update based on Modbus status or test override
   stateManager.update(isgStatus);
@@ -100,14 +110,13 @@ void loop() {
   // 3. Update outputs based on state
   outputManager.loop(stateManager.currentStateName());
 
-  // 4. Read back actual output states naar globale variabelen
-  pumpBlocked = digitalRead(PIN_PUMP_BLOCKED) == HIGH;
-  pumpForced  = digitalRead(PIN_PUMP_FORCE) == HIGH;
-  pwmOut      = analogRead(PIN_PWM_OUT);
+  // 4. Read back actual output states naar lokale variabelen
+  bool pumpBlocked = digitalRead(PIN_PUMP_BLOCKED) == HIGH;
+  bool pumpForced  = digitalRead(PIN_PUMP_FORCE) == HIGH;
+  int pwmOut      = analogRead(PIN_PWM_OUT);
 
   // 5. Fill StatusInfo with latest data (now reflecting actual outputs)
-  StatusInfo statusInfo;
-  updateStatusInfo(statusInfo);
+  StatusInfo statusInfo = updateStatusInfo(isgStatus, isgFlowRate, pwmIn, pwmOut, pumpBlocked, pumpForced);
 
   // 6. Log status
   logManager.loop(statusInfo);

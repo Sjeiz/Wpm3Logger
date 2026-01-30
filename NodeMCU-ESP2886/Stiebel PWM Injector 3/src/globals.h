@@ -24,9 +24,6 @@ extern StateManager stateManager;
 extern unsigned long stateEnterTime;
 
 // Globale inputstatus
-extern bool pumpBlocked;
-extern bool pumpForced;
-extern int pwmOut;
 
 #include <ESP8266WiFi.h>
 extern IPAddress isgIp;

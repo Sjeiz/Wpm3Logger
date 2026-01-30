@@ -7,8 +7,12 @@
 #include "test.h"
 #include "loggers/Logger.h"
 
-void updateStatusInfo(StatusInfo &info) {
+StatusInfo updateStatusInfo(uint16_t isgStatus, uint16_t isgFlowRate, float pwmIn, int pwmOut, bool pumpBlocked, bool pumpForced) {
+  StatusInfo info;
+  // State
   snprintf(info.stateName, sizeof(info.stateName), "%s", stateManager.currentStateName());
+
+  // PumpHK2
   if (pumpBlocked) {
     snprintf(info.outputStatus, sizeof(info.outputStatus), "BLOCKED");
   } else if (pumpForced) {
@@ -16,7 +20,6 @@ void updateStatusInfo(StatusInfo &info) {
   } else {
     snprintf(info.outputStatus, sizeof(info.outputStatus), "NORMAL");
   }
-  uint16_t isgStatus = modbusOverrideFlag & modbusManager.isInitialized() ? modbusOverrideBits : modbusManager.getByName("OPERATING_STATUS");
   snprintf(info.compressorStr, sizeof(info.compressorStr), "%s", (isgStatus & ISG_STATUS_COMPRESSOR) ? "ON" : "OFF");
   if (pwmOut > 10) {
     int percent = (int)((pwmOut / 1023.0f) * 100.0f + 0.5f);
@@ -24,12 +27,14 @@ void updateStatusInfo(StatusInfo &info) {
   } else {
     snprintf(info.pwmOutVal, sizeof(info.pwmOutVal), "OFF");
   }
+  snprintf(info.pwmInVal, sizeof(info.pwmInVal), "%.0f%%", pwmIn);
   info.flowTemp = flowTempSensor.read();
-  info.flowRate = modbusOverrideFlag & modbusManager.isInitialized() ? 0 : modbusManager.getByName("FLOW_RATE");
+  info.flowRate = isgFlowRate;
   info.wifiOk = networkManager.isWiFiConnected();
   snprintf(info.modbusStr, sizeof(info.modbusStr), "%s", evaluateIsgStatus(isgStatus));
   unsigned long elapsedMs = millis() - stateEnterTime;
   snprintf(info.stateTimeStr, sizeof(info.stateTimeStr), "%s", elapsedTimeToString(elapsedMs).c_str());
+  return info;
 }
 
 
@@ -49,14 +54,15 @@ const char* formatStatusLogLine(const StatusInfo& statusInfo) {
     snprintf(flowRateStr, sizeof(flowRateStr), "%.1f l/min", statusInfo.flowRate / 100.0f);
   }
   
-  static char buf[320];
+  static char buf[360];
   snprintf(buf, sizeof(buf),
-    "State: %s (%s)  PumpHK2:%s  Compressor:%s  PWM-out:%s  Flow:%s @ %s  WiFi:%s  Modbus:%s",
+    "State: %s (%s)  PumpHK2:%s  Compressor:%s  PWM-out:%s  PWM-in:%s  Flow:%s @ %s  WiFi:%s  Modbus:%s",
     statusInfo.stateName,
     statusInfo.stateTimeStr,
     statusInfo.outputStatus,
     statusInfo.compressorStr,
     statusInfo.pwmOutVal,
+    statusInfo.pwmInVal,
     flowTempStr,
     flowRateStr,
     statusInfo.wifiOk ? "OK" : "FAIL",
