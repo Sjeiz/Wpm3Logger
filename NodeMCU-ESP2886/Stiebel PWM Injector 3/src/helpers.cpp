@@ -7,12 +7,14 @@
 #include "test.h"
 #include "loggers/Logger.h"
 
-StatusInfo updateStatusInfo(uint16_t isgStatus, uint16_t isgFlowRate, float pwmIn, int pwmOut, bool pumpBlocked, bool pumpForced) {
+StatusInfo updateStatusInfo(uint16_t isgStatus, float flowTemp, uint16_t flowRate, float pwmIn, int pwmOut, bool pumpBlocked, bool pumpForced) {
   StatusInfo info;
   // State
   snprintf(info.stateName, sizeof(info.stateName), "%s", stateManager.currentStateName());
+  unsigned long elapsedMs = millis() - stateEnterTime;
+  snprintf(info.stateTimeStr, sizeof(info.stateTimeStr), "%s", elapsedTimeToString(elapsedMs).c_str());
 
-  // PumpHK2
+  // PumpHK2 state
   if (pumpBlocked) {
     snprintf(info.outputStatus, sizeof(info.outputStatus), "BLOCKED");
   } else if (pumpForced) {
@@ -20,26 +22,33 @@ StatusInfo updateStatusInfo(uint16_t isgStatus, uint16_t isgFlowRate, float pwmI
   } else {
     snprintf(info.outputStatus, sizeof(info.outputStatus), "NORMAL");
   }
+
+  // Compressor state
   snprintf(info.compressorStr, sizeof(info.compressorStr), "%s", (isgStatus & ISG_STATUS_COMPRESSOR) ? "ON" : "OFF");
+
+  //PWM-out
   if (pwmOut > 10) {
     int percent = (int)((pwmOut / 1023.0f) * 100.0f + 0.5f);
     snprintf(info.pwmOutVal, sizeof(info.pwmOutVal), "%d%%", percent);
   } else {
     snprintf(info.pwmOutVal, sizeof(info.pwmOutVal), "OFF");
   }
+
+  // PWM-in
   snprintf(info.pwmInVal, sizeof(info.pwmInVal), "%.0f%%", pwmIn);
-  info.flowTemp = flowTempSensor.read();
-  info.flowRate = isgFlowRate;
+
+  // Flow temp and rate
+  info.flowTemp = flowTemp;
+  info.flowRate = flowRate;
+
+  // Wifi state
   info.wifiOk = networkManager.isWiFiConnected();
   snprintf(info.modbusStr, sizeof(info.modbusStr), "%s", evaluateIsgStatus(isgStatus));
-  unsigned long elapsedMs = millis() - stateEnterTime;
-  snprintf(info.stateTimeStr, sizeof(info.stateTimeStr), "%s", elapsedTimeToString(elapsedMs).c_str());
   return info;
 }
 
-
-// Formatteert een StatusInfo tot een logregel (zonder newline), zonder heap-allocatie
-const char* formatStatusLogLine(const StatusInfo& statusInfo) {
+  // Flow temp
+  const char* formatStatusLogLine(const StatusInfo& statusInfo) {
   char flowTempStr[16];
   if ((int)statusInfo.flowTemp == ISG_MODBUS_READ_ERROR) {
     snprintf(flowTempStr, sizeof(flowTempStr), "FAIL");
@@ -47,6 +56,7 @@ const char* formatStatusLogLine(const StatusInfo& statusInfo) {
     snprintf(flowTempStr, sizeof(flowTempStr), "%.1f°C", statusInfo.flowTemp);
   }
   
+  // Flow rate
   char flowRateStr[16];
   if ((int)statusInfo.flowRate == ISG_MODBUS_READ_ERROR) {
     snprintf(flowRateStr, sizeof(flowRateStr), "FAIL");
@@ -54,6 +64,7 @@ const char* formatStatusLogLine(const StatusInfo& statusInfo) {
     snprintf(flowRateStr, sizeof(flowRateStr), "%.1f l/min", statusInfo.flowRate / 100.0f);
   }
   
+  // compose status line
   static char buf[360];
   snprintf(buf, sizeof(buf),
     "State: %s (%s)  PumpHK2:%s  Compressor:%s  PWM-out:%s  PWM-in:%s  Flow:%s @ %s  WiFi:%s  Modbus:%s",

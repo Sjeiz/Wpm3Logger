@@ -8,20 +8,19 @@ class PwmInSensor {
 public:
     PwmInSensor(uint8_t pin);
     void begin();
-    void update();
-    float getDutyCycle() const;
+    float read();
     float getFrequency() const;
 private:
     uint8_t _pin;
-    volatile uint32_t _lastRise;
-    volatile uint32_t _lastFall;
-    volatile uint32_t _period;
-    volatile uint32_t _highTime;
-    volatile float _dutyCycle;
-    volatile float _frequency;
-    uint32_t _lastUpdate = 0;
-    static void IRAM_ATTR isrRise(void* arg);
-    static void IRAM_ATTR isrFall(void* arg);
+    float _dutyCycle;
+    float _frequency;
+    uint32_t _lastUpdate;
+    // Polling-based sampling members
+    uint32_t _sampleStart;
+    uint32_t _highTicks;
+    uint32_t _totalTicks;
+    uint32_t _risingEdges;
+    uint8_t _lastPinState;
 };
 
 #endif // PWMIN_SENSOR_H

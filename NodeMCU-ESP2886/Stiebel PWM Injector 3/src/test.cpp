@@ -5,6 +5,7 @@
 #include "globals.h"
 #include "classes/ModbusManager.h"
 #include "test.h"
+#include "helpers.h"
 
 uint16_t modbusOverrideBits = 0;
 bool modbusOverrideFlag = false;
@@ -25,33 +26,44 @@ const BitName bitNames[] = {
 };
 
 void handleSerialTestCommand(const String& line) {
+  logMessage(String("[DEBUG] handleSerialTestCommand triggered: [") + line + "]");
+  String asciiCodes = "[DEBUG] ASCII codes: ";
+  for (unsigned int i = 0; i < line.length(); ++i) {
+    asciiCodes += String((int)line[i]);
+    if (i < line.length() - 1) asciiCodes += ",";
+  }
+  logMessage(asciiCodes);
+  logMessage(String("[DEBUG] line.length() = ") + line.length());
+  logMessage(String("[DEBUG] line.startsWith('test') = ") + (line.startsWith("test") ? "true" : "false"));
   if (line.startsWith("test")) {
     String bitNamesStr = line.substring(4);
     bitNamesStr.trim();
     if (bitNamesStr.length() == 0) {
+      logMessage("[DEBUG] test: print help");
       printSerialTestHelp();
     } else if (bitNamesStr.equalsIgnoreCase("off")) {
       modbusOverrideFlag = false;
-      Serial.println(F("[TEST] Override disabled."));
+      logMessage("[TEST] Override disabled.");
     } else {
       modbusOverrideBits = parseModbusBits(bitNamesStr);
       modbusOverrideFlag = true;
-      Serial.print(F("[TEST] Override active (0x"));
-      Serial.println(String(modbusOverrideBits, HEX) + "): " + bitNamesStr);
+      logMessage(String("[TEST] Override active (0x") + String(modbusOverrideBits, HEX) + "): " + bitNamesStr);
     }
+  } else {
+    logMessage(String("[DEBUG] handleSerialTestCommand: onbekend commando [") + line + "]");
   }
 }
 
 void printSerialTestHelp() {
-  Serial.println(F("[TEST] Test interface commands:"));
-  Serial.println(F("[TEST]   test <bitname> [<bitname> ...]  - Override Modbus bits (e.g.: test COMPRESSOR HEATING)"));
-  Serial.println(F("[TEST]   test off                        - Disable override"));
-  Serial.print(F("[TEST] Bit names: "));
+  logMessage(F("[TEST] Test interface commands:"));
+  logMessage(F("[TEST]   test <bitname> [<bitname> ...]  - Override Modbus bits (e.g.: test COMPRESSOR HEATING)"));
+  logMessage(F("[TEST]   test off                        - Disable override"));
+  String bitNamesStr = F("[TEST] Bit names: ");
   for (int i = 0; bitNames[i].name; ++i) {
-    Serial.print(bitNames[i].name);
-    if (bitNames[i+1].name) Serial.print(" ");
+    bitNamesStr += bitNames[i].name;
+    if (bitNames[i+1].name) bitNamesStr += " ";
   }
-  Serial.println();
+  logMessage(bitNamesStr);
 }
 
 uint16_t parseModbusBits(const String& input) {

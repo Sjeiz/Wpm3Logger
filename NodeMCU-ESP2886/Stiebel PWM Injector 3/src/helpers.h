@@ -25,4 +25,4 @@ void tryInitModbusManager();
 const char* evaluateIsgStatus(uint16_t isgStatus);
 
 // Returns StatusInfo struct using provided values
-StatusInfo updateStatusInfo(uint16_t isgStatus, uint16_t isgFlowRate, float pwmIn, int pwmOut, bool pumpBlocked, bool pumpForced);
+StatusInfo updateStatusInfo(uint16_t isgStatus, float flowTemp, uint16_t flowRate, float pwmIn, int pwmOut, bool pumpBlocked, bool pumpForced);

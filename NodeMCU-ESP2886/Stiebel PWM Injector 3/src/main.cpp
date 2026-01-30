@@ -100,9 +100,10 @@ void loop() {
     isgFlowRate = 0;
   }
 
-  // 1b. Read PwmIn sensor
-  pwmInSensor.update();
-  float pwmIn = pwmInSensor.getDutyCycle();
+
+  // 1b. Read input sensors
+  float pwmIn = pwmInSensor.read();
+  float flowTemp = flowTempSensor.read();
 
   // 2. State machine update based on Modbus status or test override
   stateManager.update(isgStatus);
@@ -116,7 +117,7 @@ void loop() {
   int pwmOut      = analogRead(PIN_PWM_OUT);
 
   // 5. Fill StatusInfo with latest data (now reflecting actual outputs)
-  StatusInfo statusInfo = updateStatusInfo(isgStatus, isgFlowRate, pwmIn, pwmOut, pumpBlocked, pumpForced);
+  StatusInfo statusInfo = updateStatusInfo(isgStatus, flowTemp, isgFlowRate, pwmIn, pwmOut, pumpBlocked, pumpForced);
 
   // 6. Log status
   logManager.loop(statusInfo);

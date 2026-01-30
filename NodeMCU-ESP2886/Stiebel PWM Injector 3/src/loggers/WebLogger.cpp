@@ -73,8 +73,11 @@ void WebLogger::log(const String& message, LogLevel level) {
     }
     String msg = "[" + ts + "] " + levelStr + message;
     if (!msg.endsWith("\n")) msg += "\n";
-    // Truncate if too long
-    msg = msg.substring(0, WEBLOGGER_LINES_LENGTH - 1);
+    // Truncate if too long, but always end with ...\n if truncated
+    if (msg.length() >= WEBLOGGER_LINES_LENGTH) {
+        // Reserve 4 chars for ...\n
+        msg = msg.substring(0, WEBLOGGER_LINES_LENGTH - 4) + "...\n";
+    }
     // Insert at head
     strncpy(logBuffer[(logHead + logCount) % WEBLOGGER_LINES_COUNT], msg.c_str(), WEBLOGGER_LINES_LENGTH);
     if (logCount < WEBLOGGER_LINES_COUNT) {

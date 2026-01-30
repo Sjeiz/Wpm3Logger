@@ -35,7 +35,7 @@ const int PWM_OUT_FREQUENCY_HZ = 150;
 const int PWM_OUT_DUTY_PERCENT = 30;
 
 // Post-run timer
-const int POST_RUN_DURATION_MIN = 1;
+const int POST_RUN_DURATION_MIN = 10;
 
 // Time configuration
 const char* TIMEZONE              = "CET-1CEST,M3.5.0/2,M10.5.0/3"; // Europe/Amsterdam
@@ -46,5 +46,5 @@ const int NTP_RESYNC_INTERVAL_MIN = 60;
 // Note: WEBLOGGER_LINES_COUNT must be defined in WebLogger.h due to compiler constraints
 // Note: WEBLOGGER_LINES_LENGTH must be defined in WebLogger.h due to compiler constraints
 const float WEBLOGGER_TEMP_DELTA         = 0.2; // Temperatuur verschil delta voor logging
-const int WEBLOGGER_DETAIL_INTERVAL_SEC  = 10;  // Minimaal elke 60 seconden een detailregel
-const int WEBLOGGER_REFRESH_PAGE_SEC     = 15;  // WebLogger page refresh interval (seconden)
+const int WEBLOGGER_DETAIL_INTERVAL_SEC  = 900;  // Minimaal elke 60 seconden een detailregel
+const int WEBLOGGER_REFRESH_PAGE_SEC     = ISG_POLL_INTERVAL_SEC / 2;  // WebLogger page refresh interval (seconden)

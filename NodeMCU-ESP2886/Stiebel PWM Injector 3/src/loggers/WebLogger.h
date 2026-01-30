@@ -6,7 +6,7 @@
 #include <ESP8266WebServer.h>
 #include <stdio.h>
 #define WEBLOGGER_LINES_COUNT 150   // must be a compiler value, so it cannot be declared in config
-#define WEBLOGGER_LINES_LENGTH 150 // must be a compiler value, so it cannot be declared in config
+#define WEBLOGGER_LINES_LENGTH 170  // must be a compiler value, so it cannot be declared in config
 #include "../config.h"
 #include "../classes/StatusInfo.h"
 #include "../loggers/Logger.h"
