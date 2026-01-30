@@ -1,3 +1,5 @@
+// WebLogger refresh interval (seconds)
+extern const int WEBLOGGER_REFRESH_INTERVAL_MIN;
 #ifndef CONFIG_H
 #define CONFIG_H
 #include <stdint.h>
@@ -20,11 +22,7 @@ extern const int NTP_RESYNC_INTERVAL_MIN;
 
 
 // Log level for serial output
-enum class LogLevel {
-  LOG_NORMAL,
-  LOG_VERBOSE,
-  LOG_DEBUG
-};
+enum class LogLevel {LOG_NORMAL, LOG_VERBOSE, LOG_DEBUG};
 
 // Post-run timer
 extern const int POST_RUN_DURATION_MIN;

@@ -74,6 +74,11 @@ void WebLogger::appendToBuffer(const String& message) {
         return;
     }
 
+    // Log en wacht 10s voordat we regels gaan verwijderen als de buffer vol dreigt te raken
+    if (writePos + msgLen >= bufferSize) {
+        logMessage("⚠️ WebLogger buffer bijna vol, ga oude regels verwijderen na 10s delay...");
+        delay(10000);
+    }
     // Remove oldest lines at the end (onderaan) totdat er ruimte is
     while (writePos + msgLen >= bufferSize) {
         // Zoek de laatste '\n' (onderaan, dus vanaf het einde zoeken)

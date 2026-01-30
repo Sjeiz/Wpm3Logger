@@ -14,7 +14,7 @@ public:
     ModbusManager(const ModbusConfig& cfg);
     ~ModbusManager();
 
-    void begin(const String& hostOrIp, uint16_t port = 502);
+    void begin(IPAddress ip, uint16_t port = 502);
     void loop();
 
     bool isBusy() const;

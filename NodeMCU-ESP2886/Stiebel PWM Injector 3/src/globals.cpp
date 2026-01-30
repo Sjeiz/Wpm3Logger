@@ -22,3 +22,6 @@ WebServerManager webServerManager(logManager.getWebLogger());
 ModbusManager modbusManager(MODBUS_CONFIG);
 StateManager stateManager;
 unsigned long stateEnterTime = 0;
+
+#include <ESP8266WiFi.h>
+IPAddress isgIp;

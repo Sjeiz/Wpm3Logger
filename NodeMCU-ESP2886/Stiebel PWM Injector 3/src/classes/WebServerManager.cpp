@@ -32,6 +32,9 @@ void WebServerManager::setup() {
             display: block;
           }
         </style>
+        <script>
+          var refreshInterval = %REFRESH_INTERVAL% * 60 * 1000;
+        </script>
       </head>
       <body>
         <div class='header'><h2>Stiebel PWM Injector Log</h2></div>
@@ -42,12 +45,13 @@ void WebServerManager::setup() {
               document.getElementById('log').innerHTML = t;
             });
           }
-          setInterval(fetchLog, 2000);
+          setInterval(fetchLog, refreshInterval);
           fetchLog();
         </script>
       </body>
       </html>
     )rawliteral");
+        html.replace("%REFRESH_INTERVAL%", String(WEBLOGGER_REFRESH_INTERVAL_MIN));
         server.send(200, "text/html", html);
     });
     server.on("/log", [this]() {

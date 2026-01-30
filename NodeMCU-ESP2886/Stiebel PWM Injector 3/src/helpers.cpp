@@ -55,7 +55,7 @@ void logMessage(const String& message) {
 // Tries to initialize ModbusManager if WiFi is connected and logs the result
 void tryInitModbusManager() {
   if (networkManager.isWiFiConnected()) {
-    modbusManager.begin(ISG_HOST, ISG_PORT);
+    modbusManager.begin(isgIp, ISG_PORT);
     if (modbusManager.isInitialized()) {
       logMessage("[INFO] ModbusManager initialized (WiFi connected)");
     } else {

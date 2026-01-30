@@ -6,7 +6,7 @@ void TelnetBridge::begin() {
     if (_server) _server->begin();
 }
 
-// Eenvoudige Telnet <-> UART bridge
+// Telnet command handler (geen UART bridge)
 TelnetBridge::TelnetBridge(WiFiServer* server) : _server(server) {}
 
 void TelnetBridge::handleClient() {

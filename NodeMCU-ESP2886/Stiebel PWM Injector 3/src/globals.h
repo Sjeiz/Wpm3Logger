@@ -22,3 +22,6 @@ extern WebServerManager webServerManager;
 extern ModbusManager modbusManager;
 extern StateManager stateManager;
 extern unsigned long stateEnterTime;
+
+#include <ESP8266WiFi.h>
+extern IPAddress isgIp;

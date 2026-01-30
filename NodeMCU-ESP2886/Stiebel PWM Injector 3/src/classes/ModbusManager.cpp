@@ -24,27 +24,20 @@ ModbusManager::~ModbusManager() {
     if (values) delete[] values;
 }
 
-void ModbusManager::begin(const String& hostOrIp, uint16_t port) {
-    
-
+void ModbusManager::begin(IPAddress ip, uint16_t port) {
     if (modbusClient) {
         delete modbusClient;
         modbusClient = nullptr;
         busy = false;
     }
-    IPAddress ip = ip.fromString(hostOrIp);
     if (!ip) {
-        ip = networkManager.resolveHostName(hostOrIp.c_str());
-        if (ip == IPAddress(0,0,0,0)) {
-            initialized = false;
-            logMessage(String("[ERROR] Hostname resolve failed: ") + hostOrIp, LogLevel::LOG_DEBUG);
-            return;
-        }
+        initialized = false;
+        logMessage(String("[ERROR] Ongeldig IP-adres voor ModbusManager: ") + ip.toString(), LogLevel::LOG_DEBUG);
+        return;
     }
     logMessage("[DEBUG] Creating ModbusClientTCPasync for " + ip.toString() + ":" + String(port), LogLevel::LOG_DEBUG);
     modbusClient = new ModbusClientTCPasync(ip, port);
     modbusClient->onDataHandler([this](ModbusMessage response, uint32_t token) {
-        //logMessage("[DEBUG] ModbusManager onDataHandler called for token: " + String(token), LogLevel::LOG_DEBUG);
         this->handleModbusData(response, token);
     });
     modbusClient->onErrorHandler([this](Error error, uint32_t token) {
@@ -53,7 +46,6 @@ void ModbusManager::begin(const String& hostOrIp, uint16_t port) {
     });
     modbusClient->setTimeout(500);
     modbusClient->setIdleTimeout(60000);
-    //modbusClient->connect(ip, port);
     initialized = true;
 }
 

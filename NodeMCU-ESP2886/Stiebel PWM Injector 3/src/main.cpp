@@ -33,6 +33,31 @@ void setup() {
   // Initialize network and related services (WiFi, OTA, NTP)
   networkManager.begin();
 
+  // Los ISG_HOST op naar IP-adres en sla op in globale variabele (blocking, max 6 pogingen)
+  const int maxTries = 6;
+  const int retryDelayMs = 10000;
+  int tryCount = 0;
+  bool resolved = false;
+  while (tryCount < maxTries && !resolved) {
+    logMessage(String("🔎 ISG_HOST DNS-resolutie poging ") + (tryCount+1) + "/" + maxTries + ": " + ISG_HOST);
+    IPAddress resolvedIp;
+    if (WiFi.hostByName(ISG_HOST, resolvedIp) == 1 && resolvedIp != IPAddress(0,0,0,0)) {
+      isgIp = resolvedIp;
+      resolved = true;
+      logMessage(String("✅ ISG_HOST resolved: ") + resolvedIp.toString());
+    } else {
+      logMessage("❌ ISG_HOST niet gevonden, opnieuw proberen over 10s...");
+      delay(retryDelayMs);
+      tryCount++;
+    }
+  }
+  if (!resolved) {
+    logMessage("💥 ISG_HOST DNS-resolutie 6x mislukt, rebooting...");
+    delay(1000);
+    ESP.restart();
+    return;
+  }
+
   // Initialize other managers, services, sensors
   ArduinoOTA.begin();                              // Enable Over-the-Air (OTA) firmware updates
   outputManager.begin();                           // Initialize output manager  
@@ -40,6 +65,9 @@ void setup() {
   logManager.addLogger(logManager.getWebLogger()); // Initialize Web logger
   stateManager.begin(errorState);                  // Initialize state machine, starting in error state
   flowTempSensor.begin();                          // Initialize flow temperature sensor
+
+  // Start ModbusManager met IP-adres
+  modbusManager.begin(isgIp, ISG_PORT);
 
   logMessage("[INFO] Initialization completed");
 }
@@ -56,12 +84,15 @@ void loop() {
   handleSerialTestInput(); // Can override Modbus status bits for testing purposes
   logManager.getTelnetBridge()->handleClient();
   webServerManager.handleClient();
-  
-  // Only poll Modbus when ModbusManager is initialized
+
+  // Herinitialiseer ModbusManager alleen met eerder opgeloste IP
+  if (!modbusManager.isInitialized()) {
+    modbusManager.begin(isgIp, ISG_PORT);
+  }
   if(modbusManager.isInitialized()) modbusManager.loop(); // Poll Modbus data
   else tryInitModbusManager();
 
-  // Get latest Modbus status value or overridden value from serial console for testing purposes
+  // 1. Get latest Modbus status value or overridden value from serial console for testing purposes
   uint16_t isgStatus;
   uint16_t isgFlowRate;
   if(!modbusOverrideFlag & modbusManager.isInitialized()) {
@@ -73,15 +104,34 @@ void loop() {
   }
 
 
-  // State machine update based on Modbus status or test override
+  // 2. State machine update based on Modbus status or test override
   stateManager.update(isgStatus);
 
-  // Fill StatusInfo with latest data
+  // 3. Update outputs based on state
+  outputManager.loop(stateManager.currentStateName());
+
+  // 4. Read back actual output states
+  bool pumpBlocked = digitalRead(PIN_PUMP_BLOCKED) == HIGH;
+  bool pumpForced  = digitalRead(PIN_PUMP_FORCE) == HIGH;
+  int pwmVal = analogRead(PIN_PWM_OUT);
+
+  // 5. Fill StatusInfo with latest data (now reflecting actual outputs)
   StatusInfo statusInfo;
   statusInfo.stateName     = stateManager.currentStateName();
-  statusInfo.outputStatus  = outputStatusName(statusInfo.stateName.c_str());
+  if (pumpBlocked) {
+    statusInfo.outputStatus = "BLOCKED";
+  } else if (pumpForced) {
+    statusInfo.outputStatus = "FORCED";
+  } else {
+    statusInfo.outputStatus = "NORMAL";
+  }
   statusInfo.compressorStr = (isgStatus & ISG_STATUS_COMPRESSOR) ? "ON" : "OFF";
-  statusInfo.pwmOutVal     = (stateManager.getCurrentStatePtr() == postRunState) ? String(PWM_OUT_DUTY_PERCENT) + "%" : "OFF";
+  if (pwmVal > 10) {
+    int percent = (int)((pwmVal / 1023.0f) * 100.0f + 0.5f);
+    statusInfo.pwmOutVal = String(percent) + "%";
+  } else {
+    statusInfo.pwmOutVal = "OFF";
+  }
   statusInfo.flowTemp      = flowTempSensor.read();
   statusInfo.flowRate      = isgFlowRate;
   statusInfo.wifiOk        = networkManager.isWiFiConnected();
@@ -89,6 +139,6 @@ void loop() {
   unsigned long elapsedMs  = millis() - stateEnterTime;
   statusInfo.stateTimeStr  = elapsedTimeToString(elapsedMs);
 
-  outputManager.loop(statusInfo.stateName.c_str());
+  // 6. Log status
   logManager.loop(statusInfo);
 }
