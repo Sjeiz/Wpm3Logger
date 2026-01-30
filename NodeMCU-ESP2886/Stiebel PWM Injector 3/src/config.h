@@ -1,24 +1,19 @@
 // WebLogger refresh interval (seconds)
-extern const int WEBLOGGER_REFRESH_INTERVAL_MIN;
+
 #ifndef CONFIG_H
 #define CONFIG_H
 #include <stdint.h>
 
-// WebLogger aantal regels in buffer
+// WebLogger
 extern const int WEBLOGGER_BUFFER_LINES;
-// WebLogger temperature margin for logging
-extern const float WEBLOGGER_TEMP_MARGE;
-// WebLogger minimum detailregel interval (minuten)
+extern const float WEBLOGGER_TEMP_DELTA;
+extern const int WEBLOGGER_REFRESH_PAGE_SEC;
 extern const int WEBLOGGER_DETAIL_INTERVAL_MIN;
 
 
 // Interval voor temperatuur uitlezen (ms)
 // Interval voor NTP resync (min)
 extern const int NTP_RESYNC_INTERVAL_MIN;
-
-
-// Modbus register addresses en namen (voor gebruik in ModbusManager)
-
 
 
 // Log level for serial output

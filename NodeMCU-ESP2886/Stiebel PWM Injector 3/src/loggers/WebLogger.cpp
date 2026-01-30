@@ -17,7 +17,7 @@ void WebLogger::logStatus(const StatusInfo& statusInfo) {
     changed |= statusInfo.compressorStr != lastStatusInfo.compressorStr;
     changed |= statusInfo.pwmOutVal != lastStatusInfo.pwmOutVal;
     // Only log significant temperature changes (margin ±0.2)
-    changed |= fabs(statusInfo.flowTemp - lastStatusInfo.flowTemp) > WEBLOGGER_TEMP_MARGE;
+    changed |= fabs(statusInfo.flowTemp - lastStatusInfo.flowTemp) > WEBLOGGER_TEMP_DELTA;
     changed |= statusInfo.wifiOk != lastStatusInfo.wifiOk;
     changed |= statusInfo.modbusStr != lastStatusInfo.modbusStr;
     unsigned long nowMs = millis();

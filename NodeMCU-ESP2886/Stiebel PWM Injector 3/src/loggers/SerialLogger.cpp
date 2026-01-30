@@ -18,7 +18,7 @@ void SerialLogger::log(const String& msg, LogLevel level) {
         default: levelStr = ""; break;
     }
     String out = "[" + ts + "] " + levelStr + msg;
-    Serial.print(out);
+    Serial.println(out);
     if (logManager.getTelnetBridge()) {
         logManager.getTelnetBridge()->writeToClient(out.c_str());
     }

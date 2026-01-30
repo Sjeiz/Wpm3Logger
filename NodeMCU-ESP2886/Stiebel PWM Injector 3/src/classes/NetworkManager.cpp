@@ -41,8 +41,7 @@ IPAddress NetworkManager::getLocalIP() const {
 }
 
 void NetworkManager::tryConnectWiFi() {
-    Serial.println("Initializing WiFi...");
-    //logMessage("\xE2\x8C\x9B Initializing WiFi...");
+    logMessage("\xE2\x8C\x9B Initializing WiFi...");
     WiFi.disconnect();
     WiFi.mode(WIFI_STA);
     WiFi.hostname(HOSTNAME);

@@ -51,7 +51,7 @@ void WebServerManager::setup() {
       </body>
       </html>
     )rawliteral");
-        html.replace("%REFRESH_INTERVAL%", String(WEBLOGGER_REFRESH_INTERVAL_MIN));
+        html.replace("%REFRESH_INTERVAL%", String(WEBLOGGER_REFRESH_PAGE_SEC));
         server.send(200, "text/html", html);
     });
     server.on("/log", [this]() {

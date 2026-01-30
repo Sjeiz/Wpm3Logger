@@ -33,31 +33,7 @@ void setup() {
   // Initialize network and related services (WiFi, OTA, NTP)
   networkManager.begin();
 
-  // Los ISG_HOST op naar IP-adres en sla op in globale variabele (blocking, max 6 pogingen)
-  const int maxTries = 6;
-  const int retryDelayMs = 10000;
-  int tryCount = 0;
-  bool resolved = false;
-  while (tryCount < maxTries && !resolved) {
-    logMessage(String("🔎 ISG_HOST DNS-resolutie poging ") + (tryCount+1) + "/" + maxTries + ": " + ISG_HOST);
-    IPAddress resolvedIp;
-    if (WiFi.hostByName(ISG_HOST, resolvedIp) == 1 && resolvedIp != IPAddress(0,0,0,0)) {
-      isgIp = resolvedIp;
-      resolved = true;
-      logMessage(String("✅ ISG_HOST resolved: ") + resolvedIp.toString());
-    } else {
-      logMessage("❌ ISG_HOST niet gevonden, opnieuw proberen over 10s...");
-      delay(retryDelayMs);
-      tryCount++;
-    }
-  }
-  if (!resolved) {
-    logMessage("💥 ISG_HOST DNS-resolutie 6x mislukt, rebooting...");
-    delay(1000);
-    ESP.restart();
-    return;
-  }
-
+  
   // Initialize other managers, services, sensors
   ArduinoOTA.begin();                              // Enable Over-the-Air (OTA) firmware updates
   outputManager.begin();                           // Initialize output manager  
@@ -65,6 +41,20 @@ void setup() {
   logManager.addLogger(logManager.getWebLogger()); // Initialize Web logger
   stateManager.begin(errorState);                  // Initialize state machine, starting in error state
   flowTempSensor.begin();                          // Initialize flow temperature sensor
+
+  // Los ISG_HOST op naar IP-adres en sla op in globale variabele (reboot if failed)
+  isgIp = resolveHost(ISG_HOST);
+  if (isgIp == IPAddress(0,0,0,0)) {
+    logMessage("💥 ISG_HOST DNS-resolutie mislukt, rebooting...");
+    unsigned long start = millis();
+    while (millis() - start < 10000UL) {
+      webServerManager.handleClient();
+      ArduinoOTA.handle();
+      yield();
+      delay(50);
+    }
+    ESP.restart();
+  }
 
   // Start ModbusManager met IP-adres
   modbusManager.begin(isgIp, ISG_PORT);

@@ -1,30 +1,32 @@
-
-
 #include <Arduino.h>
+#include <ESP8266WiFi.h>
 #include <time.h>
-#include "helpers.h"
 #include "globals.h"
 #include "config.h"
+#include "helpers.h"
 #include "test.h"
 #include "loggers/Logger.h"
 
-// Formatteert een StatusInfo tot een logregel (zonder newline)
-String formatStatusLogLine(const StatusInfo& statusInfo) {
+
+// Formatteert een StatusInfo tot een logregel (zonder newline), zonder heap-allocatie
+const char* formatStatusLogLine(const StatusInfo& statusInfo) {
   char flowTempStr[16];
-  char flowRateStr[16];
   if ((int)statusInfo.flowTemp == ISG_MODBUS_READ_ERROR) {
-    strcpy(flowTempStr, "FAIL");
+    snprintf(flowTempStr, sizeof(flowTempStr), "FAIL");
   } else {
-    snprintf(flowTempStr, sizeof(flowTempStr), "%.1f", statusInfo.flowTemp);
+    snprintf(flowTempStr, sizeof(flowTempStr), "%.1f°C", statusInfo.flowTemp);
   }
+  
+  char flowRateStr[16];
   if ((int)statusInfo.flowRate == ISG_MODBUS_READ_ERROR) {
-    strcpy(flowRateStr, "FAIL");
+    snprintf(flowRateStr, sizeof(flowRateStr), "FAIL");
   } else {
-    snprintf(flowRateStr, sizeof(flowRateStr), "%.1f", statusInfo.flowRate / 100.0f);
+    snprintf(flowRateStr, sizeof(flowRateStr), "%.1f l/min", statusInfo.flowRate / 100.0f);
   }
-  char buf[320];
+  
+  static char buf[320];
   snprintf(buf, sizeof(buf),
-    "State: %s (%s)  PumpHK2:%s  Compressor:%s  PWM-out:%s  Flow:%s\u00b0C @ %s l/min  WiFi:%s  Modbus:%s",
+    "State: %s (%s)  PumpHK2:%s  Compressor:%s  PWM-out:%s  Flow:%s @ %s  WiFi:%s  Modbus:%s",
     statusInfo.stateName.c_str(),
     statusInfo.stateTimeStr.c_str(),
     statusInfo.outputStatus.c_str(),
@@ -35,19 +37,32 @@ String formatStatusLogLine(const StatusInfo& statusInfo) {
     statusInfo.wifiOk ? "OK" : "FAIL",
     statusInfo.modbusStr.c_str()
   );
-  return String(buf);
+  return buf;
 }
 
-#include <Arduino.h>
-#include <time.h>
-#include "helpers.h"
-#include "globals.h"
-#include "config.h"
-#include "test.h"
-#include "loggers/Logger.h"
 
+IPAddress resolveHost(const char* host, int maxTries, int retryDelayMs) {
+  IPAddress outIp(0,0,0,0);
+  for (int tryCount = 0; tryCount < maxTries; ++tryCount) {
+    logMessage(String("🔎 ISG_HOST DNS-resolutie poging ") + (tryCount+1) + "/" + maxTries + ": " + host);
+    if (WiFi.hostByName(host, outIp) == 1 && outIp != IPAddress(0,0,0,0)) {
+      logMessage(String("✅ ISG_HOST resolved: ") + outIp.toString());
+      return outIp;
+    } else {
+      logMessage("❌ ISG_HOST niet gevonden, opnieuw proberen over 10s...");
+      unsigned long start = millis();
+      while (millis() - start < (unsigned long)retryDelayMs) {
+        webServerManager.handleClient();
+        ArduinoOTA.handle();
+        yield();
+        delay(50);
+      }
+    }
+  }
+  logMessage("💥 ISG_HOST DNS-resolutie mislukt");
+  return IPAddress(0,0,0,0);
+}
 
-// Overload: logMessage(message) gebruikt standaard LOG_NORMAL
 void logMessage(const String& message) {
   logMessage(message, LogLevel::LOG_NORMAL);
 }
