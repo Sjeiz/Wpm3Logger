@@ -5,15 +5,6 @@
 #include "../helpers.h"
 
 
-void SerialLogger::log(const String& msg) {
-    String ts = timeStamp();
-    String out = "[" + ts + "] " + msg;
-    Serial.print(out);
-    // Stuur log ook naar Telnet, indien beschikbaar
-    if (logManager.getTelnetBridge()) {
-        logManager.getTelnetBridge()->writeToClient(out.c_str());
-    }
-}
 
 void SerialLogger::log(const String& msg, LogLevel level) {
     if(level == LogLevel::LOG_DEBUG && !DEBUG) return;
@@ -26,7 +17,11 @@ void SerialLogger::log(const String& msg, LogLevel level) {
         case LogLevel::LOG_NORMAL:
         default: levelStr = ""; break;
     }
-    log("[" + ts + "] " + levelStr + msg);
+    String out = "[" + ts + "] " + levelStr + msg;
+    Serial.print(out);
+    if (logManager.getTelnetBridge()) {
+        logManager.getTelnetBridge()->writeToClient(out.c_str());
+    }
 }
 
 void SerialLogger::logStatus(const StatusInfo& statusInfo) {

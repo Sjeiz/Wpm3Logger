@@ -12,9 +12,8 @@ class LogManager : public Logger {
 public:
     LogManager();
     void addLogger(Logger* logger);
-    void log(const String& msg) override;
-    void log(const String& msg, LogLevel level);
-    void logStatus(const StatusInfo& statusInfo);
+    void log(const String& msg, LogLevel level = LogLevel::LOG_NORMAL) override;
+    void logStatus(const StatusInfo& statusInfo) override;
     void loop(const StatusInfo& statusInfo);
 
     TelnetBridge* getTelnetBridge();

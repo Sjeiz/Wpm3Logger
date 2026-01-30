@@ -4,8 +4,8 @@ extern const int WEBLOGGER_REFRESH_INTERVAL_MIN;
 #define CONFIG_H
 #include <stdint.h>
 
-// WebLogger buffer size (in bytes)
-extern const int WEBLOGGER_BUFFER_SIZE;
+// WebLogger aantal regels in buffer
+extern const int WEBLOGGER_BUFFER_LINES;
 // WebLogger temperature margin for logging
 extern const float WEBLOGGER_TEMP_MARGE;
 // WebLogger minimum detailregel interval (minuten)

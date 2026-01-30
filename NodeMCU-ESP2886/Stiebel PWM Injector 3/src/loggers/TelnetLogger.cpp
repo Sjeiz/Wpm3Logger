@@ -7,13 +7,6 @@
 #include "../helpers.h"
 
 
-void TelnetLogger::log(const String& msg) {
-    String ts = timeStamp();
-    String out = "[" + ts + "] " + msg;
-    if (_bridge) {
-        _bridge->writeToClient(out.c_str());
-    }
-}
 
 void TelnetLogger::log(const String& msg, LogLevel level) {
     if(level == LogLevel::LOG_DEBUG && !DEBUG) return;
@@ -26,7 +19,10 @@ void TelnetLogger::log(const String& msg, LogLevel level) {
         case LogLevel::LOG_NORMAL:
         default: levelStr = ""; break;
     }
-    log("[" + ts + "] " + levelStr + msg);
+    String out = "[" + ts + "] " + levelStr + msg;
+    if (_bridge) {
+        _bridge->writeToClient(out.c_str());
+    }
 }
 
 void TelnetLogger::logStatus(const StatusInfo& statusInfo) {

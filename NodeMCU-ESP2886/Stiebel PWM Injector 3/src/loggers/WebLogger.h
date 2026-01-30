@@ -9,23 +9,17 @@ class StatusInfo;
 
 class WebLogger : public Logger {
 public:
-    WebLogger(size_t bufferSize = 2048);
-    ~WebLogger();
+    WebLogger(size_t maxLines = WEBLOGGER_BUFFER_LINES);
 
     void begin();
-    void log(const String& message) override;
-    void log(const String& message, LogLevel level) override;
+    void log(const String& message, LogLevel level = LogLevel::LOG_NORMAL) override;
     void logStatus(const StatusInfo& statusInfo) override;
     String getLogHtml() const;
-    String getLogText() const;
     void clear();
 
-
 private:
-    char* buffer;
-    size_t bufferSize;
-    size_t writePos;
-    void appendToBuffer(const String& message);
+    std::vector<String> logLines;
+    size_t maxLines;
 };
 
 #endif // WEBLOGGER_H

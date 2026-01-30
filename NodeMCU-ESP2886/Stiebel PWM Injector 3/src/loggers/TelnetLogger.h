@@ -6,8 +6,7 @@
 class TelnetLogger : public Logger {
 public:
     TelnetLogger(TelnetBridge* bridge) : _bridge(bridge) {}
-    void log(const String& msg) override;
-    void log(const String& msg, LogLevel level) override;
+    void log(const String& msg, LogLevel level = LogLevel::LOG_NORMAL) override;
     void logStatus(const StatusInfo& statusInfo) override;
 private:
     TelnetBridge* _bridge;

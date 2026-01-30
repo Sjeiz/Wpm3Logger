@@ -9,7 +9,7 @@
 LogManager::LogManager()
     : count(0), lastStatusLog(0) {
     telnetBridge = new TelnetBridge(new WiFiServer(23));
-    webLogger = new WebLogger(WEBLOGGER_BUFFER_SIZE);
+    webLogger = new WebLogger(WEBLOGGER_BUFFER_LINES);
 }
 
 TelnetBridge* LogManager::getTelnetBridge() {
@@ -26,9 +26,6 @@ void LogManager::addLogger(Logger* logger) {
     }
 }
 
-void LogManager::log(const String& msg) {
-    log(msg, LogLevel::LOG_NORMAL);
-}
 
 void LogManager::log(const String& msg, LogLevel level) {
     for (int i = 0; i < count; ++i) {
