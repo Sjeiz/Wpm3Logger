@@ -7,6 +7,31 @@
 #include "test.h"
 #include "loggers/Logger.h"
 
+void updateStatusInfo(StatusInfo &info) {
+  snprintf(info.stateName, sizeof(info.stateName), "%s", stateManager.currentStateName());
+  if (pumpBlocked) {
+    snprintf(info.outputStatus, sizeof(info.outputStatus), "BLOCKED");
+  } else if (pumpForced) {
+    snprintf(info.outputStatus, sizeof(info.outputStatus), "FORCED");
+  } else {
+    snprintf(info.outputStatus, sizeof(info.outputStatus), "NORMAL");
+  }
+  uint16_t isgStatus = modbusOverrideFlag & modbusManager.isInitialized() ? modbusOverrideBits : modbusManager.getByName("OPERATING_STATUS");
+  snprintf(info.compressorStr, sizeof(info.compressorStr), "%s", (isgStatus & ISG_STATUS_COMPRESSOR) ? "ON" : "OFF");
+  if (pwmOut > 10) {
+    int percent = (int)((pwmOut / 1023.0f) * 100.0f + 0.5f);
+    snprintf(info.pwmOutVal, sizeof(info.pwmOutVal), "%d%%", percent);
+  } else {
+    snprintf(info.pwmOutVal, sizeof(info.pwmOutVal), "OFF");
+  }
+  info.flowTemp = flowTempSensor.read();
+  info.flowRate = modbusOverrideFlag & modbusManager.isInitialized() ? 0 : modbusManager.getByName("FLOW_RATE");
+  info.wifiOk = networkManager.isWiFiConnected();
+  snprintf(info.modbusStr, sizeof(info.modbusStr), "%s", evaluateIsgStatus(isgStatus));
+  unsigned long elapsedMs = millis() - stateEnterTime;
+  snprintf(info.stateTimeStr, sizeof(info.stateTimeStr), "%s", elapsedTimeToString(elapsedMs).c_str());
+}
+
 
 // Formatteert een StatusInfo tot een logregel (zonder newline), zonder heap-allocatie
 const char* formatStatusLogLine(const StatusInfo& statusInfo) {
@@ -27,15 +52,15 @@ const char* formatStatusLogLine(const StatusInfo& statusInfo) {
   static char buf[320];
   snprintf(buf, sizeof(buf),
     "State: %s (%s)  PumpHK2:%s  Compressor:%s  PWM-out:%s  Flow:%s @ %s  WiFi:%s  Modbus:%s",
-    statusInfo.stateName.c_str(),
-    statusInfo.stateTimeStr.c_str(),
-    statusInfo.outputStatus.c_str(),
-    statusInfo.compressorStr.c_str(),
-    statusInfo.pwmOutVal.c_str(),
+    statusInfo.stateName,
+    statusInfo.stateTimeStr,
+    statusInfo.outputStatus,
+    statusInfo.compressorStr,
+    statusInfo.pwmOutVal,
     flowTempStr,
     flowRateStr,
     statusInfo.wifiOk ? "OK" : "FAIL",
-    statusInfo.modbusStr.c_str()
+    statusInfo.modbusStr
   );
   return buf;
 }

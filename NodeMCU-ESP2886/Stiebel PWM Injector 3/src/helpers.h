@@ -1,11 +1,9 @@
 
 
-
 #pragma once
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include "config.h"
-
 #include "classes/StatusInfo.h"
 
 // Formatteert een StatusInfo tot een logregel (zonder newline, geen heap-allocatie)
@@ -25,3 +23,6 @@ void handleSerialTestInput();
 String elapsedTimeToString(unsigned long elapsedMs);
 void tryInitModbusManager();
 const char* evaluateIsgStatus(uint16_t isgStatus);
+
+// Fills StatusInfo struct using global managers and sensors
+void updateStatusInfo(StatusInfo &info);

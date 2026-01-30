@@ -1,11 +1,10 @@
-#include "config.h"
 
 
 #pragma once
 #include <stdint.h>
 #include <Arduino.h>
 #include <functional>
-#include "../include/config.h"
+#include "config.h"
 
 // --- State interface & BaseState ---
 class State {

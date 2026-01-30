@@ -2,13 +2,13 @@
 #include <Arduino.h>
 
 struct StatusInfo {
-    String stateName;
-    String outputStatus;
-    String compressorStr;
-    String pwmOutVal;
+    char stateName[16];
+    char outputStatus[8];
+    char compressorStr[4];
+    char pwmOutVal[8];
     float flowTemp;
-    float flowRate = 0.0f;
+    uint16_t flowRate;
     bool wifiOk;
-    String modbusStr;
-    String stateTimeStr;
+    char modbusStr[24];
+    char stateTimeStr[16];
 };

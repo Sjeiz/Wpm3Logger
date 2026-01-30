@@ -100,34 +100,14 @@ void loop() {
   // 3. Update outputs based on state
   outputManager.loop(stateManager.currentStateName());
 
-  // 4. Read back actual output states
-  bool pumpBlocked = digitalRead(PIN_PUMP_BLOCKED) == HIGH;
-  bool pumpForced  = digitalRead(PIN_PUMP_FORCE) == HIGH;
-  int pwmVal = analogRead(PIN_PWM_OUT);
+  // 4. Read back actual output states naar globale variabelen
+  pumpBlocked = digitalRead(PIN_PUMP_BLOCKED) == HIGH;
+  pumpForced  = digitalRead(PIN_PUMP_FORCE) == HIGH;
+  pwmOut      = analogRead(PIN_PWM_OUT);
 
   // 5. Fill StatusInfo with latest data (now reflecting actual outputs)
   StatusInfo statusInfo;
-  statusInfo.stateName     = stateManager.currentStateName();
-  if (pumpBlocked) {
-    statusInfo.outputStatus = "BLOCKED";
-  } else if (pumpForced) {
-    statusInfo.outputStatus = "FORCED";
-  } else {
-    statusInfo.outputStatus = "NORMAL";
-  }
-  statusInfo.compressorStr = (isgStatus & ISG_STATUS_COMPRESSOR) ? "ON" : "OFF";
-  if (pwmVal > 10) {
-    int percent = (int)((pwmVal / 1023.0f) * 100.0f + 0.5f);
-    statusInfo.pwmOutVal = String(percent) + "%";
-  } else {
-    statusInfo.pwmOutVal = "OFF";
-  }
-  statusInfo.flowTemp      = flowTempSensor.read();
-  statusInfo.flowRate      = isgFlowRate;
-  statusInfo.wifiOk        = networkManager.isWiFiConnected();
-  statusInfo.modbusStr     = evaluateIsgStatus(isgStatus);
-  unsigned long elapsedMs  = millis() - stateEnterTime;
-  statusInfo.stateTimeStr  = elapsedTimeToString(elapsedMs);
+  updateStatusInfo(statusInfo);
 
   // 6. Log status
   logManager.loop(statusInfo);

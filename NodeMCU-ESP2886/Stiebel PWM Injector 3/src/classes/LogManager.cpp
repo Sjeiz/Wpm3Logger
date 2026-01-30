@@ -1,7 +1,5 @@
 #include "LogManager.h"
 #include "StatusInfo.h"
-
-
 #include "../loggers/TelnetBridge.h"
 #include "../loggers/WebLogger.h"
 #include <ESP8266WiFi.h>

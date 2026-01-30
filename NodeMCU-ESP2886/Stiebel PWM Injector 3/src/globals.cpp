@@ -23,5 +23,10 @@ ModbusManager modbusManager(MODBUS_CONFIG);
 StateManager stateManager;
 unsigned long stateEnterTime = 0;
 
+// Globale inputstatus
+bool pumpBlocked = false;
+bool pumpForced = false;
+int pwmOut = 0;
+
 #include <ESP8266WiFi.h>
 IPAddress isgIp;

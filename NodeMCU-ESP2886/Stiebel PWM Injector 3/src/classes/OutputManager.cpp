@@ -1,5 +1,3 @@
-
-
 #include "config.h"
 #include "OutputManager.h"
 #include "../include/config.h"

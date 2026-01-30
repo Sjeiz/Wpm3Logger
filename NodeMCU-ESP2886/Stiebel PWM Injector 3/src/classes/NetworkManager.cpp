@@ -1,6 +1,7 @@
 #include <ESP8266WiFi.h>
 #include "NetworkManager.h"
 #include "helpers.h"
+#include "globals.h"
 
 NetworkManager::NetworkManager()
     : wifiConnected(false), lastWiFiAttempt(0), lastNTPSync(0), telnetServer(23) {}
@@ -25,6 +26,12 @@ void NetworkManager::begin() {
 void NetworkManager::loop() {
     ArduinoOTA.handle();
     handleTelnet();
+
+    // Controleer WiFi en reconnect indien nodig
+    if (!wifiConnected || WiFi.status() != WL_CONNECTED) {
+        tryConnectWiFi();
+    }
+
     // NTP resync op basis van interval in minuten
     const unsigned long ntpResyncIntervalMs = NTP_RESYNC_INTERVAL_MIN * 60000UL;
     if (wifiConnected && millis() - lastNTPSync >= ntpResyncIntervalMs) {
@@ -55,6 +62,16 @@ void NetworkManager::tryConnectWiFi() {
     if (wifiConnected) {
         logMessage("\xE2\x9C\x85 WiFi connected: " + WiFi.localIP().toString());
         syncTimeWithNTP();
+        // Herinitialiseer ModbusManager direct na WiFi reconnect
+        extern IPAddress isgIp;
+        modbusManager.begin(isgIp, ISG_PORT);
+        // Dummy-read om eerste mislukte Modbus-read te negeren
+        modbusManager.getByName("OPERATING_STATUS");
+        if (modbusManager.isInitialized()) {
+            logMessage("[INFO] ModbusManager initialized (WiFi reconnected)");
+        } else {
+            logMessage("[WARN] ModbusManager init failed (host unresolved)");
+        }
     } else {
         logMessage("\xE2\x9D\x8C WiFi connection failed!");
     }
