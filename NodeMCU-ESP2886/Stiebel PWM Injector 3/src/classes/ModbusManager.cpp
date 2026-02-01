@@ -118,17 +118,17 @@ void ModbusManager::startAsyncRead(uint8_t index) {
         addr,                // register address
         1                    // count
     );
-    logMessage("[DEBUG] ModbusManager starting async read of register: " + String(cfg.regs[index].name) + " (addr " + String(addr) + ")", LogLevel::LOG_DEBUG);
+    //logMessage("[DEBUG] ModbusManager starting async read of register: " + String(cfg.regs[index].name) + " (addr " + String(addr) + ")", LogLevel::LOG_DEBUG);
 }
 
 void ModbusManager::handleModbusData(ModbusMessage response, uint32_t token) {
-    logMessage("[DEBUG] ModbusManager received response for token: " + String(token), LogLevel::LOG_DEBUG);
+    //logMessage("[DEBUG] ModbusManager received response for token: " + String(token), LogLevel::LOG_DEBUG);
     if (token < cfg.count) {
         uint16_t val;
         uint8_t dataHi = response[3];
         uint8_t dataLo = response[4];
         val = (dataHi << 8) | dataLo;
-        logMessage("[DEBUG] ModbusManager received data for register: " + String(cfg.regs[token].name) + " value: " + String(val) + " dataHi:" + String(dataHi) + " dataLo:" + String(dataLo), LogLevel::LOG_DEBUG);
+        //logMessage("[DEBUG] ModbusManager received data for register: " + String(cfg.regs[token].name) + " value: " + String(val) + " dataHi:" + String(dataHi) + " dataLo:" + String(dataLo), LogLevel::LOG_DEBUG);
         values[token] = val;
     }
 
@@ -139,6 +139,12 @@ void ModbusManager::handleModbusData(ModbusMessage response, uint32_t token) {
 void ModbusManager::handleModbusError(Error error, uint32_t token) {
     if (token < cfg.count) {
         values[token] = ISG_MODBUS_READ_ERROR;
+    }
+
+    // Herinitialiseer bij error 224 (TCP timeout/disconnect)
+    if ((uint8_t)error == 224) {
+        initialized = false;
+        logMessage("[WARN] ModbusManager: error 224 gedetecteerd, client wordt opnieuw geïnitialiseerd");
     }
 
     busy = false;

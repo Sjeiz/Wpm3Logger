@@ -21,6 +21,11 @@ private:
     uint32_t _totalTicks;
     uint32_t _risingEdges;
     uint8_t _lastPinState;
+    // Moving average buffer
+    static const uint8_t MA_SIZE = 20;
+    float _maBuffer[MA_SIZE];
+    uint8_t _maIndex = 0;
+    uint8_t _maCount = 0;
 };
 
 #endif // PWMIN_SENSOR_H

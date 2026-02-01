@@ -25,24 +25,49 @@ void WebLogger::streamLogHtml(ESP8266WebServer& server) const {
 
 // Only log if relevant statusInfo fields differ from previous (excluding stateTimeStr)
 void WebLogger::logStatus(const StatusInfo& statusInfo) {
-    static StatusInfo lastStatusInfo; // default init, always different the first time
-    static unsigned long lastDetailLogMs = 0;
-    bool changed = false;
-    changed |= statusInfo.stateName != lastStatusInfo.stateName;
-    changed |= statusInfo.outputStatus != lastStatusInfo.outputStatus;
-    changed |= statusInfo.compressorStr != lastStatusInfo.compressorStr;
-    changed |= statusInfo.pwmOutVal != lastStatusInfo.pwmOutVal;
-    // Only log significant temperature changes (margin ±0.2)
-    changed |= fabs(statusInfo.flowTemp - lastStatusInfo.flowTemp) > WEBLOGGER_TEMP_DELTA;
-    changed |= statusInfo.wifiOk != lastStatusInfo.wifiOk;
-    changed |= statusInfo.modbusStr != lastStatusInfo.modbusStr;
-    unsigned long nowMs = millis();
-    unsigned long intervalMs = WEBLOGGER_DETAIL_INTERVAL_SEC * 1000UL;
-    bool timeElapsed = (nowMs - lastDetailLogMs) >= intervalMs;
-    if (changed || timeElapsed) {
+    // --- Detailregel criteria ---
+    // 1. Minimaal 1 update per WEBLOGGER_DETAIL_INTERVAL_SEC
+    // 2. Update bij statechange
+    // 3. Update bij pump mode change
+    // 4. Update bij compressor change
+    // 5. Update bij PWM-in change > WEBLOGGER_PWMIN_DELTA_PCT
+    // 6. Update bij flowtemp change > WEBLOGGER_TEMP_DELTA
+    // 7. Update bij flowrate change > WEBLOGGER_FLOW_DELTA_PCT
+    // 8. Update bij Wifi change
+    // 9. Update bij modbus change
+
+    static StatusInfo prev = {};
+    static unsigned long lastDetail = 0;
+    unsigned long now = millis();
+    bool logDetail = false;
+
+    // 1. Minimaal 1 update per interval
+    if (now - lastDetail > WEBLOGGER_DETAIL_INTERVAL_SEC * 1000UL) logDetail = true;
+    // 2. Statechange
+    if (strcmp(statusInfo.stateName, prev.stateName) != 0) logDetail = true;
+    // 3. Pump mode change
+    if (strcmp(statusInfo.outputStatus, prev.outputStatus) != 0) logDetail = true;
+    // 4. Compressor change
+    if (strcmp(statusInfo.compressorStr, prev.compressorStr) != 0) logDetail = true;
+    // 5. PWM-in change
+    float pwmInNow = atof(statusInfo.pwmInVal);
+    float pwmInPrev = atof(prev.pwmInVal);
+    if (fabs(pwmInNow - pwmInPrev) >= WEBLOGGER_PWMIN_DELTA_PCT) logDetail = true;
+    // 6. Flowtemp change
+    if (fabs(statusInfo.flowTemp - prev.flowTemp) >= WEBLOGGER_TEMP_DELTA) logDetail = true;
+    // 7. Flowrate change
+    float flowPctNow = statusInfo.flowRate;
+    float flowPctPrev = prev.flowRate;
+    if (flowPctPrev > 0 && fabs(flowPctNow - flowPctPrev) / flowPctPrev * 100.0f >= WEBLOGGER_FLOW_DELTA_PCT) logDetail = true;
+    // 8. Wifi change
+    if (statusInfo.wifiOk != prev.wifiOk) logDetail = true;
+    // 9. Modbus change
+    if (strcmp(statusInfo.modbusStr, prev.modbusStr) != 0) logDetail = true;
+
+    if (logDetail) {
         this->log(formatStatusLogLine(statusInfo));
-        lastStatusInfo = statusInfo;
-        lastDetailLogMs = nowMs;
+        lastDetail = now;
+        prev = statusInfo;
     }
 }
 

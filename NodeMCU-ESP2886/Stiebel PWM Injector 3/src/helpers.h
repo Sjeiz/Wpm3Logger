@@ -24,5 +24,9 @@ String elapsedTimeToString(unsigned long elapsedMs);
 void tryInitModbusManager();
 const char* evaluateIsgStatus(uint16_t isgStatus);
 
+
+// Decodeert Modbus status bitflags naar string (HK2_PUMP alleen als commentaar)
+String decodeModbusStatus(uint16_t status);
+
 // Returns StatusInfo struct using provided values
 StatusInfo updateStatusInfo(uint16_t isgStatus, float flowTemp, uint16_t flowRate, float pwmIn, int pwmOut, bool pumpBlocked, bool pumpForced);

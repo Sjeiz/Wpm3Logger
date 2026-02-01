@@ -8,7 +8,7 @@
 
 
 // Logging configuration
-const bool DEBUG   = false;
+const bool DEBUG   = true;
 const bool VERBOSE = false;
 
 // WiFi credentials
@@ -23,19 +23,19 @@ const char* OTA_PASSWORD = "StiebelPumpControl";
 
 // Modbus/ISG configuration
 const char* ISG_HOST                = "servicewelt.iot.cheizoo.lan";
-const int ISG_PORT = 502;
+const int ISG_PORT                  = 502;
 const int ISG_OPERATING_STATUS_ADDR = 2500;
-const int ISG_POLL_INTERVAL_SEC     = 5;
+const int ISG_POLL_INTERVAL_SEC     = 10;
 const ModbusRegDef MODBUS_REGS[]    = {	{"OPERATING_STATUS", 2500},	{"FLOW_RATE", 520}};
-const ModbusConfig MODBUS_CONFIG = {MODBUS_REGS, sizeof(MODBUS_REGS) / sizeof(ModbusRegDef)};
+const ModbusConfig MODBUS_CONFIG    = {MODBUS_REGS, sizeof(MODBUS_REGS) / sizeof(ModbusRegDef)};
 
 
 // PWM configuration
 const int PWM_OUT_FREQUENCY_HZ = 150;
-const int PWM_OUT_DUTY_PERCENT = 25; // Standaard uitgangs PWM duty cycle percentage
+const int PWM_OUT_DUTY_PERCENT = 25; // Default output PWM duty cycle percentage
 
 // Post-run timer
-const int POST_RUN_DURATION_MIN = 30;
+const int POST_RUN_DURATION_MIN = 20; // Minutes the pump keeps running after a cycle
 
 // Time configuration
 const char* TIMEZONE              = "CET-1CEST,M3.5.0/2,M10.5.0/3"; // Europe/Amsterdam
@@ -45,6 +45,8 @@ const int NTP_RESYNC_INTERVAL_MIN = 60;
 // WebLogger configuration
 // Note: WEBLOGGER_LINES_COUNT must be defined in WebLogger.h due to compiler constraints
 // Note: WEBLOGGER_LINES_LENGTH must be defined in WebLogger.h due to compiler constraints
-const float WEBLOGGER_TEMP_DELTA         = 0.2; // Temperatuur verschil delta voor logging
-const int WEBLOGGER_DETAIL_INTERVAL_SEC  = 900;  // Minimaal elke 60 seconden een detailregel
-const int WEBLOGGER_REFRESH_PAGE_SEC     = ISG_POLL_INTERVAL_SEC / 2;  // WebLogger page refresh interval (seconden)
+const float WEBLOGGER_TEMP_DELTA         = 0.2; // Temperature difference delta for logging (°C)
+const float WEBLOGGER_FLOW_DELTA_PCT     = 5; // Flow rate difference delta for logging (%)
+const float WEBLOGGER_PWMIN_DELTA_PCT    = 20; // PWM input difference delta for logging (%)
+const int WEBLOGGER_DETAIL_INTERVAL_SEC  = 600;  // At least every xxx seconds a detail line
+const int WEBLOGGER_REFRESH_PAGE_SEC     = ISG_POLL_INTERVAL_SEC / 2;  // WebLogger page refresh interval (seconds)

@@ -46,10 +46,10 @@ void setup() {
   stateManager.begin(errorState);                  // Initialize state machine, starting in error state
   flowTempSensor.begin();                          // Initialize flow temperature sensor
 
-  // Los ISG_HOST op naar IP-adres en sla op in globale variabele (reboot if failed)
+  // Resolve ISG_HOST to IP address and store in global variable (reboot if failed)
   isgIp = resolveHost(ISG_HOST);
   if (isgIp == IPAddress(0,0,0,0)) {
-    logMessage("💥 ISG_HOST DNS-resolutie mislukt, rebooting...");
+    logMessage("💥 ISG_HOST DNS resolution failed, rebooting...");
     unsigned long start = millis();
     while (millis() - start < 10000UL) {
       webServerManager.handleClient();
@@ -60,7 +60,7 @@ void setup() {
     ESP.restart();
   }
 
-  // Start ModbusManager met IP-adres
+  // Start ModbusManager with IP address
   modbusManager.begin(isgIp, ISG_PORT);
 
   char heapMsg[64];
@@ -82,7 +82,7 @@ void loop() {
   logManager.getTelnetBridge()->handleClient();
   webServerManager.handleClient();
 
-  // Herinitialiseer ModbusManager alleen met eerder opgeloste IP
+  // Re-initialize ModbusManager only with previously resolved IP
   if (!modbusManager.isInitialized()) {
     modbusManager.begin(isgIp, ISG_PORT);
   }
@@ -111,10 +111,10 @@ void loop() {
   // 3. Update outputs based on state
   outputManager.loop(stateManager.currentStateName());
 
-  // 4. Read back actual output states naar lokale variabelen
+  // 4. Read back actual output states to local variables
   bool pumpBlocked = digitalRead(PIN_PUMP_BLOCKED) == HIGH;
   bool pumpForced  = digitalRead(PIN_PUMP_FORCE) == HIGH;
-  int pwmOut      = PWM_OUT_DUTY_PERCENT;
+  int pwmOut      = outputManager.getCurrentPwmPercent();
 
   // 5. Fill StatusInfo with latest data (now reflecting actual outputs)
   StatusInfo statusInfo = updateStatusInfo(isgStatus, flowTemp, isgFlowRate, pwmIn, pwmOut, pumpBlocked, pumpForced);

@@ -6,12 +6,15 @@
 
 // WebLogger
 extern const float WEBLOGGER_TEMP_DELTA;
+extern const float WEBLOGGER_FLOW_DELTA;
+extern const float WEBLOGGER_FLOW_DELTA_PCT;
+extern const float WEBLOGGER_PWMIN_DELTA_PCT;
 extern const int WEBLOGGER_REFRESH_PAGE_SEC;
 extern const int WEBLOGGER_DETAIL_INTERVAL_SEC;
 
 
-// Interval voor temperatuur uitlezen (ms)
-// Interval voor NTP resync (min)
+// Interval for temperature reading (ms)
+// Interval for NTP resync (min)
 extern const int NTP_RESYNC_INTERVAL_MIN;
 
 
@@ -32,8 +35,8 @@ extern const bool VERBOSE;
 #define PIN_PUMP_FORCE   D7 // Output, normal low
 #define PIN_PUMP_BLOCKED D8 // Output, normal low
 
-// PWM configuratie
-extern const int PWM_OUT_FREQUENCY_HZ;   // PWM frequentie (Hz)
+// PWM configuration
+extern const int PWM_OUT_FREQUENCY_HZ;   // PWM frequency (Hz)
 extern const int PWM_OUT_DUTY_PERCENT;   // PWM duty cycle (%)
 
 // ISG_OPERATING_STATUS bitflag definitions
@@ -49,6 +52,7 @@ extern const int PWM_OUT_DUTY_PERCENT;   // PWM duty cycle (%)
 #define ISG_STATUS_DEFROSTING         0x0200 // B9
 #define ISG_STATUS_SILENT_MODE_1      0x0400 // B10
 #define ISG_STATUS_SILENT_MODE_2      0x0800 // B11
+
 
 // Modbus/ISG configuration
 extern const char* ISG_HOST;
@@ -71,9 +75,9 @@ extern const int WIFI_TIMEOUT_SEC;
 extern const int WIFI_RETRY_SEC;
 
 
-// NTP & tijdzone configuratie
+// NTP & timezone configuration
 extern const char* NTP_SERVER;
-extern const char* TIMEZONE; // bv. "CET-1CEST,M3.5.0/2,M10.5.0/3" voor Europa/Amsterdam
+extern const char* TIMEZONE; // e.g. "CET-1CEST,M3.5.0/2,M10.5.0/3" for Europe/Amsterdam
 
 // OTA password configuration
 extern const char* OTA_PASSWORD;
@@ -82,7 +86,7 @@ extern const char* OTA_PASSWORD;
 extern const char* DNS_SUFFIX;
 
 
-// State pointers (voor centralTransition)
+// State pointers (for centralTransition)
 class State;
 extern State* errorState;
 extern State* defrostState;

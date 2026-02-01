@@ -8,7 +8,9 @@ public:
     void setPostRun(int pwmPercent);
     void setNormal();
     void loop(const char* stateName);
+    int getCurrentPwmPercent() const { return currentPwmPercent; }
 private:
     const char* lastStateName = nullptr;
+    int currentPwmPercent = 0;
 };
 #endif // OUTPUTMANAGER_H

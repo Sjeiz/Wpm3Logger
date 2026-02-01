@@ -1,1 +1,0 @@
-TelnetLogger.cpp en TelnetLogger.h zijn nu veilig te verwijderen; alle verwijzingen zijn verwijderd of vervangen.

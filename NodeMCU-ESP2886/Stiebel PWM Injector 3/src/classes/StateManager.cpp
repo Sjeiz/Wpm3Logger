@@ -98,6 +98,14 @@ extern unsigned long stateEnterTime;
 
 void StateManager::update(uint16_t modbusStatus) {
     State* nextState = currentState->transition(modbusStatus);
+    // Debug logging: show pointer and name values before and after transition
+    Serial.printf("[DEBUG] update() called. currentState ptr: %p, nextState ptr: %p\n", currentState, nextState);
+    if (currentState) {
+        Serial.printf("[DEBUG] currentState name: %s\n", currentState->name());
+    }
+    if (nextState) {
+        Serial.printf("[DEBUG] nextState name: %s\n", nextState->name());
+    }
     if (nextState != currentState) {
         unsigned long now = millis();
         unsigned long lastStateDuration = now - stateEnterTime;
@@ -148,6 +156,9 @@ void StateManager::update(uint16_t modbusStatus) {
         currentState = nextState;
         currentState->enter();
         stateEnterTime = now;
+        Serial.printf("[DEBUG] State transition detected. stateEnterTime set to: %lu\n", stateEnterTime);
+    } else {
+        Serial.printf("[DEBUG] No state transition. stateEnterTime unchanged: %lu\n", stateEnterTime);
     }
     currentState->handle();
 }
