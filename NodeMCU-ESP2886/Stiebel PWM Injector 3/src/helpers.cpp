@@ -27,12 +27,7 @@ StatusInfo updateStatusInfo(uint16_t isgStatus, float flowTemp, uint16_t flowRat
   snprintf(info.compressorStr, sizeof(info.compressorStr), "%s", (isgStatus & ISG_STATUS_COMPRESSOR) ? "ON" : "OFF");
 
   //PWM-out
-  if (pwmOut > 10) {
-    int percent = (int)((pwmOut / 1023.0f) * 100.0f + 0.5f);
-    snprintf(info.pwmOutVal, sizeof(info.pwmOutVal), "%d%%", percent);
-  } else {
-    snprintf(info.pwmOutVal, sizeof(info.pwmOutVal), "OFF");
-  }
+  snprintf(info.pwmOutVal, sizeof(info.pwmOutVal), "%d%%", PWM_OUT_DUTY_PERCENT);
 
   // PWM-in
   snprintf(info.pwmInVal, sizeof(info.pwmInVal), "%.0f%%", pwmIn);

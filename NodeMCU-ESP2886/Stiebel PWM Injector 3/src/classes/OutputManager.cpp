@@ -2,6 +2,7 @@
 #include "OutputManager.h"
 #include "../include/config.h"
 #include <Ticker.h>
+#include "../helpers.h"
 
 // Prototype for local use in this file
 void ledToggle(unsigned int onDuration, unsigned int offDuration, bool ledIsAan);
@@ -48,9 +49,11 @@ void OutputManager::setDefrost() {
     ledToggle(100, 100, false); // Snel knipperen
 }
 void OutputManager::setPostRun(int pwmPercent) {
-    digitalWrite(PIN_PUMP_FORCE, HIGH);
+    digitalWrite(PIN_PUMP_FORCE, LOW);
     digitalWrite(PIN_PUMP_BLOCKED, LOW);
-    analogWrite(PIN_PWM_OUT, (int)(pwmPercent * 1023 / 100));
+    int pwmValue = (int)(pwmPercent * 1023 / 100);
+    analogWrite(PIN_PWM_OUT, pwmValue);
+    logMessage(String("PWM-out set to ") + String(pwmValue) + " (duty " + String(pwmPercent) + "%)", LogLevel::LOG_DEBUG);
     ledTicker.detach();
     ledToggle(1000, 1000, false); // 1 sec aan/uit
 }

@@ -114,7 +114,7 @@ void loop() {
   // 4. Read back actual output states naar lokale variabelen
   bool pumpBlocked = digitalRead(PIN_PUMP_BLOCKED) == HIGH;
   bool pumpForced  = digitalRead(PIN_PUMP_FORCE) == HIGH;
-  int pwmOut      = analogRead(PIN_PWM_OUT);
+  int pwmOut      = PWM_OUT_DUTY_PERCENT;
 
   // 5. Fill StatusInfo with latest data (now reflecting actual outputs)
   StatusInfo statusInfo = updateStatusInfo(isgStatus, flowTemp, isgFlowRate, pwmIn, pwmOut, pumpBlocked, pumpForced);

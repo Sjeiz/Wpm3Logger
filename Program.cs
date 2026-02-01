@@ -373,14 +373,33 @@ class Program
 
     // State machine
     static string DecodeState(ushort status)
-    {
-        if ((status & 0b00000001) != 0) return "HEATING";
-        if ((status & 0b00000010) != 0) return "WATER";
-        if ((status & 0b00000100) != 0) return "COOLING";
-        if ((status & 0b00001000) != 0) return "DEFROST";
-        if ((status & 0b00010000) != 0) return "PUMP_ONLY";
-        return "IDLE";
-    }
+	{
+		List<string> flags = new();
+
+		// Mode bits
+		if ((status & (1 << 4)) != 0) flags.Add("HEATING");     // B4: WP IM HEIZBETRIEB
+		if ((status & (1 << 5)) != 0) flags.Add("WATER");       // B5: WP IM WARMWASSERBETRIEB
+		if ((status & (1 << 8)) != 0) flags.Add("COOLING");     // B8: KUEHLBETRIEB
+		if ((status & (1 << 9)) != 0) flags.Add("DEFROST");     // B9: ABTAUEN
+
+		// Compressor
+		if ((status & (1 << 6)) != 0) flags.Add("COMPRESSOR");  // B6: VERDICHTER IN BETRIEB
+
+		// NHZ
+		if ((status & (1 << 3)) != 0) flags.Add("NHZ");         // B3: NHZ STUFEN IN BETRIEB
+
+		// Pompen
+		if ((status & (1 << 0)) != 0) flags.Add("HK1_PUMP");    // B0
+		//if ((status & (1 << 1)) != 0) flags.Add("HK2_PUMP");    // B1
+
+		// Zomerbedrijf
+		if ((status & (1 << 7)) != 0) flags.Add("SUMMER");      // B7: SOMMERBETRIEB
+
+		if (flags.Count == 0)
+			return "IDLE";
+
+		return string.Join(" ", flags);
+	}
 
     // ASCII grafiek
     static string Bar(double value, double max = 70)
