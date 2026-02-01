@@ -11,3 +11,4 @@ secrets/
 *.img
 *.vhdx
 Wpm3Logger_*.csv
+ISGAPILogger_*.csv
