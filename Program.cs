@@ -373,33 +373,32 @@ class Program
 
     // State machine
     static string DecodeState(ushort status)
-	{
-		List<string> flags = new();
+    {
+        List<string> flags = new();
 
-		// Mode bits
-		if ((status & (1 << 4)) != 0) flags.Add("HEATING");     // B4: WP IM HEIZBETRIEB
-		if ((status & (1 << 5)) != 0) flags.Add("WATER");       // B5: WP IM WARMWASSERBETRIEB
-		if ((status & (1 << 8)) != 0) flags.Add("COOLING");     // B8: KUEHLBETRIEB
-		if ((status & (1 << 9)) != 0) flags.Add("DEFROST");     // B9: ABTAUEN
+        // --- POMPEN ---
+        if ((status & (1 << 0)) != 0) flags.Add("HK1_PUMP");     // B0
+        // if ((status & (1 << 1)) != 0) flags.Add("HK2_PUMP");  // B1 (genegeerd volgens contract)
 
-		// Compressor
-		if ((status & (1 << 6)) != 0) flags.Add("COMPRESSOR");  // B6: VERDICHTER IN BETRIEB
+        // --- PROGRAMMA'S / MODES ---
+        // if ((status & (1 << 2)) != 0) flags.Add("HEATUP");    // B2: HEAT-UP PROGRAM (niet gebruikt)
+        if ((status & (1 << 3)) != 0) flags.Add("NHZ");          // B3: NHZ STAGES RUNNING
+        if ((status & (1 << 4)) != 0) flags.Add("HEATING");      // B4: HP IN HEATING MODE
+        if ((status & (1 << 5)) != 0) flags.Add("WATER");        // B5: HP IN DHW MODE
+        if ((status & (1 << 6)) != 0) flags.Add("COMPRESSOR");   // B6: COMPRESSOR RUNNING
+        if ((status & (1 << 7)) != 0) flags.Add("SUMMER");       // B7: SUMMER MODE ACTIVE
+        if ((status & (1 << 8)) != 0) flags.Add("COOLING");      // B8: COOLING MODE ACTIVE
+        if ((status & (1 << 9)) != 0) flags.Add("DEFROST");      // B9: DEFROST MODE
 
-		// NHZ
-		if ((status & (1 << 3)) != 0) flags.Add("NHZ");         // B3: NHZ STUFEN IN BETRIEB
+        // --- SILENT MODES ---
+        // if ((status & (1 << 10)) != 0) flags.Add("SILENT1");  // B10: SILENT MODE 1 ACTIVE
+        // if ((status & (1 << 11)) != 0) flags.Add("SILENT2");  // B11: SILENT MODE 2 ACTIVE (HP OFF)
 
-		// Pompen
-		if ((status & (1 << 0)) != 0) flags.Add("HK1_PUMP");    // B0
-		//if ((status & (1 << 1)) != 0) flags.Add("HK2_PUMP");    // B1
+        if (flags.Count == 0)
+            return "IDLE";
 
-		// Zomerbedrijf
-		if ((status & (1 << 7)) != 0) flags.Add("SUMMER");      // B7: SOMMERBETRIEB
-
-		if (flags.Count == 0)
-			return "IDLE";
-
-		return string.Join(" ", flags);
-	}
+        return string.Join(" ", flags);
+    }
 
     // ASCII grafiek
     static string Bar(double value, double max = 70)
