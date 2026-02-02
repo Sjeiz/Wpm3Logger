@@ -47,8 +47,8 @@ State* centralTransition(uint16_t modbusStatus, State* previousState) {
     // Compressor active?
     bool compressorAan = (modbusStatus & ISG_STATUS_COMPRESSOR);
 
-    // Minimaal minStateTime in elke status blijven
-    if ((now - stateEnterTime) < minStateTime) {
+    // Minimaal minStateTime in elke status blijven, behalve bij errorState
+    if (previousState != errorState && (now - stateEnterTime) < minStateTime) {
         return previousState;
     }
 
