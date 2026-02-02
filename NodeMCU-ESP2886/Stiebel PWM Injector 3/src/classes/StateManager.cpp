@@ -21,6 +21,16 @@ unsigned long postRunEndTime = 0;
 // Central transition function
 State* centralTransition(uint16_t modbusStatus, State* previousState) {
     const unsigned long postRunTimeout = POST_RUN_DURATION_MIN * 60000UL;
+    const unsigned long minStateTime = ISG_POLL_STABLETIME_SEC * 1000UL;
+    static unsigned long stateEnterTime = 0;
+    static State* lastState = nullptr;
+    unsigned long now = millis();
+
+    // Detect state change
+    if (previousState != lastState) {
+        stateEnterTime = now;
+        lastState = previousState;
+    }
 
     // ERROR overrules everything
     if (modbusStatus == ISG_MODBUS_READ_ERROR) {
@@ -36,6 +46,11 @@ State* centralTransition(uint16_t modbusStatus, State* previousState) {
 
     // Compressor active?
     bool compressorAan = (modbusStatus & ISG_STATUS_COMPRESSOR);
+
+    // Minimaal minStateTime in elke status blijven
+    if ((now - stateEnterTime) < minStateTime) {
+        return previousState;
+    }
 
     // HOT_WATER → POST_RUN when compressor turns off
     if (!compressorAan && previousState == hotWaterState) {

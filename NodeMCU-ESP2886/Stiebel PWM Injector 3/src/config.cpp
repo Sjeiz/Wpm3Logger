@@ -26,6 +26,7 @@ const char* ISG_HOST                = "servicewelt.iot.cheizoo.lan";
 const int ISG_PORT                  = 502;
 const int ISG_OPERATING_STATUS_ADDR = 2500;
 const int ISG_POLL_INTERVAL_SEC     = 10;
+const int ISG_POLL_STABLETIME_SEC   = 30; // Time in seconds to consider ISG data stable after a change
 const ModbusRegDef MODBUS_REGS[]    = {	{"OPERATING_STATUS", 2500},	{"FLOW_RATE", 520}};
 const ModbusConfig MODBUS_CONFIG    = {MODBUS_REGS, sizeof(MODBUS_REGS) / sizeof(ModbusRegDef)};
 
@@ -35,7 +36,7 @@ const int PWM_OUT_FREQUENCY_HZ = 150;
 const int PWM_OUT_DUTY_PERCENT = 25; // Default output PWM duty cycle percentage
 
 // Post-run timer
-const int POST_RUN_DURATION_MIN = 20; // Minutes the pump keeps running after a cycle
+const int POST_RUN_DURATION_MIN = 15; // Minutes the pump keeps running after a cycle
 
 // Time configuration
 const char* TIMEZONE              = "CET-1CEST,M3.5.0/2,M10.5.0/3"; // Europe/Amsterdam

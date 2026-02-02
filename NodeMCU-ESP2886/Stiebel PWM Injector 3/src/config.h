@@ -54,11 +54,13 @@ extern const int PWM_OUT_DUTY_PERCENT;   // PWM duty cycle (%)
 #define ISG_STATUS_SILENT_MODE_2      0x0800 // B11
 
 
+
 // Modbus/ISG configuration
 extern const char* ISG_HOST;
 extern const int ISG_PORT;
 extern const int ISG_OPERATING_STATUS_ADDR;
 extern const int ISG_POLL_INTERVAL_SEC;
+extern const int ISG_POLL_STABLETIME_SEC;
 #define ISG_MODBUS_READ_ERROR 0xFFFF 
 #define ISG_SLAVE_ID 1
 struct ModbusRegDef {const char* name; uint16_t address;};
