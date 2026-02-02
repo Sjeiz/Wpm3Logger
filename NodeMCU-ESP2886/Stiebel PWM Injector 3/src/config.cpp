@@ -36,7 +36,7 @@ const int PWM_OUT_FREQUENCY_HZ = 150;
 const int PWM_OUT_DUTY_PERCENT = 25; // Default output PWM duty cycle percentage
 
 // Post-run timer
-const int POST_RUN_DURATION_MIN = 15; // Minutes the pump keeps running after a cycle
+const int POST_RUN_DURATION_MIN = 20; // Minutes the pump keeps running after a warm water cycle
 
 // Time configuration
 const char* TIMEZONE              = "CET-1CEST,M3.5.0/2,M10.5.0/3"; // Europe/Amsterdam

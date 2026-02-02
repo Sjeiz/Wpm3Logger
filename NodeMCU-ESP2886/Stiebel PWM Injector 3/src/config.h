@@ -40,16 +40,16 @@ extern const int PWM_OUT_FREQUENCY_HZ;   // PWM frequency (Hz)
 extern const int PWM_OUT_DUTY_PERCENT;   // PWM duty cycle (%)
 
 // ISG_OPERATING_STATUS bitflag definitions
-#define ISG_STATUS_HK1_PUMP           0x0001 // B0
-#define ISG_STATUS_HK2_PUMP           0x0002 // B1
-#define ISG_STATUS_HEAT_UP_PROGRAM    0x0004 // B2
-#define ISG_STATUS_NHZ_STAGES_RUNNING 0x0008 // B3
-#define ISG_STATUS_HEATING            0x0010 // B4
-#define ISG_STATUS_HOT_WATER          0x0020 // B5
-#define ISG_STATUS_COMPRESSOR         0x0040 // B6
-#define ISG_STATUS_SUMMER_MODE_ACTIVE 0x0080 // B7
-#define ISG_STATUS_COOLING            0x0100 // B8
-#define ISG_STATUS_DEFROSTING         0x0200 // B9
+#define ISG_STATUS_HK1_PUMP           0x0001 // B00
+#define ISG_STATUS_HK2_PUMP           0x0002 // B01
+#define ISG_STATUS_HEAT_UP_PROGRAM    0x0004 // B02
+#define ISG_STATUS_NHZ_STAGES_RUNNING 0x0008 // B03
+#define ISG_STATUS_HEATING            0x0010 // B04
+#define ISG_STATUS_HOT_WATER          0x0020 // B05
+#define ISG_STATUS_COMPRESSOR         0x0040 // B06
+#define ISG_STATUS_SUMMER_MODE_ACTIVE 0x0080 // B07
+#define ISG_STATUS_COOLING            0x0100 // B08
+#define ISG_STATUS_DEFROSTING         0x0200 // B09
 #define ISG_STATUS_SILENT_MODE_1      0x0400 // B10
 #define ISG_STATUS_SILENT_MODE_2      0x0800 // B11
 

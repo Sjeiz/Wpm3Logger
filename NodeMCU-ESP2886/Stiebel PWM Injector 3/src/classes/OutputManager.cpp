@@ -53,10 +53,11 @@ void OutputManager::setDefrost() {
 void OutputManager::setPostRun(int pwmPercent) {
     digitalWrite(PIN_PUMP_FORCE, HIGH); // Pump forced ON in post-run
     digitalWrite(PIN_PUMP_BLOCKED, LOW);
-    int pwmValue = (int)(pwmPercent * 1023 / 100);
+    // Inverteer PWM voor open collector met pull-up
+    int pwmValue = (int)((100 - pwmPercent) * 1023 / 100);
     analogWrite(PIN_PWM_OUT, pwmValue);
     currentPwmPercent = pwmPercent;
-    logMessage(String("PWM-out set to ") + String(pwmValue) + " (duty " + String(pwmPercent) + "%)", LogLevel::LOG_DEBUG);
+    logMessage(String("PWM-out set to ") + String(pwmValue) + " (duty " + String(pwmPercent) + "%, inverted)", LogLevel::LOG_DEBUG);
     ledTicker.detach();
     ledToggle(1000, 1000, false); // 1 second on/off
 }
