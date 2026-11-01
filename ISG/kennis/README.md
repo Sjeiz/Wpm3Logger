@@ -60,6 +60,26 @@ waren ook werkelijk ongeldig. De regel kent dus geen tegenvoorbeeld.
 Een waarde **boven** `65535` is juist geldig: dat is een 32-bits register (timestamps,
 grote tellers), en daar klopt de `max` uit de tester niet.
 
+### Waarom een drempel en geen bit-test
+
+De drempel ligt op `32768` omdat dat `0x8000` is: bit 15. Dat is het mechanisme in de
+firmware, en in het 16-bits bereik zijn de twee formuleringen aantoonbaar hetzelfde --
+over 10.618 waarnemingen geeft `v & 0x8000` nul keer een andere uitkomst dan
+`v >= 32768`.
+
+**Implementeer het toch niet als bit-test.** Dat faalt op twee plekken:
+
+- **Negatieve waarden.** Alle 187 waargenomen negatieve waarden hebben bit 15 gezet zodra
+  je ze als uint16 leest: `-400` is `0xFE70`, `-1` is `0xFFFF`. Een bit-test keurt dus elke
+  temperatuur onder nul af.
+- **32-bits registers.** Drie van de tien waargenomen 32-bits waarden hebben bit 15 van hun
+  lage helft gezet, bijvoorbeeld WebID 60019 = `0x696BF7D6` en WebID 60307 = `0x01C1D3F3`.
+  Dat zijn geldige timestamps en tellers.
+
+De drempel `32768 <= v <= 65535` drukt alle drie de voorwaarden uit die nodig zijn: bit 15
+gezet, het is een 16-bits getal, en het is niet als negatief geinterpreteerd. Een
+bit-operatie drukt alleen de eerste uit.
+
 ### Regel 2 -- sensor ontbreekt of is defect
 
 Staat er een echt bereik in de tester-uitvoer, dan is `waarde x schaal` buiten `[min, max]`
