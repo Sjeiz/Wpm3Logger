@@ -208,6 +208,48 @@ sentinel-lijsten zowel `32768` als `-32768` noemden.
 
 ---
 
+## Aangetoonde fouten
+
+Niet alles in dit dossier is samenvoegen; een deel is rechtzetten. Deze fouten zijn met
+meetdata of met de broncode aangetoond, niet vermoed.
+
+### In Stiebels eigen materiaal
+
+- `StiebelDoc_modbus.json` bevat een record met `unit: "6"` -- een getal waar een eenheid
+  hoort. Een keer in 331 records.
+- De live configuratie wijst **WebID 1123** aan als `VERDICHTER` onder STARTS, maar dat
+  register staat op 0; de waarde die de Service Welt toont (625) komt uit **1122**.
+- `_inc/pre7.inc` toetst op ongeldige waarden met een **stringvergelijking op geschaalde
+  getallen** (`"3686.4"`, `"-2867.2"`). Dat breekt zodra de schaalfactor van dat type
+  verandert, en het staat los van de centrale test in `isg_object.php`.
+- `0x9000` wordt niet centraal als ongeldig behandeld, `0x8000` wel. De regel zit dus op
+  twee plaatsen met twee verschillende mechanismen.
+- De `max` uit `isg_tester -p` klopt niet voor 32-bits registers: WebID 60018 meldt
+  `max 65535` en levert waarden van 1,77 miljard.
+
+### In ons eigen werk van januari 2026, nu gecorrigeerd
+
+- **21 modbus-adressen** in de afgeleide tabellen wezen naar het verkeerde WebID. Zeven
+  daarvan zijn met waarden hard weerlegd; het scherpst bij 30515 en 30516, waar de kolom
+  precies een positie verschoven stond. De overige zeven betreffen duplicaatregisters met
+  dezelfde waarde en zijn daarmee risicoloos.
+- **WebID 402** stond als "LAUFZEIT HEIZEN" met de aantekening dat het empirisch was
+  vastgesteld. Het is `PUMPENSTATUS`, een bitveld met elf benoemde pompen en mengers.
+- **`scaling`** oogde als vaststelling maar was voor 91% de default `1.0`: van de registers
+  met een naam had 32% een niet-triviale schaal, van de naamloze 0,2%.
+- **`-200` en `-400`** stonden als universele sentinel in `isg_logger_delta_engine.py`. Het
+  zijn de bereikgrenzen van niet-aangesloten sensoren, en dus een eigenschap van het
+  register -- bij een werkende sensor is `-40,0` graden een geldige meting.
+- `isg_json_exporter.sh` schreef de slotregel `object_count: 681` weg als WebID met lege
+  velden, waardoor beide JSON-dumps ongeldig waren.
+
+### In de Modbus-configuratie van Home Assistant
+
+- Tien registers van `wtype 11` staan op `scale: 1.0` waar `sf::normalize` door 1000 deelt.
+  Dat zijn de energietellers; zie de paarstructuur hierboven.
+
+---
+
 ## Open punten
 
 1. **De schaal van de registers zonder naam.** Afleiden uit `min`, `max` en de ruwe waarde
