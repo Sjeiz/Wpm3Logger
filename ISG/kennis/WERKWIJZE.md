@@ -56,6 +56,12 @@ register over duizenden metingen op exact dezelfde waarde, en is die waarde prec
 ondergrens van het meetbereik, dan is de sensor niet aangesloten. Zo bleken `-400` (= -40,0
 graden) bij WebID 18 en 558 geen metingen maar open circuits.
 
+**De meetdata zijn vensters, geen reeks.** De waarnemingen komen uit januari en februari 2026 plus
+een momentopname in november, en in die periode zijn de installatie-instellingen niet aangepast.
+Afwezigheid van een verandering bewijst dus niets: een register dat daarbuiten van toestand
+veranderde ziet er in deze data uit als onveranderd. Dat geldt voor elke conclusie die op
+`gedrag_gemeten` rust.
+
 **Gedrag over bedrijfstoestanden.** `metingen/*.csv` bevat vier snapshots (idle, verwarmen,
 warmwater, ontdooien). Een register dat in alle vier hetzelfde doet, doet niets.
 

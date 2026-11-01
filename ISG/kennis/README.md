@@ -94,9 +94,18 @@ deed precies een register dat: een SG-Ready-ingang die af en toe op `0x8000` sto
 gewoon 0 of 1 gaf -- tijdelijk niet leesbaar, geen verdwenen hardware.
 
 Belangrijk daarbij: een functie die je **uitzet** gaat niet naar `0x8000` maar naar de uit-waarde
-van zijn type. De registers die nu op `0x9000` staan zijn in de hele meetperiode nooit aan
-geweest, dus de overgang zelf is niet waargenomen -- dat ze bij uitzetten op `0x9000` komen volgt
-uit `pre7.inc`, niet uit een meting.
+van zijn type. Dat volgt uit `pre7.inc`, niet uit een meting -- en dat kan ook niet, want die
+overgang zit niet in de waarneming.
+
+**Wat de meetdata wel en niet kan zeggen.** De waarnemingen komen uit januari en februari 2026 plus
+een momentopname in november. Dat zijn vensters, geen doorlopende reeks, en in die periode zijn de
+installatie-instellingen niet aangepast. Een register dat in maart van toestand veranderde, of dat
+alleen in de zomer beweegt, of alleen tijdens een storing, ziet er in deze data uit als onveranderd.
+
+Lees de kolom `gedrag_gemeten` dus als **"in de waargenomen vensters"** en niet als een uitspraak
+over het register als zodanig. "Nooit beschreven" is sterk bewijs dat een functie ontbreekt wanneer
+het samenvalt met `0x8000`, maar "constant" is dat niet: dat kan net zo goed een instelling zijn
+die in die periode niet is aangeraakt.
 
 De koppeling moet er dus op voorbereid zijn dat een register onbruikbaar wordt zonder dat er iets
 aan de installatie is veranderd, ook al gebeurt het bijna nooit.
