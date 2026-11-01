@@ -12,7 +12,7 @@ eruit hebben gehaald, en wat we erover weten.
 De scheiding is er met opzet. In `firmware/` staat uitsluitend wat **wij** hebben
 toegevoegd of gewijzigd, vastgesteld door de twee firmwareslots te vergelijken: wat in
 `rel_b` staat maar niet in `rel_a`, is van ons. Op die manier bleek `start.sh` ons
-SSH-blok te bevatten en bleken `isg_api.php` en `sjeiz.php` eigen werk.
+SSH-blok te bevatten en bleek `isg_api.php` eigen werk.
 
 Stiebel-bestanden horen daar **niet** in, ook niet als we ze nodig hebben: een
 firmware-update zet die zelf terug, en terugkopieren uit deze repo zou een nieuwere
