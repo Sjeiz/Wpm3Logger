@@ -22,7 +22,7 @@ webid,naam,naam_en,naam_en_bron,naam_de,naam_modbus_csv,categorie,eenheid,wtype,
 23,ECO TEMPERATURE,ECO TEMPERATURE,Stiebel,ECO TEMPERATUR,,WP > WPM_3 > EINSTELLUNGEN > WARMWASSER > WARMWASSERTEMPERATUREN,°C,2,RW,10,60,0.1,,,31510,500,geldig,beweegt (2 waarden),10,,DONE and VERIFIED,eerder door ons 'SOLLTEMPERATUR WARMWASSER ECO' genoemd
 24,DHW,DHW,Stiebel,WARMWASSER,,WP > WPM_3 > START,°C,2,RO,10,65,0.1,,,30522,502,geldig,beweegt (81 waarden),10,,DONE and VERIFIED,eerder door ons 'ISTTEMPERATUR WARMWASSER' genoemd
 25,HEATING CURVE RISE,HEATING CURVE RISE,Stiebel,STEIGUNG HEIZKURVE,,WP > WPM_3 > EINSTELLUNGEN > HEIZEN > HEIZKREIS 1,,7,RW,0,3,0.01,,,41504,22,geldig,constant op 22,10,,empirisch vastgesteld,eerder door ons 'interne HK1‑Offset?' genoemd; modbus-adres uit manifest jan-2026 (681)
-26,HEATING CURVE RISE,HEATING CURVE RISE,Stiebel,STEIGUNG HEIZKURVE,,WP > WPM_3 > EINSTELLUNGEN > HEIZEN > HEIZKREIS 2,,7,RW,0,3,0.01,,,30507,29,geldig,beweegt (2 waarden),11,,DONE AND VERIFIED,in de analyse-set
+26,HEATING CURVE RISE,HEATING CURVE RISE,Stiebel,STEIGUNG HEIZKURVE,,WP > WPM_3 > EINSTELLUNGEN > HEIZEN > HEIZKREIS 2,°C,7,RW,0,3,0.01,,,30507,29,geldig,beweegt (2 waarden),11,,DONE AND VERIFIED,in de analyse-set; eenheid uit Stiebels Modbus-documentatie
 27,OUTSIDE TEMPERATURE,OUTSIDE TEMPERATURE,Stiebel,AUSSENTEMPERATUR,,WP > WPM_3 > INFO > ANLAGE > HEIZUNG,°C,2,RO,-60,80,0.1,,,30507,109,geldig,beweegt (95 waarden),10,,DONE,
 29,DEW POINT TEMPERATURE,DEW POINT TEMPERATURE,Stiebel,TAUPUNKTTEMPERATUR,,WP > WPM_3 > INFO > ANLAGE > RAUMTEMPERATUR,°C,2,RO,-40,30,0.1,,,30506,111,geldig,beweegt (60 waarden),10,,DONE and VERIFIED,zichtbaar afhankelijk van WebID 444
 30,SET TEMPERATURE,SET TEMPERATURE,Stiebel,SOLLTEMPERATUR,,WP > WPM_3 > INFO > ANLAGE > WARMWASSER,°C,2,RO,10,65,0.1,,,30523,500,geldig,constant op 500,10,,,"in de analyse-set; eerder door ons 'Temperaturgröße (0,1 °C, functie onbeken' genoemd"
@@ -633,7 +633,7 @@ webid,naam,naam_en,naam_en_bron,naam_de,naam_modbus_csv,categorie,eenheid,wtype,
 60042,,,,,,,,6,RO,0,65535,1,,,,32768,ongeldig (0x8000),nooit beschreven,5,stil;geen,,
 60100,CAN STATUS,CAN STATUS,eigen vertaling,CAN-STATUS,,WP > WPM_3 > DIAGNOSE > SYSTEM > CAN-STATUS,,1,RO,-4,0,1,,"enum, 5 waarden -> webid_codes.csv",32505,0,geldig,constant op 0,10,,,-1=FAULT; -2=CAN-FEHLER; -3=CAN-FEHLER; -4=LEITUNGSFEHLER
 60101,CAN INTERVALL,CAN INTERVALL,Stiebel,CAN-INTERVALL,,WP > WPM_3 > EINSTELLUNGEN > RESET > ISG,ms,6,RW,70,250,1,,,,150,geldig,constant op 150,10,,,
-60102,RESET ISG,RESET ISG,eigen vertaling,RESET ISG,,WP > WPM_3 > EINSTELLUNGEN > RESET > ISG,,6,RW,0,2,1,,"enum, 3 waarden -> webid_codes.csv",41521,0,geldig,constant op 0,10,,,1=NEU-STARTEN; 2=SENDEN
+60102,RESET ISG,RESET ISG,eigen vertaling,RESET ISG,,WP > WPM_3 > EINSTELLUNGEN > RESET > ISG,6,6,RW,0,2,1,,"enum, 3 waarden -> webid_codes.csv",41521,0,geldig,constant op 0,10,,,1=NEU-STARTEN; 2=SENDEN; eenheid uit Stiebels Modbus-documentatie
 60103,,,,,,,,6,RW,0,1,1,,,,0,geldig,constant op 0,10,stil;geen,,
 60110,,,,,,,,6,RW,0,4,1,,,,0,geldig,constant op 0,10,stil;geen,,
 60111,,,,,,,,6,RW,0,4,1,,,,0,geldig,constant op 0,10,stil;geen,,
