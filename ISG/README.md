@@ -1,7 +1,19 @@
-# ISG — eigen bestanden op de gateway
+# ISG — alles rond de Stiebel-gateway
 
-Alles in deze map staat op de Stiebel ISG en is **niet van Stiebel**. De paden zijn
-gespiegeld: het pad onder `ISG/` is het pad op het apparaat. Deployen is kopiëren.
+Deze map bevat alles wat met de ISG te maken heeft: de bestanden die erop staan, wat we
+eruit hebben gehaald, en wat we erover weten.
+
+| map | wat erin staat | gaat naar het apparaat? |
+|---|---|---|
+| `firmware/` | onze eigen bestanden op het apparaat, **paden gespiegeld** — uitrollen is kopiëren | ja, dit *is* het apparaat |
+| `staged/` | van ons, hoort op het apparaat, staat er nog niet | nog niet |
+| `dumps/` | opgehaald ván het apparaat: objecttabellen, configtemplates, directory listings | nee |
+| `kennis/` | wat we over het apparaat weten, met herkomst en status per gegeven — zie `kennis/README.md` | nee, nooit |
+
+De scheiding is er met opzet: zodra er iets anders dan apparaatbestanden in `firmware/`
+belandt, is de spiegel niets meer waard en kun je niet meer blind kopiëren.
+
+Alles onder `firmware/` is **niet van Stiebel** — het is eigen werk.
 
 ## Waarom dit hier staat
 
