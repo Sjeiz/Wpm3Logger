@@ -1,0 +1,4088 @@
+{
+    "60000": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60001": {
+        "name": "ISG HAUPTVERSIONSNUMMER",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60002": {
+        "name": "ISG NEBENVERSIONSNUMMER",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60003": {
+        "name": "ISG REVISIONSNUMMER",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60004": {
+        "name": "LAUFZEIT-TAGE",
+        "scaling": 1,
+        "unit": "d",
+        "analyse": true
+    },
+    "60005": {
+        "name": "LAUFZEIT-STUNDEN",
+        "scaling": 1,
+        "unit": "h",
+        "analyse": true
+    },
+    "60006": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60007": {
+        "name": null,
+        "scaling": 1,
+        "unit": "d",
+        "analyse": true
+    },
+    "60008": {
+        "name": null,
+        "scaling": 1,
+        "unit": "h",
+        "analyse": true
+    },
+    "60009": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60010": {
+        "name": null,
+        "scaling": 1,
+        "unit": "s",
+        "analyse": true
+    },
+    "60011": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60012": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60013": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60014": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60015": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60016": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60017": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60018": {
+        "name": "FEHLER TIMESTAMP",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60019": {
+        "name": "FATALER FEHLER TIMESTAMP",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60020": {
+        "name": "INSTALLIERTE ERWEITERUNG",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60021": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60022": {
+        "name": "DASHBOARD-LOG DAY_DBL",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60023": {
+        "name": "DASHBOARD-LOG WM_HZ_DBL",
+        "scaling": 1,
+        "unit": "kWh",
+        "analyse": true
+    },
+    "60024": {
+        "name": "DASHBOARD-LOG WM_WW_DBL",
+        "scaling": 1,
+        "unit": "kWh",
+        "analyse": true
+    },
+    "60025": {
+        "name": "DASHBOARD-LOG AUSSENTEMP_MAX_DBL",
+        "scaling": "0.1",
+        "unit": "°C",
+        "analyse": true
+    },
+    "60026": {
+        "name": "DASHBOARD-LOG AUSSENTEMP_AVG_DBL",
+        "scaling": "0.1",
+        "unit": "°C",
+        "analyse": true
+    },
+    "60027": {
+        "name": "DASHBOARD-LOG AUSSENTEMP_MIN_DBL",
+        "scaling": "0.1",
+        "unit": "°C",
+        "analyse": true
+    },
+    "60028": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60029": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60030": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60031": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60032": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60033": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60034": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60035": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60038": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60039": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60040": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60042": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60100": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60101": {
+        "name": "CAN-INTERVALL",
+        "scaling": 1,
+        "unit": "ms",
+        "analyse": true
+    },
+    "60102": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60103": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60110": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60111": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60114": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60120": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60121": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60122": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60123": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60124": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60125": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60126": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60127": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60128": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60129": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60130": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60131": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60132": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60133": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60140": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60190": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "65000": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "1": {
+        "name": "BETRIEBSART (ENUM)",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "3": {
+        "name": "Wärmepumpen statuscode top-level (WPM prioriteit volgorde, uitzoeken!)",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "4": {
+        "name": "Regelungsfreigabe (System aktiv)?",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "5": {
+        "name": "Interne Regelungsstatus (WPM)?",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "6": {
+        "name": "Interne Regelungsstatus HK2 (WPM)?",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "7": {
+        "name": "Hydraulik-Statuscode (WPM intern)?",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "9": {
+        "name": "Heizkurven-/Regelungsprofil-ID (WPM intern)?",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "10": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "11": {
+        "name": "Interne Regelungszustand A (WPM)?",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "12": {
+        "name": "Regelungsprofil-/Algorithmus-ID (WPM)?",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "13": {
+        "name": "Heizkreis-Freigabe (WPM intern, global)?",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "14": {
+        "name": "Interne Regelungszustand B (WPM)?",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "15": {
+        "name": "Interne Regelungszustand C (WPM, inaktiv)?",
+        "scaling": 1,
+        "unit": "h",
+        "analyse": true
+    },
+    "16": {
+        "name": "KOMFORTTEMPERATUR Heizkreis 1",
+        "scaling": 0.1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "17": {
+        "name": "ECOTEMPERATUR Heizkreis 1",
+        "scaling": 0.1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "18": {
+        "name": "Temperaturkanal (nicht belegt)?",
+        "scaling": 0.11,
+        "unit": "°C",
+        "analyse": true
+    },
+    "19": {
+        "name": "KOMFORT TEMPERATUR HK2",
+        "scaling": 0.1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "20": {
+        "name": "ECO TEMPERATUR HK2",
+        "scaling": 0.1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "21": {
+        "name": "RAUMTEMPERATUR IST",
+        "scaling": 0.1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "22": {
+        "name": "SOLLTEMPERATUR WARMWASSER COMFORT",
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "23": {
+        "name": "SOLLTEMPERATUR WARMWASSER ECO",
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "24": {
+        "name": "ISTTEMPERATUR WARMWASSER",
+        "scaling": 0.1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "25": {
+        "name": "interne HK1‑Offset?",
+        "scaling": 0.1,
+        "unit": "",
+        "analyse": true
+    },
+    "26": {
+        "name": "STEIGUNG HEIZKURVE HK2",
+        "scaling": 0.01,
+        "unit": "",
+        "analyse": true
+    },
+    "27": {
+        "name": "AUSSENTEMPERATUR",
+        "scaling": 0.1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "29": {
+        "name": "TAUPUNKTTEMPERATUR",
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "30": {
+        "name": "Temperaturgröße (0,1 °C, functie onbekend)?",
+        "scaling": 0.1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "31": {
+        "name": "HK1/HK2(gedeeld) Vorlauf‑SOLL?",
+        "scaling": 0.1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "33": {
+        "name": "STEIGUNG HEIZKURVE Heizkreis 1",
+        "scaling": 0.01,
+        "unit": "°C",
+        "analyse": true
+    },
+    "34": {
+        "name": "SOLLTEMPERATUR HK1",
+        "scaling": 0.1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "35": {
+        "name": "Temperaturgröße (Funktion unbekannt)?",
+        "scaling": 0.1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "36": {
+        "name": "VORLAUFISTTEMPERATUR - WP1",
+        "scaling": 0.1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "37": {
+        "name": "RUECKLAUFTEMPERATUR - WP1",
+        "scaling": 0.1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "38": {
+        "name": "MAXIMALE VORLAUFTEMP?",
+        "scaling": "0.1",
+        "unit": "°C",
+        "analyse": true
+    },
+    "39": {
+        "name": "Temperatur (nicht belegt) – Vorschlag?",
+        "scaling": 0.1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "40": {
+        "name": "Temperatur (nicht belegt) – Vorschlag?",
+        "scaling": 0.1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "41": {
+        "name": "BIVALENZTEMPERATUR HZG (Vorschlag)?",
+        "scaling": 0.1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "42": {
+        "name": "BIVALENZTEMPERATUR WW (Vorschlag)?",
+        "scaling": 0.1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "43": {
+        "name": "Temperatur (nicht belegt) – Vorschlag?",
+        "scaling": 0.1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "44": {
+        "name": "Temperatur (nicht belegt) – Vorschlag?",
+        "scaling": 0.1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "45": {
+        "name": "FROSTSCHUTZ ANLAGE",
+        "scaling": "0.1",
+        "unit": "°C",
+        "analyse": true
+    },
+    "49": {
+        "name": "VD HEIZEN TAG",
+        "scaling": "1",
+        "unit": "Wh",
+        "analyse": true
+    },
+    "50": {
+        "name": "VD HEIZEN TAG - WP1",
+        "scaling": 1,
+        "unit": "kWh",
+        "analyse": true
+    },
+    "51": {
+        "name": "VD ZÄHLER (unbestimmt) – Vorschlag?",
+        "scaling": 1,
+        "unit": "kWh",
+        "analyse": true
+    },
+    "52": {
+        "name": "VD HEIZEN SUMME - WP1",
+        "scaling": 1,
+        "unit": "MWh",
+        "analyse": true
+    },
+    "53": {
+        "name": "VD WARMWASSER TAG",
+        "scaling": "1",
+        "unit": "Wh",
+        "analyse": true
+    },
+    "54": {
+        "name": "VD WARMWASSER TAG - WP1",
+        "scaling": 1,
+        "unit": "kWh",
+        "analyse": true
+    },
+    "55": {
+        "name": null,
+        "scaling": 1,
+        "unit": "kWh",
+        "analyse": true
+    },
+    "56": {
+        "name": "VD WARMWASSER SUMME - WP1",
+        "scaling": 1,
+        "unit": "MWh",
+        "analyse": true
+    },
+    "57": {
+        "name": null,
+        "scaling": 1,
+        "unit": "kWh",
+        "analyse": true
+    },
+    "58": {
+        "name": null,
+        "scaling": 1,
+        "unit": "kWh",
+        "analyse": true
+    },
+    "59": {
+        "name": null,
+        "scaling": 1,
+        "unit": "MWh",
+        "analyse": true
+    },
+    "60": {
+        "name": null,
+        "scaling": 1,
+        "unit": "kWh",
+        "analyse": true
+    },
+    "61": {
+        "name": null,
+        "scaling": 1,
+        "unit": "kWh",
+        "analyse": true
+    },
+    "62": {
+        "name": "NHZ WARMWASSER SUMME",
+        "scaling": 1,
+        "unit": "MWh",
+        "analyse": true
+    },
+    "63": {
+        "name": "VD HEIZEN TAG",
+        "scaling": "1",
+        "unit": "Wh",
+        "analyse": true
+    },
+    "64": {
+        "name": "VD HEIZEN TAG - WP1",
+        "scaling": 1,
+        "unit": "kWh",
+        "analyse": true
+    },
+    "65": {
+        "name": null,
+        "scaling": 1,
+        "unit": "kWh",
+        "analyse": true
+    },
+    "66": {
+        "name": "VD HEIZEN SUMME",
+        "scaling": 1,
+        "unit": "MWh",
+        "analyse": true
+    },
+    "67": {
+        "name": "VD WARMWASSER TAG",
+        "scaling": "1",
+        "unit": "Wh",
+        "analyse": true
+    },
+    "68": {
+        "name": "VD WARMWASSER TAG - WP1",
+        "scaling": 1,
+        "unit": "kWh",
+        "analyse": true
+    },
+    "69": {
+        "name": null,
+        "scaling": 1,
+        "unit": "kWh",
+        "analyse": true
+    },
+    "70": {
+        "name": "VD WARMWASSER SUMME - WP1",
+        "scaling": 1,
+        "unit": "MWh",
+        "analyse": true
+    },
+    "83": {
+        "name": "KUEHLMODUS",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "85": {
+        "name": "GEBLAESEKUEHLUNG (EIN/AUS)",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "86": {
+        "name": " ISTTEMPERATUR GEBLAESE",
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "87": {
+        "name": null,
+        "scaling": 1,
+        "unit": "K",
+        "analyse": true
+    },
+    "88": {
+        "name": "SOLLTEMPERATUR GEBLAESE",
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "89": {
+        "name": "FLAECHENKUEHLUNG (EIN/AUS)",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "90": {
+        "name": "ISTTEMPERATUR FLAECHE",
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "91": {
+        "name": null,
+        "scaling": 1,
+        "unit": "K",
+        "analyse": true
+    },
+    "92": {
+        "name": "SOLLTEMPERATUR FLAECHE",
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "93": {
+        "name": "AUFHEIZPROGRAMM",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "94": {
+        "name": "STEIGUNG PRO TAG",
+        "scaling": 1,
+        "unit": "K/d",
+        "analyse": true
+    },
+    "95": {
+        "name": "SOCKELTEMPERATUR",
+        "scaling": "0.1",
+        "unit": "°C",
+        "analyse": true
+    },
+    "96": {
+        "name": "DAUER SOCKEL",
+        "scaling": 1,
+        "unit": "d",
+        "analyse": true
+    },
+    "97": {
+        "name": "MAXIMALTEMPERATUR",
+        "scaling": "0.1",
+        "unit": "°C",
+        "analyse": true
+    },
+    "98": {
+        "name": "DAUER MAXIMALTEMPERATUR",
+        "scaling": 1,
+        "unit": "d",
+        "analyse": true
+    },
+    "99": {
+        "name": "SOMMERZEIT TAG ANFANG",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "100": {
+        "name": "SOMMERZEIT MONAT ANFANG",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "101": {
+        "name": "SOMMERZEIT TAG ENDE",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "102": {
+        "name": "SOMMERZEIT MONAT ENDE",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "103": {
+        "name": "SOMMERBETRIEB",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "104": {
+        "name": "GEBAEUDEDAEMPFUNG",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "105": {
+        "name": "AUSSENTEMPERATUR SOMMERBETRIEB",
+        "scaling": "0.1",
+        "unit": "°C",
+        "analyse": true
+    },
+    "106": {
+        "name": "PUMPENZYKLEN",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "108": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "109": {
+        "name": "STILLSTANDSZEIT",
+        "scaling": 1,
+        "unit": "min",
+        "analyse": true
+    },
+    "111": {
+        "name": "QUELLENMEDIUM",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "112": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "113": {
+        "name": "MAXIMALE RUECKLAUFTEMP",
+        "scaling": "0.1",
+        "unit": "°C",
+        "analyse": true
+    },
+    "114": {
+        "name": "MISCHERDYNAMIK HK 2",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "115": {
+        "name": "MAXIMAL TEMPERATUR HK 2",
+        "scaling": "0.1",
+        "unit": "°C",
+        "analyse": true
+    },
+    "116": {
+        "name": "HK1/HK2 (gedeeld) Vorlauf‑IST 1",
+        "scaling": 0.1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "117": {
+        "name": "interne Flow‑Ableitung",
+        "scaling": 0.1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "118": {
+        "name": "ISTTEMPERATUR HK1",
+        "scaling": 0.1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "119": {
+        "name": null,
+        "scaling": 1,
+        "unit": "K",
+        "analyse": true
+    },
+    "120": {
+        "name": "WARMWASSERHYSTERESE",
+        "scaling": "0.1",
+        "unit": "K",
+        "analyse": true
+    },
+    "121": {
+        "name": "WW-KORREKTUR",
+        "scaling": "0.1",
+        "unit": "°C",
+        "analyse": true
+    },
+    "122": {
+        "name": "ANTILEGIONELLENBEHANDLUNG",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "123": {
+        "name": "WW LERNFUNKTION",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "124": {
+        "name": "VORWAHL HEIZKREIS",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "125": {
+        "name": "KORREKTUR",
+        "scaling": 1,
+        "unit": "K",
+        "analyse": true
+    },
+    "127": {
+        "name": "TYP",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "128": {
+        "name": "SOFTWARE REGLER",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "130": {
+        "name": "MO-HK1-ZEIT-1",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "131": {
+        "name": "MO-HK1-ZEIT-2",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "132": {
+        "name": "MO-HK1-ZEIT-3",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "133": {
+        "name": "DI-HK1-ZEIT-1",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "134": {
+        "name": "DI-HK1-ZEIT-2",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "135": {
+        "name": "DI-HK1-ZEIT-3",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "136": {
+        "name": "MI-HK1-ZEIT-1",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "137": {
+        "name": "MI-HK1-ZEIT-2",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "138": {
+        "name": "MI-HK1-ZEIT-3",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "139": {
+        "name": "DO-HK1-ZEIT-1",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "140": {
+        "name": "DO-HK1-ZEIT-2",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "141": {
+        "name": "DO-HK1-ZEIT-3",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "142": {
+        "name": "FR-HK1-ZEIT-1",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "143": {
+        "name": "FR-HK1-ZEIT-2",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "144": {
+        "name": "FR-HK1-ZEIT-3",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "145": {
+        "name": "SA-HK1-ZEIT-1",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "146": {
+        "name": "SA-HK1-ZEIT-2",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "147": {
+        "name": "SA-HK1-ZEIT-3",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "148": {
+        "name": "SO-HK1-ZEIT-1",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "149": {
+        "name": "SO-HK1-ZEIT-2",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "150": {
+        "name": "SO-HK1-ZEIT-3",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "151": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "152": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "153": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "154": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "155": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "156": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "157": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "158": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "159": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "160": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "161": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "162": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "163": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "164": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "165": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "166": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "167": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "168": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "169": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "170": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "171": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "172": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "173": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "174": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "175": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "176": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "177": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "178": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "179": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "180": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "181": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "182": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "183": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "184": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "185": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "186": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "187": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "188": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "189": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "190": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "191": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "192": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "193": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "194": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "195": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "196": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "197": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "198": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "199": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "200": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "201": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "202": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "203": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "204": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "205": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "206": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "207": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "208": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "209": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "210": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "211": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "212": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "213": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "214": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "215": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "216": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "217": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "218": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "219": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "220": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "221": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "222": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "223": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "224": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "225": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "226": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "227": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "228": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "229": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "230": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "231": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "232": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "233": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "234": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "235": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "236": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "237": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "238": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "239": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "240": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "241": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "242": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "243": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "244": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "245": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "246": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "247": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "248": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "249": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "250": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "251": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "252": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "253": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "254": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "255": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "256": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "257": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "258": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "259": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "260": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "261": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "262": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "263": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "264": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "265": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "266": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "267": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "268": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "269": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "270": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "271": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "272": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "273": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "274": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "275": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "276": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "277": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "278": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "279": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "280": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "281": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "282": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "283": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "284": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "285": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "286": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "287": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "288": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "289": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "290": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "291": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "292": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "293": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "294": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "295": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "296": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "297": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "298": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "299": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "300": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "301": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "302": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "303": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "304": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "305": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "306": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "307": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "308": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "309": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "310": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "311": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "312": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "313": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "314": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "315": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "316": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "317": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "318": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "319": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "320": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "321": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "322": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "323": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "324": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "325": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "326": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "327": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "328": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "329": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "330": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "331": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "332": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "333": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "334": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "335": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "336": {
+        "name": "Heizkurven‑Kompensation HK1/HK2 (gedeeld)",
+        "scaling": 0.1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "342": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "343": {
+        "name": null,
+        "scaling": 1,
+        "unit": "h",
+        "analyse": true
+    },
+    "344": {
+        "name": null,
+        "scaling": 1,
+        "unit": "h",
+        "analyse": true
+    },
+    "357": {
+        "name": "MINIMALE ABTAUZEIT",
+        "scaling": 1,
+        "unit": "min",
+        "analyse": true
+    },
+    "363": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "365": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "367": {
+        "name": null,
+        "scaling": 1,
+        "unit": "K",
+        "analyse": true
+    },
+    "368": {
+        "name": "VORLAUFANTEIL HEIZKREIS",
+        "scaling": 1,
+        "unit": "%",
+        "analyse": true
+    },
+    "369": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "371": {
+        "name": null,
+        "scaling": 1,
+        "unit": "l/min",
+        "analyse": true
+    },
+    "372": {
+        "name": "MAXIMALE VORLAUFTEMP",
+        "scaling": "0.1",
+        "unit": "°C",
+        "analyse": true
+    },
+    "374": {
+        "name": null,
+        "scaling": 1,
+        "unit": "h",
+        "analyse": true
+    },
+    "375": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "376": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "377": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "399": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "401": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "402": {
+        "name": "LAUFZEIT HEIZEN",
+        "scaling": 0.1,
+        "unit": "",
+        "analyse": true
+    },
+    "412": {
+        "name": "LEISTUNG HEIZKREISPUMPE",
+        "scaling": 1,
+        "unit": "%",
+        "analyse": true
+    },
+    "413": {
+        "name": "ANZAHL STUFEN",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "414": {
+        "name": "VERZOEGERUNGSZEIT",
+        "scaling": 1,
+        "unit": "min",
+        "analyse": true
+    },
+    "415": {
+        "name": "LEISTUNG WARMWASSERPUMPE",
+        "scaling": 1,
+        "unit": "%",
+        "analyse": true
+    },
+    "423": {
+        "name": null,
+        "scaling": 1,
+        "unit": "min",
+        "analyse": true
+    },
+    "425": {
+        "name": "NOTBETRIEB",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "430": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "431": {
+        "name": null,
+        "scaling": 1,
+        "unit": "kW",
+        "analyse": true
+    },
+    "433": {
+        "name": "SOMMERBETRIEB WPM3",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "434": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "435": {
+        "name": "WASSERDRUCK",
+        "scaling": 0.01,
+        "unit": "bar",
+        "analyse": true
+    },
+    "437": {
+        "name": "Wärmeabgabe Ableitung HK1/HK2 (gedeeld)",
+        "scaling": 0.1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "438": {
+        "name": "WASSERVOLUMENSTROM - WP1",
+        "scaling": 0.01,
+        "unit": "l/min",
+        "analyse": true
+    },
+    "439": {
+        "name": null,
+        "scaling": 1,
+        "unit": "bar",
+        "analyse": true
+    },
+    "440": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "441": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "442": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "443": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "444": {
+        "name": "RAUMFEUCHTE",
+        "scaling": 1,
+        "unit": "%",
+        "analyse": true
+    },
+    "445": {
+        "name": "Rücklauf/Flow Ableitung HK1/HK2 (gedeeld)",
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "446": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "447": {
+        "name": "Kurven Ableitung HK1",
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "448": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "449": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "450": {
+        "name": "PUFFERBETRIEB",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "451": {
+        "name": "HEIZKREIS OPTIMAL",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "452": {
+        "name": "RAUMEINFLUSS",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "453": {
+        "name": null,
+        "scaling": 1,
+        "unit": "K min",
+        "analyse": true
+    },
+    "454": {
+        "name": "KOMBISPEICHER",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "455": {
+        "name": "Rücklauf/Flow Ableitung",
+        "scaling": 1,
+        "unit": "%",
+        "analyse": true
+    },
+    "456": {
+        "name": "KUEHLEN",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "457": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "460": {
+        "name": "GEBLAESEKUEHLUNG DYNAMIK AKTIV",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "461": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "462": {
+        "name": "HYSTERESE",
+        "scaling": 1,
+        "unit": "K",
+        "analyse": true
+    },
+    "463": {
+        "name": "HD SENSOR MAX",
+        "scaling": "0.1",
+        "unit": "bar",
+        "analyse": true
+    },
+    "464": {
+        "name": "LEISTUNG SOLEPUMPE",
+        "scaling": 1,
+        "unit": "%",
+        "analyse": true
+    },
+    "465": {
+        "name": "EINPHASIGER BETRIEB",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "466": {
+        "name": "SOFORTSTART",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "467": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "468": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "471": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "472": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "474": {
+        "name": "GEBLAESE-/FLAECHENKUEHLUNG DYNAMIK PASSIV",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "475": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "476": {
+        "name": null,
+        "scaling": 1,
+        "unit": "kW",
+        "analyse": true
+    },
+    "477": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "480": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "485": {
+        "name": "STATUS",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "486": {
+        "name": "MINIMAL TEMPERATUR HK 1",
+        "scaling": "0.1",
+        "unit": "°C",
+        "analyse": true
+    },
+    "487": {
+        "name": "MINIMAL TEMPERATUR HK 2",
+        "scaling": "0.1",
+        "unit": "°C",
+        "analyse": true
+    },
+    "488": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "510": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "511": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "512": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "513": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "514": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "515": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "516": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "517": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "518": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "519": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "520": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "521": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "522": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "523": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "524": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "525": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "526": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "527": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "528": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "529": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "530": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "531": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "532": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "533": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "534": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "535": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "536": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "537": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "538": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "539": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "540": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "541": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "542": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "543": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "544": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "545": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "546": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "547": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "548": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "549": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "550": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "551": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "552": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "554": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "555": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "556": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "558": {
+        "name": "KOMFORTTEMPERATUR INNEN HK 1",
+        "scaling": "0.1",
+        "unit": "°C",
+        "analyse": true
+    },
+    "600": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "601": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "602": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "603": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "604": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "605": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "606": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "607": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "608": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "609": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "610": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "611": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "612": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "613": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "614": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "615": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "616": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "617": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "618": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "619": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "620": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "621": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "622": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "623": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "624": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "625": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "626": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "627": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "628": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "629": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "630": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "631": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "632": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "633": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "634": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "635": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "636": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "637": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "638": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "639": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "640": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "641": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "700": {
+        "name": "DYNAMISIERUNG-1",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "701": {
+        "name": "DYNAMISIERUNG-2",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "702": {
+        "name": "SYSTEM",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "703": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "704": {
+        "name": "FUEHLER",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "705": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "706": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "712": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "1001": {
+        "name": null,
+        "scaling": 0.1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "1002": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "1004": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "1005": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "1006": {
+        "name": "RUECKLAUFTEMPERATUR - WP1",
+        "scaling": 0.1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "1007": {
+        "name": null,
+        "scaling": 1,
+        "unit": "%",
+        "analyse": true
+    },
+    "1008": {
+        "name": null,
+        "scaling": 1,
+        "unit": "%",
+        "analyse": true
+    },
+    "1009": {
+        "name": null,
+        "scaling": 1,
+        "unit": "%",
+        "analyse": true
+    },
+    "1012": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "1013": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "1014": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "1015": {
+        "name": null,
+        "scaling": 1,
+        "unit": "%",
+        "analyse": true
+    },
+    "1016": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "1017": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "1018": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "1022": {
+        "name": null,
+        "scaling": 1,
+        "unit": "bar",
+        "analyse": true
+    },
+    "1023": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "1028": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "1029": {
+        "name": "VORLAUFTEMPERATUR - WP1",
+        "scaling": 0.1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "1030": {
+        "name": "HEISSGASTEMPERATUR - WP1",
+        "scaling": 0.1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "1031": {
+        "name": "DRUCK HOCHDRUCK - WP1",
+        "scaling": 0.01,
+        "unit": "bar",
+        "analyse": true
+    },
+    "1032": {
+        "name": "DRUCK NIEDERDRUCK - WP1",
+        "scaling": 0.01,
+        "unit": "bar",
+        "analyse": true
+    },
+    "1033": {
+        "name": "LAUFZEIT HEIZEN - WP1",
+        "scaling": 1,
+        "unit": "h",
+        "analyse": true
+    },
+    "1034": {
+        "name": null,
+        "scaling": 1,
+        "unit": "h",
+        "analyse": true
+    },
+    "1035": {
+        "name": null,
+        "scaling": 1,
+        "unit": "h",
+        "analyse": true
+    },
+    "1036": {
+        "name": "LAUFZEIT KÜHLEN WP1",
+        "scaling": 1,
+        "unit": "h",
+        "analyse": true
+    },
+    "1039": {
+        "name": "LAUFZEIT WW - WP1",
+        "scaling": 1,
+        "unit": "h",
+        "analyse": true
+    },
+    "1040": {
+        "name": null,
+        "scaling": 1,
+        "unit": "h",
+        "analyse": true
+    },
+    "1041": {
+        "name": null,
+        "scaling": 1,
+        "unit": "h",
+        "analyse": true
+    },
+    "1042": {
+        "name": "LAUFZEIT NHZ 1 - WP1",
+        "scaling": 1,
+        "unit": "h",
+        "analyse": true
+    },
+    "1043": {
+        "name": "LAUFZEIT NHZ 2 - WP1",
+        "scaling": 1,
+        "unit": "h",
+        "analyse": true
+    },
+    "1044": {
+        "name": "LAUFZEIT NHZ 1 / 2 - WP1",
+        "scaling": 1,
+        "unit": "h",
+        "analyse": true
+    },
+    "1045": {
+        "name": null,
+        "scaling": 1,
+        "unit": "h",
+        "analyse": true
+    },
+    "1046": {
+        "name": null,
+        "scaling": 1,
+        "unit": "h",
+        "analyse": true
+    },
+    "1048": {
+        "name": null,
+        "scaling": 1,
+        "unit": "Wh",
+        "analyse": true
+    },
+    "1049": {
+        "name": null,
+        "scaling": 1,
+        "unit": "kWh",
+        "analyse": true
+    },
+    "1050": {
+        "name": null,
+        "scaling": 1,
+        "unit": "kWh",
+        "analyse": true
+    },
+    "1051": {
+        "name": null,
+        "scaling": 1,
+        "unit": "MWh",
+        "analyse": true
+    },
+    "1052": {
+        "name": null,
+        "scaling": 1,
+        "unit": "Wh",
+        "analyse": true
+    },
+    "1053": {
+        "name": null,
+        "scaling": 1,
+        "unit": "kWh",
+        "analyse": true
+    },
+    "1054": {
+        "name": null,
+        "scaling": 1,
+        "unit": "kWh",
+        "analyse": true
+    },
+    "1055": {
+        "name": null,
+        "scaling": 1,
+        "unit": "MWh",
+        "analyse": true
+    },
+    "1056": {
+        "name": null,
+        "scaling": 1,
+        "unit": "kWh",
+        "analyse": true
+    },
+    "1057": {
+        "name": null,
+        "scaling": 1,
+        "unit": "kWh",
+        "analyse": true
+    },
+    "1058": {
+        "name": null,
+        "scaling": 1,
+        "unit": "MWh",
+        "analyse": true
+    },
+    "1059": {
+        "name": null,
+        "scaling": 1,
+        "unit": "kWh",
+        "analyse": true
+    },
+    "1060": {
+        "name": null,
+        "scaling": 1,
+        "unit": "kWh",
+        "analyse": true
+    },
+    "1061": {
+        "name": null,
+        "scaling": 1,
+        "unit": "MWh",
+        "analyse": true
+    },
+    "1062": {
+        "name": null,
+        "scaling": 1,
+        "unit": "Wh",
+        "analyse": true
+    },
+    "1063": {
+        "name": null,
+        "scaling": 1,
+        "unit": "kWh",
+        "analyse": true
+    },
+    "1064": {
+        "name": null,
+        "scaling": 1,
+        "unit": "kWh",
+        "analyse": true
+    },
+    "1065": {
+        "name": null,
+        "scaling": 1,
+        "unit": "MWh",
+        "analyse": true
+    },
+    "1066": {
+        "name": null,
+        "scaling": 1,
+        "unit": "Wh",
+        "analyse": true
+    },
+    "1067": {
+        "name": null,
+        "scaling": 1,
+        "unit": "kWh",
+        "analyse": true
+    },
+    "1068": {
+        "name": null,
+        "scaling": 1,
+        "unit": "kWh",
+        "analyse": true
+    },
+    "1069": {
+        "name": null,
+        "scaling": 1,
+        "unit": "MWh",
+        "analyse": true
+    },
+    "1073": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "1074": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "1076": {
+        "name": "DRUCK MITTELDRUCK - WP1",
+        "scaling": 0.01,
+        "unit": "bar",
+        "analyse": true
+    },
+    "1077": {
+        "name": null,
+        "scaling": 1,
+        "unit": "A",
+        "analyse": true
+    },
+    "1078": {
+        "name": null,
+        "scaling": 1,
+        "unit": "A",
+        "analyse": true
+    },
+    "1079": {
+        "name": null,
+        "scaling": 1,
+        "unit": "Hz",
+        "analyse": true
+    },
+    "1080": {
+        "name": null,
+        "scaling": 1,
+        "unit": "Hz",
+        "analyse": true
+    },
+    "1081": {
+        "name": null,
+        "scaling": 1,
+        "unit": "Hz",
+        "analyse": true
+    },
+    "1082": {
+        "name": null,
+        "scaling": 1,
+        "unit": "Hz",
+        "analyse": true
+    },
+    "1084": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "1085": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "1086": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "1087": {
+        "name": null,
+        "scaling": 1,
+        "unit": "%",
+        "analyse": true
+    },
+    "1088": {
+        "name": null,
+        "scaling": 1,
+        "unit": "l/min",
+        "analyse": true
+    },
+    "1091": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "1092": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "1094": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "1095": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "1096": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "1097": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "1098": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "1099": {
+        "name": null,
+        "scaling": 1,
+        "unit": "V",
+        "analyse": true
+    },
+    "1100": {
+        "name": null,
+        "scaling": 1,
+        "unit": "bar",
+        "analyse": true
+    },
+    "1101": {
+        "name": null,
+        "scaling": 1,
+        "unit": "A",
+        "analyse": true
+    },
+    "1102": {
+        "name": "VERSORGUNGSSPANNUNG",
+        "scaling": 0.1,
+        "unit": "V",
+        "analyse": true
+    },
+    "1103": {
+        "name": null,
+        "scaling": 1,
+        "unit": "Hz",
+        "analyse": true
+    },
+    "1104": {
+        "name": null,
+        "scaling": 1,
+        "unit": "Hz",
+        "analyse": true
+    },
+    "1107": {
+        "name": null,
+        "scaling": 1,
+        "unit": "min",
+        "analyse": true
+    },
+    "1108": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "1112": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "1113": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "1114": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "1115": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "1116": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "1117": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "1118": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "1119": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "1120": {
+        "name": null,
+        "scaling": 1,
+        "unit": "kW",
+        "analyse": true
+    },
+    "1122": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "1123": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "1124": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "1125": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "1126": {
+        "name": null,
+        "scaling": 1,
+        "unit": "kW",
+        "analyse": true
+    },
+    "1127": {
+        "name": null,
+        "scaling": 1,
+        "unit": "kW",
+        "analyse": true
+    },
+    "1128": {
+        "name": null,
+        "scaling": 1,
+        "unit": "kW",
+        "analyse": true
+    },
+    "1129": {
+        "name": "KOMPRESSOR-STROMBEGRENZUNG",
+        "scaling": 0.1,
+        "unit": "A",
+        "analyse": true
+    },
+    "1130": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "1131": {
+        "name": null,
+        "scaling": 1,
+        "unit": "min",
+        "analyse": true
+    },
+    "1133": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "1134": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "1135": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "1136": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "1137": {
+        "name": null,
+        "scaling": 1,
+        "unit": "%",
+        "analyse": true
+    },
+    "1138": {
+        "name": null,
+        "scaling": 1,
+        "unit": "%",
+        "analyse": true
+    },
+    "1139": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "1140": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "1713": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60300": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60307": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60310": {
+        "name": "OBERE - RAUMTEMP - HK1",
+        "scaling": "0.1",
+        "unit": "°C",
+        "analyse": true
+    },
+    "60311": {
+        "name": "OBERE - RAUMTEMP - HK2",
+        "scaling": "0.1",
+        "unit": "°C",
+        "analyse": true
+    },
+    "60312": {
+        "name": "OBERE - WARMWASSER - TEMP",
+        "scaling": "0.1",
+        "unit": "°C",
+        "analyse": true
+    },
+    "60316": {
+        "name": "WAERMEPUMPENTYP",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60317": {
+        "name": "HEIZUNGSPUFFER",
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60328": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60600": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60700": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60701": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60702": {
+        "name": null,
+        "scaling": 1,
+        "unit": "kW",
+        "analyse": true
+    },
+    "60703": {
+        "name": null,
+        "scaling": 1,
+        "unit": "kW",
+        "analyse": true
+    },
+    "60704": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60705": {
+        "name": null,
+        "scaling": 1,
+        "unit": "°C",
+        "analyse": true
+    },
+    "60706": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60304": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60305": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60306": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60320": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60321": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60322": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60323": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60324": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    },
+    "60325": {
+        "name": null,
+        "scaling": 1,
+        "unit": "",
+        "analyse": true
+    }
+}

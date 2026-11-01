@@ -1,0 +1,127 @@
+import csv
+import json
+import sys
+import os
+from datetime import datetime, timedelta
+
+MANIFEST = "manifest-small-with-analyse.json"
+
+def parse_date(s):
+    return datetime.strptime(s, "%Y-%m-%d").date()
+
+def load_manifest():
+    with open(MANIFEST, "r", encoding="utf-8") as f:
+        manifest = json.load(f)
+    return [f"w{wid}" for wid, meta in manifest.items()
+            if isinstance(meta, dict) and meta.get("analyse", True)]
+
+def daterange(start, end):
+    for n in range((end - start).days + 1):
+        yield start + timedelta(days=n)
+
+# ---------------------------------------------------------
+# Delta-engine voor meerdere dagen gecombineerd
+# ---------------------------------------------------------
+def process_period(start, end, analyse_wids):
+    all_rows = []
+
+    # Verzamel alle rijen van alle dagen
+    for d in daterange(start, end):
+        csv_file = f"ISGAPILogger_{d}.csv.txt"
+        if not os.path.exists(csv_file):
+            print(f"[SKIP] {csv_file} bestaat niet")
+            continue
+
+        print(f"[OK]   Verwerk {csv_file}")
+
+        with open(csv_file, "r", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                row["__date"] = str(d)  # optioneel, handig voor debugging
+                all_rows.append(row.copy())
+
+    if not all_rows:
+        print("[WARN] Geen data gevonden in opgegeven periode")
+        return
+
+    # Sorteren op tijd + datum (voor veiligheid)
+    all_rows.sort(key=lambda r: (r["__date"], r["time"]))
+
+    delta_rows = []
+    previous = None
+
+    for row in all_rows:
+        if previous is None:
+            delta = {"time": row["time"], "event": "baseline"}
+            for wid in analyse_wids:
+                if wid in row:
+                    delta[wid] = row[wid]
+            delta_rows.append(delta)
+            previous = row.copy()
+            continue
+
+        changes = {}
+        for wid in analyse_wids:
+            if wid not in row:
+                continue
+            old = previous.get(wid, "")
+            new = row.get(wid, "")
+            if old != new:
+                changes[wid] = new
+
+        if changes:
+            delta = {"time": row["time"], "event": "change"}
+            delta.update(changes)
+            delta_rows.append(delta)
+
+        previous = row.copy()
+
+    # ---------------------------------------------------------
+    # Output-bestandsnaam
+    # ---------------------------------------------------------
+    if start == end:
+        out_file = f"delta-{start}.csv.txt"
+    else:
+        out_file = f"delta-{start}-{end}.csv.txt"
+
+    # Verzamel alle kolommen
+    all_keys = set()
+    for d in delta_rows:
+        all_keys.update(d.keys())
+    all_keys = ["time", "event"] + sorted(k for k in all_keys if k not in ("time", "event"))
+
+    with open(out_file, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=all_keys)
+        writer.writeheader()
+        for d in delta_rows:
+            writer.writerow(d)
+
+    print(f"[DONE] Delta opgeslagen als {out_file}")
+
+# ---------------------------------------------------------
+def main():
+    if len(sys.argv) == 1:
+        today = datetime.now().date()
+        start = today
+        end = today
+        print(f"Geen datum opgegeven → gebruik huidige datum: {today}")
+
+    elif len(sys.argv) == 2:
+        start = parse_date(sys.argv[1])
+        end = start
+
+    elif len(sys.argv) == 3:
+        start = parse_date(sys.argv[1])
+        end = parse_date(sys.argv[2])
+
+    else:
+        print("Gebruik: python isg_logger_deltas.py [begindatum] [einddatum]")
+        print("Formaat: YYYY-MM-DD")
+        return
+
+    analyse_wids = load_manifest()
+    process_period(start, end, analyse_wids)
+
+# ---------------------------------------------------------
+if __name__ == "__main__":
+    main()
