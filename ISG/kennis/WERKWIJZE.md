@@ -115,7 +115,7 @@ overleeft.
 
 ## Naambronnen, en waar ze ophouden
 
-Er zijn drie Stiebel-bronnen voor namen, en ze overlappen maar dekken samig niet alles:
+Er zijn drie Stiebel-bronnen voor namen, en ze overlappen en dekken samen niet alles:
 
 | bron | dekking | aard |
 |---|---|---|
