@@ -5,15 +5,19 @@ eruit hebben gehaald, en wat we erover weten.
 
 | map | wat erin staat | gaat naar het apparaat? |
 |---|---|---|
-| `firmware/` | onze eigen bestanden op het apparaat, **paden gespiegeld** — uitrollen is kopiëren | ja, dit *is* het apparaat |
-| `staged/` | van ons, hoort op het apparaat, staat er nog niet | nog niet |
-| `dumps/` | opgehaald ván het apparaat: objecttabellen, configtemplates, directory listings | nee |
-| `kennis/` | wat we over het apparaat weten, met herkomst en status per gegeven — zie `kennis/README.md` | nee, nooit |
+| `firmware/` | **alleen onze eigen bestanden**, paden gespiegeld -- uitrollen is kopieren | ja, dit *is* het apparaat |
+| `dumps/` | opgehaald van het apparaat: Stiebel-code, configuraties, objecttabellen | nee |
+| `kennis/` | wat we over het apparaat weten, met herkomst per gegeven -- zie `kennis/README.md` | nee, nooit |
 
-De scheiding is er met opzet: zodra er iets anders dan apparaatbestanden in `firmware/`
-belandt, is de spiegel niets meer waard en kun je niet meer blind kopiëren.
+De scheiding is er met opzet. In `firmware/` staat uitsluitend wat **wij** hebben
+toegevoegd of gewijzigd, vastgesteld door de twee firmwareslots te vergelijken: wat in
+`rel_b` staat maar niet in `rel_a`, is van ons. Op die manier bleek `start.sh` ons
+SSH-blok te bevatten en bleken `isg_api.php` en `sjeiz.php` eigen werk.
 
-Alles onder `firmware/` is **niet van Stiebel** — het is eigen werk.
+Stiebel-bestanden horen daar **niet** in, ook niet als we ze nodig hebben: een
+firmware-update zet die zelf terug, en terugkopieren uit deze repo zou een nieuwere
+versie met een oudere kunnen overschrijven. Ze staan in `dumps/`.
+
 
 ## Waarom dit hier staat
 
