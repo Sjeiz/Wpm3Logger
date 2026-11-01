@@ -313,12 +313,9 @@ sentinel-lijsten zowel `32768` als `-32768` noemden.
 
 ---
 
-## Aangetoonde fouten
+## Fouten in Stiebels materiaal
 
-Niet alles in dit dossier is samenvoegen; een deel is rechtzetten. Deze fouten zijn met
-meetdata of met de broncode aangetoond, niet vermoed.
-
-### In Stiebels eigen materiaal
+Deze zitten er nog in en kunnen je werk raken. Elk met meetdata of broncode aangetoond.
 
 - `StiebelDoc_modbus.json` bevat een record met `unit: "6"` -- een getal waar een eenheid
   hoort. Een keer in 331 records.
@@ -331,32 +328,6 @@ meetdata of met de broncode aangetoond, niet vermoed.
   twee plaatsen met twee verschillende mechanismen.
 - De `max` uit `isg_tester -p` klopt niet voor 32-bits registers: WebID 60018 meldt
   `max 65535` en levert waarden van 1,77 miljard.
-
-### In ons eigen werk van januari 2026, nu gecorrigeerd
-
-- **21 modbus-adressen** in de afgeleide tabellen wezen naar het verkeerde WebID. Zeven
-  daarvan zijn met waarden hard weerlegd; het scherpst bij 30515 en 30516, waar de kolom
-  precies een positie verschoven stond. De overige zeven betreffen duplicaatregisters met
-  dezelfde waarde en zijn daarmee risicoloos.
-- **WebID 402** stond als "LAUFZEIT HEIZEN" met de aantekening dat het empirisch was
-  vastgesteld. Het is `PUMPENSTATUS`, een bitveld met elf benoemde pompen en mengers.
-- **`scaling`** oogde als vaststelling maar was voor 91% de default `1.0`: van de registers
-  met een naam had 32% een niet-triviale schaal, van de naamloze 0,2%.
-- **`-200` en `-400`** stonden als universele sentinel in `isg_logger_delta_engine.py`. Het
-  zijn de bereikgrenzen van niet-aangesloten sensoren, en dus een eigenschap van het
-  register -- bij een werkende sensor is `-40,0` graden een geldige meting.
-- `isg_json_exporter.sh` schreef de slotregel `object_count: 681` weg als WebID met lege
-  velden, waardoor beide JSON-dumps ongeldig waren.
-
-### Geen fout, maar het leek er wel op
-
-Tien registers van `wtype 11` staan in de HA-configuratie op `scale: 1.0` terwijl
-`sf::normalize` bij dat type door 1000 deelt. Dat lijkt een fout en is het niet: die deling
-hoort bij de **gecombineerde** waarde van het tellerpaar, niet bij de losse grove helft. HA
-leest beide helften ruw en combineert ze in de template tot `major x 1000 + minor`, wat exact
-het getal oplevert dat de Service Welt toont.
-
-Geverifieerd 02-11-2026 op de warmwaterteller: HA 28138 kWh tegenover 28,138 MWh in de UI.
 
 ---
 
