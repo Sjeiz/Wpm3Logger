@@ -57,9 +57,10 @@ Samengevat, als een functie:
             als (a >> 8) >= 128 of (a & 255) >= 128:    ongeldig
         anders                                           geldig
 
-**Kruiscontrole.** Die regel markeert op 01-11-2026 194 van de 681 registers als ongeldig.
-Onafhankelijk daarvan laat de gedragsanalyse over 5,49 mln waarnemingen uit tien bronnen zien
-dat precies 194 registers nooit een geldige waarde geven. Dezelfde 194.
+**Kruiscontrole.** De regel markeert op een momentopname een aantal registers als onbruikbaar.
+Onafhankelijk daarvan wijst de gedragsanalyse over alle beschikbare meetdata aan welke registers
+nooit een geldige waarde geven. Dat zijn **exact dezelfde registers** -- twee methoden die elkaar
+niet kennen, met dezelfde uitkomst.
 
 ### Wat een onbruikbare waarde precies betekent
 
@@ -143,8 +144,8 @@ register tussen geldig en ongeldig, dus dringend is het niet.
 ### Schaal
 
 `stablevalues.php` bevat `sf::normalize($value, $type)`, dat de schaal volledig uit het
-webType bepaalt. Daarmee is de schaal voor **alle** 681 registers bekend, en zijn de 27
-handmatig gekozen factoren in de Modbus-configuratie overbodig:
+webType bepaalt. Daarmee is de schaal voor **alle** registers bekend, en zijn de handmatig
+gekozen factoren in de Modbus-configuratie overbodig:
 
 | webType | wat ermee gebeurt |
 |---|---|
