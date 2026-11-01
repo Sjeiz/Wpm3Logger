@@ -27,3 +27,16 @@ terugkopiëren zou een nieuwere versie met een oudere kunnen overschrijven.
 
 Niets hiervan is gecontroleerd op secrets-gevoelige inhoud bevonden; de bestanden zijn
 gelezen voordat ze hier zijn geplaatst.
+
+## De configuratiebestanden ernaast
+
+| bestand in `../` | wat het is |
+|---|---|
+| `config.json.template` | de echte template uit `rel_b/etc/config/`, 14 kB -- generiek voor alle toestellen |
+| `config_live_2026-11-01.json` | de **live** configuratie van dit toestel, 467 kB, 554 WebID's |
+| `WPM_3_config.json.template.txt` | een eerdere live config (januari 2026), ondanks de naam |
+
+De live configuratie is wat `isg_object.php` inleest via `$GLOBALS['json_template']`, en
+hij bepaalt welke registers de Service Welt toont en onder welke naam. Hij staat op
+`/var/volatile/cache/config.json`, en **`/var/volatile` is tmpfs**: na een reboot is dat
+bestand weg tot de firmware het opnieuw genereert. Daarom staat hier een kopie met datum.
