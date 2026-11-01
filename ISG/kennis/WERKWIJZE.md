@@ -65,6 +65,28 @@ warmwater, ontdooien). Een register dat in alle vier hetzelfde doet, doet niets.
 **Maar let op wat het bewijst:** alleen dat beide hetzelfde *ruwe* getal lezen -- niet dat
 onze schaal in HA juist is. Zie de valkuilen.
 
+## Hun code is een bron, geen voorbeeld
+
+De Stiebel-code vertelt betrouwbaar **wat het apparaat doet**. Over **hoe je het zelf bouwt** zegt
+hij weinig goeds, en dat is geen detail: wie hun constructies overneemt, neemt hun fouten mee.
+
+Een patroon om te herkennen -- getallen worden er als tekst behandeld:
+
+    $obj->value != "3686.4"        // stringvergelijking op een geschaalde waarde
+    array( 32768, 3276832768 )     // "32768" tweemaal aan elkaar geplakt
+
+De eerste vergelijkt een berekende waarde met een string en vertrouwt op de typeconversie van PHP;
+verander de schaalfactor van dat type en de uit-detectie valt stil, zonder foutmelding. De tweede
+construeert de 32-bits ongeldigwaarde door decimale cijfers te concateneren in plaats van twee
+woorden te combineren.
+
+Hetzelfde denken verklaart `unit: "6"` in hun Modbus-export: als alles tekst is, valt een getal in
+een eenheidsveld niemand op.
+
+**Neem dus de regel over, niet de constructie.** De geldigheidstest uit `isg_object.php` is
+correct; `abs(v) in {...}` is een nette formulering. De stringvergelijking in `pre7.inc` is dat
+niet -- gebruik daar `v == 36864`.
+
 ## Valkuilen
 
 Dit is de lijst die het meeste tijd had gescheeld.
