@@ -89,6 +89,18 @@ registers staan er tientallen op hun minimum of maximum, met heel verschillende 
 warmtepomp **niet** uit staat, en `TAG` op 1 is gewoon de eerste van de maand. Dit is dus een
 interpretatie per register, niet iets wat de PHP kan afleiden.
 
+**Kan een register van geldig naar onbruikbaar gaan?** Ja, maar zelden. Over alle waarnemingen
+deed precies een register dat: een SG-Ready-ingang die af en toe op `0x8000` stond en verder
+gewoon 0 of 1 gaf -- tijdelijk niet leesbaar, geen verdwenen hardware.
+
+Belangrijk daarbij: een functie die je **uitzet** gaat niet naar `0x8000` maar naar de uit-waarde
+van zijn type. De registers die nu op `0x9000` staan zijn in de hele meetperiode nooit aan
+geweest, dus de overgang zelf is niet waargenomen -- dat ze bij uitzetten op `0x9000` komen volgt
+uit `pre7.inc`, niet uit een meting.
+
+De koppeling moet er dus op voorbereid zijn dat een register onbruikbaar wordt zonder dat er iets
+aan de installatie is veranderd, ook al gebeurt het bijna nooit.
+
 **Een vijfde geval, voor de volledigheid:** een register kan geldig zijn en toch niets zeggen
 omdat het nooit beweegt -- een ongebruikte functie. Dat is alleen aan het gedrag over tijd te
 zien, vandaar de kolom `gedrag_gemeten`.
