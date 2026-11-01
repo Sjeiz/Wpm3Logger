@@ -36,3 +36,7 @@
 
 # Auto-detect text/binary for everything else
 * text=auto
+
+# ISG (Stiebel Eltron gateway): moet LF blijven.
+# CRLF in start.sh maakt de shebang ongeldig en breekt de boot van het apparaat.
+ISG/** text eol=lf

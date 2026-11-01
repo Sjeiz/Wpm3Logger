@@ -1,8 +1,3 @@
-<!--
-	Dit bestand moet op de ISG web in de /var/volatile/www (<-symlink) geplaatst worden
-	Het is dan benaderbaar via http://servicewelt.iot.cheizoo.lan/isg_api.php
--->	
-	
 <?php
 header('Content-Type: application/json');
 
