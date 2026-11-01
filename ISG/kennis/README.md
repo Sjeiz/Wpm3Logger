@@ -126,10 +126,14 @@ toegangsniveau, en het loopt gelijk op met hoe ingrijpend een instelling is:
 | 2 | ingrijpend -- hier zitten de reset-registers |
 | 4 | installateurswaarden -- bivalentietemperatuur, inzetgrenzen, ontwerptemperatuur |
 
-Voor fase 3 is dat een bruikbaar filter: een whitelist die alleen `accessRight 1` toelaat sluit de
-resets en de installateursinstellingen vanzelf uit, zonder dat we een lijst met uitzonderingen
-hoeven bij te houden. Het staat per register in `../dumps/config_live_*.json`; de catalogus neemt
-het (nog) niet over.
+Voor fase 3 is dat een bruikbaar filter: een whitelist die alleen niveau 1 toelaat sluit de resets
+en de installateursinstellingen vanzelf uit, zonder dat we een lijst met uitzonderingen hoeven bij
+te houden.
+
+Het staat per register in de catalogus, kolom `toegangsniveau`, naast `access`. Die twee zeggen
+iets anders: `access` is wat het apparaat technisch toestaat (RO, RW, CRW), `toegangsniveau` is
+voor wie de instelling bedoeld is. Registers die niet in de UI-configuratie voorkomen hebben geen
+niveau; daar zegt het veld dus niets, en dat is iets anders dan niveau 1.
 
 ### Wat dat betekent voor de koppeling
 
