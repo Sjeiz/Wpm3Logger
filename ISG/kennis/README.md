@@ -92,6 +92,25 @@ interpretatie per register, niet iets wat de PHP kan afleiden.
 omdat het nooit beweegt -- een ongebruikte functie. Dat is alleen aan het gedrag over tijd te
 zien, vandaar de kolom `gedrag_gemeten`.
 
+### Wat de Service Welt wel en niet toont
+
+De web-UI bouwt zich op uit de configuratie en rendert per register het bestand
+`_inc/pre<presentation>.inc`. Bestaat dat bestand niet, dan wordt er niets getoond.
+
+Dat heeft twee gevolgen die het nemen van de directe route onderbouwen:
+
+- Van de registers in de configuratie hebben er 147 `presentation 0`, en een `pre0.inc` bestaat
+  niet. Die worden dus overgeslagen. Geen verlies: geen van de 147 beweegt.
+- Zwaarwegender: **een groot deel van de registers staat helemaal niet in de UI-configuratie.**
+  Daarvan bewegen er tientallen, waaronder de volledige energietellerreeks op installatieniveau.
+
+De Service Welt laat dus een subset zien, en mist daarbij registers die wel degelijk meten. De
+tester geeft ze alle. Dat is precies de reden dat de koppeling niet via de web-UI loopt maar via
+`isg_tester`.
+
+Zie `webid_catalogus.csv` voor welke registers het betreft; filter op een gevulde `naam` met een
+`gedrag_gemeten` dat met "beweegt" begint.
+
 ### Wat dat betekent voor de koppeling
 
 De PHP hoeft alleen de eerste drie te kennen; die volgen uit waarde en type. Of hij het verschil
