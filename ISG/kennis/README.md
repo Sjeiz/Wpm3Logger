@@ -97,6 +97,61 @@ gezaghebbend en de HA-waarde eigen werk.
 
 ---
 
+## Namen, categorieen en enums -- ook uit Stiebels eigen bestanden
+
+Werkregel die deze sessie opleverde: **bij twijfel naar de Stiebel-broncode, daar moet het
+in staan.** Dat gold voor de geldigheidsregel en het gold opnieuw voor de namen, die we
+eerst moeizaam uit eigen meetwerk probeerden te reconstrueren.
+
+**`../dumps/WPM_3_config.json.template.txt`** is de configuratie waarmee `isg_object.php` de
+Service Welt opbouwt. Die bevat voor 874 WebID's:
+
+- de naam en de plaats in de menuboom (bruikbaar als categorie)
+- `options`: de **enum- en bitveldbetekenissen**, per waarde of per bit
+- `dependency`: het WebID dat bepaalt of dit register zichtbaar is -- het conditie-mechanisme
+  waar `isg_object.php::dependencywebidcheck()` op werkt (30 registers hebben er een)
+- `accessRight` en `pageType`
+
+**`/firmware/rel_b/www/obj/sprache/sprache`** is een PHP-geserialiseerd object met 3468
+vertaalparen; de taal op dit apparaat staat op Engels. De catalogus gebruikt die voor de
+kolom `naam_en` en houdt het Duitse origineel in `naam_de`. Let op: het bestand bevat ook
+andere typen dan strings, dus een regex over `s:<len>:"..."` loopt uit de pas -- gebruik een
+echte unserialize.
+
+### Waar dit eerdere conclusies omgooit
+
+**WebID 402 is `PUMPENSTATUS` (Engels: PUMP), een bitveld met negen benoemde bits:**
+B0 buffer charging pump 1, B1 buffer charging pump 2, B2 source pump, B3 solar circuit pump,
+B4 htg circ pump 1, B5 htg circ pump 2, B6 DHW charging pump, B7 mixer open, B8 Mischer-Z.
+
+Dat is lang onbeslist geweest: `metingen/*.csv` noemt het "LAUFZEIT HEIZEN" met de
+aantekening dat het empirisch is vastgesteld. Twee onafhankelijke argumenten weerleggen dat.
+De broncode geeft de naam en de bits. En een looptijdteller loopt alleen op: over 1226
+metingen op een dag gaat WebID 402 73 keer omhoog en **71 keer omlaag**, net als het bekende
+bitveld 485 (72 omhoog, 74 omlaag), terwijl de bekende teller 1033 7 keer omhoog en 0 keer
+omlaag gaat. Die monotonie-toets is herbruikbaar voor elk register waarvan de aard onduidelijk
+is.
+
+### Het schrijfpad, volgens `save.php`
+
+Stiebel doet bij het opslaan van een waarde precies het omgekeerde van het lezen:
+
+    schaal de invoer OMHOOG volgens webType (x10, x100, x1000)
+    accepteer als  waarde >= minValue en waarde <= maxValue
+    of als presentation == 7 en de waarde -28672 of 36864 is  (0x9000, de 'uit'-stand)
+
+Nuttig voor fase 3: de bereikcontrole die wij willen bouwen bestaat dus al, en de uitzondering
+voor `presentation 7` laat zien dat de 'uit'-stand van die registers geschreven moet kunnen
+worden.
+
+**Pas op met min/max uit twee interfaces.** Gemeten: de tester en de objecttabel geven
+identieke min/max (56 registers, geen afwijking), en de **geschaalde** waarde valt daar
+binnen (40 van 41) terwijl de ruwe dat niet doet (1 van 41). Voor ons, die `isg_tester`
+gebruiken, zijn min/max dus geschaald. `save.php` vergelijkt tegen een ruwe min/max uit de
+php_mapper -- een andere interface met een andere conventie. Niet verwarren.
+
+---
+
 ## De catalogus
 
 `webid_catalogus.csv` — één regel per WebID, met per veld de bron en de status. De kolommen
