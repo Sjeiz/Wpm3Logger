@@ -61,31 +61,46 @@ Samengevat, als een functie:
 Onafhankelijk daarvan laat de gedragsanalyse over 5,49 mln waarnemingen uit tien bronnen zien
 dat precies 194 registers nooit een geldige waarde geven. Dezelfde 194.
 
-### Twee soorten onbruikbaar, en waarom dat verschil telt
+### Wat een onbruikbare waarde precies betekent
 
-De twee regels hierboven vangen verschillende dingen, en voor de koppeling betekenen ze iets
-heel anders:
+Niet elke waarde die geen meting is, betekent hetzelfde. De code onderscheidt er drie, en de
+catalogus doet dat nu ook in de kolom `geldig_01nov`:
 
-| | wat de waarde is | wat het betekent | verandert het ooit? |
+| waarde | geldt bij | betekenis | verandert het ooit? |
 |---|---|---|---|
-| **niet aanwezig** | `0x8000` en varianten | deze installatie heeft die hardware of functie niet; het object is nooit beschreven en staat nog op zijn initiele waarde | nee, niet zonder verbouwing |
-| **niet geldig** | binnen het bereik van het datatype, maar buiten `[min, max]` | er hoort hier wel een sensor te zitten, maar hij staat op de grens van zijn meetbereik -- los, defect of niet aangesloten | ja, zodra de sensor het weer doet |
+| `0x8000` | elk type | **niet aanwezig** -- deze installatie heeft die functie of hardware niet; het object staat nog op zijn initiele waarde | nee, niet zonder verbouwing |
+| `0x9000` | `presentation 7` | **uitgeschakeld** -- de functie bestaat wel, maar staat bewust uit. `_inc/pre7.inc` toont die waarde als *AUS* | ja, zodra je hem aanzet |
+| `0x8080` | `webType 5` | **leeg tijdvenster** -- er is geen schakeltijd ingesteld; beide bytehelften staan op `0x80` | ja, zodra je een tijd instelt |
 
-Het praktische gevolg: **geef die twee niet hetzelfde antwoord terug.**
+Dat onderscheid is geen haarkloverij. `0x8000` bij WebID 455 (`WW-PWM`) betekent dat je toestel
+die regeling niet heeft; `0x9000` bij WebID 43 (`EINSATZGRENZE HZG`) betekent dat de inzetgrens
+bestaat en door jou is uitgezet. Het eerste hoeft nooit een entiteit in HA, het tweede is een
+instelling die je wilt kunnen zien en zetten.
 
-- *Niet aanwezig* hoeft nooit in de payload te staan en hoeft in HA geen entiteit te krijgen.
-  Elke dag dezelfde melding over een zonneboiler die er niet is, is ruis.
-- *Niet geldig* is een storing die je juist wilt zien. Wordt die als "bestaat niet" behandeld,
-  dan verdwijnt een sensor stil uit je data op het moment dat hij kapot gaat -- precies wanneer
-  je het had willen weten.
+**En een vierde geval dat niet uit de waarde af te leiden is.** Een instelling kan op de rand van
+zijn bereik staan en daarmee functioneel "uit" betekenen, terwijl het technisch een geldige waarde
+is. WebID 41 en 42 (`BIVALENZTEMPERATUR HZG/WW`) staan op `-20,0`, het minimum van hun bereik: de
+bijverwarming schakelt dus nooit in.
 
-Daarom geeft de validatiefunctie beter een **reden** terug dan een `true`/`false`. Met alleen een
-boolean gooi je het onderscheid weg op de enige plek waar het nog bekend is.
+Een algemene regel daarvoor bestaat niet, en die moet je ook niet verzinnen. Van de schrijfbare
+registers staan er tientallen op hun minimum of maximum, met heel verschillende betekenis:
+`ANTILEGIONELLENBEHANDLUNG` op 0 is uit, maar `WAERMEPUMPE AUS` op 0 betekent juist dat de
+warmtepomp **niet** uit staat, en `TAG` op 1 is gewoon de eerste van de maand. Dit is dus een
+interpretatie per register, niet iets wat de PHP kan afleiden.
 
-Een derde geval om te kennen: een register kan **geldig zijn en toch niets zeggen**. Veel
-registers staan constant op nul of op een vaste waarde zonder ooit te bewegen. Dat is geen
-ongeldigheid maar een ongebruikte functie, en het is alleen aan het gedrag over tijd te zien --
-vandaar de kolom `gedrag_gemeten` in de catalogus.
+**Een vijfde geval, voor de volledigheid:** een register kan geldig zijn en toch niets zeggen
+omdat het nooit beweegt -- een ongebruikte functie. Dat is alleen aan het gedrag over tijd te
+zien, vandaar de kolom `gedrag_gemeten`.
+
+### Wat dat betekent voor de koppeling
+
+De PHP hoeft alleen de eerste drie te kennen; die volgen uit waarde en type. Of hij het verschil
+ook moet **melden** is een ontwerpkeuze: je kunt alles wat geen meting is uit de payload weglaten,
+waarna de HA-sensor vanzelf `unavailable` wordt. Dat is het eenvoudigst en dekt alle gevallen.
+
+Een reden-code wordt pas nuttig als je onderscheid wilt tussen "was er nooit" en "is net
+weggevallen" -- bijvoorbeeld om op uitval te alarmeren. In de gemeten periode wisselde geen enkel
+register tussen geldig en ongeldig, dus dringend is het niet.
 
 ### Schaal
 
