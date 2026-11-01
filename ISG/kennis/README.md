@@ -16,9 +16,9 @@ We hebben dit eerst uit de data proberen af te leiden, met vier onderling tegens
 sentinel-lijsten als resultaat. Dat was de omweg. De gateway draait Stiebels eigen PHP, en
 daar staat het antwoord letterlijk in.
 
-**Bron:** `/firmware/rel_b/www/isg_object.php` en `/firmware/rel_b/www/stablevalues.php`
-op het apparaat, plus `_inc/pre7.inc`. Die bestanden staan **niet in deze repo** -- het is
-Stiebels auteursrechtelijk beschermde code en deze repo is publiek. Lees ze op het apparaat.
+**Bron:** `isg_object.php`, `stablevalues.php` en `_inc/pre7.inc`. Die staan als referentie in
+`../dumps/stiebel_www/`, met het origineel op het apparaat onder `/firmware/rel_b/www/`. Het is
+Stiebel-code; wij hebben hem niet geschreven en wijzigen hem niet.
 
 ### Ongeldig
 
@@ -60,6 +60,32 @@ Samengevat, als een functie:
 **Kruiscontrole.** Die regel markeert op 01-11-2026 194 van de 681 registers als ongeldig.
 Onafhankelijk daarvan laat de gedragsanalyse over 5,49 mln waarnemingen uit tien bronnen zien
 dat precies 194 registers nooit een geldige waarde geven. Dezelfde 194.
+
+### Twee soorten onbruikbaar, en waarom dat verschil telt
+
+De twee regels hierboven vangen verschillende dingen, en voor de koppeling betekenen ze iets
+heel anders:
+
+| | wat de waarde is | wat het betekent | verandert het ooit? |
+|---|---|---|---|
+| **niet aanwezig** | `0x8000` en varianten | deze installatie heeft die hardware of functie niet; het object is nooit beschreven en staat nog op zijn initiele waarde | nee, niet zonder verbouwing |
+| **niet geldig** | binnen het bereik van het datatype, maar buiten `[min, max]` | er hoort hier wel een sensor te zitten, maar hij staat op de grens van zijn meetbereik -- los, defect of niet aangesloten | ja, zodra de sensor het weer doet |
+
+Het praktische gevolg: **geef die twee niet hetzelfde antwoord terug.**
+
+- *Niet aanwezig* hoeft nooit in de payload te staan en hoeft in HA geen entiteit te krijgen.
+  Elke dag dezelfde melding over een zonneboiler die er niet is, is ruis.
+- *Niet geldig* is een storing die je juist wilt zien. Wordt die als "bestaat niet" behandeld,
+  dan verdwijnt een sensor stil uit je data op het moment dat hij kapot gaat -- precies wanneer
+  je het had willen weten.
+
+Daarom geeft de validatiefunctie beter een **reden** terug dan een `true`/`false`. Met alleen een
+boolean gooi je het onderscheid weg op de enige plek waar het nog bekend is.
+
+Een derde geval om te kennen: een register kan **geldig zijn en toch niets zeggen**. Veel
+registers staan constant op nul of op een vaste waarde zonder ooit te bewegen. Dat is geen
+ongeldigheid maar een ongebruikte functie, en het is alleen aan het gedrag over tijd te zien --
+vandaar de kolom `gedrag_gemeten` in de catalogus.
 
 ### Schaal
 
