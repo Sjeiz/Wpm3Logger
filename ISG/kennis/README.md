@@ -99,8 +99,11 @@ De web-UI bouwt zich op uit de configuratie en rendert per register het bestand
 
 Dat heeft twee gevolgen die het nemen van de directe route onderbouwen:
 
-- Van de registers in de configuratie hebben er 147 `presentation 0`, en een `pre0.inc` bestaat
-  niet. Die worden dus overgeslagen. Geen verlies: geen van de 147 beweegt.
+- Een deel van de registers in de configuratie heeft `presentation 0`, en een `pre0.inc` bestaat
+  niet. Die worden dus overgeslagen. Geen verlies: geen ervan beweegt.
+  *Waarom Stiebel daar geen handler voor heeft, weten we niet.* Afgeschermd zijn ze niet -- ze
+  hebben dezelfde `accessRight` als de meeste registers die wel getoond worden. Het is dus geen
+  uitspraak over hun bruikbaarheid, alleen over wat de UI rendert.
 - Zwaarwegender: **een groot deel van de registers staat helemaal niet in de UI-configuratie.**
   Daarvan bewegen er tientallen, waaronder de volledige energietellerreeks op installatieniveau.
 
@@ -110,6 +113,22 @@ tester geeft ze alle. Dat is precies de reden dat de koppeling niet via de web-U
 
 Zie `webid_catalogus.csv` voor welke registers het betreft; filter op een gevulde `naam` met een
 `gedrag_gemeten` dat met "beweegt" begint.
+
+### accessRight -- bruikbaar voor de schrijf-whitelist
+
+De configuratie geeft per register een `accessRight`. Het is geen zichtbaarheidsvlag maar een
+toegangsniveau, en het loopt gelijk op met hoe ingrijpend een instelling is:
+
+| waarde | wat voor registers |
+|---|---|
+| 1 | gewone bediening -- bedrijfsmodus, gewenste temperaturen |
+| 2 | ingrijpend -- hier zitten de reset-registers |
+| 4 | installateurswaarden -- bivalentietemperatuur, inzetgrenzen, ontwerptemperatuur |
+
+Voor fase 3 is dat een bruikbaar filter: een whitelist die alleen `accessRight 1` toelaat sluit de
+resets en de installateursinstellingen vanzelf uit, zonder dat we een lijst met uitzonderingen
+hoeven bij te houden. Het staat per register in `../dumps/config_live_*.json`; de catalogus neemt
+het (nog) niet over.
 
 ### Wat dat betekent voor de koppeling
 
