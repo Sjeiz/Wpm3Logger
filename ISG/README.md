@@ -48,6 +48,20 @@ bestanden naar `/etc` kopiëren → `remount ro`. Zo komen de SSH-config en de
 geautoriseerde sleutel op hun plek. Een configbestand dat in `/etc` moet staan en een
 reboot moet overleven, gaat via dat blok.
 
+## Een regel in start.sh die aandacht verdient
+
+`start.sh` eindigt met `bin/isg_tester -s 65000 32768`, met een uitgecommentarieerde variant
+`-s 65000 1` eronder. Dat is een experiment uit januari 2026 dat nooit is heroverwogen.
+
+Wat we er nu van weten: WebID 65000 is volgens de tester **alleen-lezen**, en 32768 is precies de
+waarde die een nooit-beschreven register toch al heeft. De regel zet dus waarschijnlijk niets.
+Het enige aantoonbare gevolg van die waarde is dat de Stiebel-webinterface dertien registers
+verbergt die 65000 als `dependency` hebben.
+
+**Dat raakt onze koppeling niet** -- die leest via `isg_tester`, en daar staan die dertien gewoon
+in. Het is dus geen open beslissing, alleen iets om te weten als iemand zich ooit afvraagt waarom
+die regel er staat.
+
 ## Niet in deze map
 
 De SSH-sleutels horen bij de secrets en blijven buiten deze repo — die is publiek.
