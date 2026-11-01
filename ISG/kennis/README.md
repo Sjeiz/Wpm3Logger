@@ -348,10 +348,15 @@ meetdata of met de broncode aangetoond, niet vermoed.
 - `isg_json_exporter.sh` schreef de slotregel `object_count: 681` weg als WebID met lege
   velden, waardoor beide JSON-dumps ongeldig waren.
 
-### In de Modbus-configuratie van Home Assistant
+### Geen fout, maar het leek er wel op
 
-- Tien registers van `wtype 11` staan op `scale: 1.0` waar `sf::normalize` door 1000 deelt.
-  Dat zijn de energietellers; zie de paarstructuur hierboven.
+Tien registers van `wtype 11` staan in de HA-configuratie op `scale: 1.0` terwijl
+`sf::normalize` bij dat type door 1000 deelt. Dat lijkt een fout en is het niet: die deling
+hoort bij de **gecombineerde** waarde van het tellerpaar, niet bij de losse grove helft. HA
+leest beide helften ruw en combineert ze in de template tot `major x 1000 + minor`, wat exact
+het getal oplevert dat de Service Welt toont.
+
+Geverifieerd 02-11-2026 op de warmwaterteller: HA 28138 kWh tegenover 28,138 MWh in de UI.
 
 ---
 
