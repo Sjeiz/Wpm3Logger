@@ -21,7 +21,7 @@ webid,naam,naam_en,naam_en_bron,naam_de,naam_modbus_csv,categorie,eenheid,wtype,
 22,DHW,DHW,Stiebel,WARMWASSER,,WP > WPM_3 > START,°C,2,RW,10,60,0.1,,,31511,500,geldig,constant op 500,10,,DONE and VERIFIED,eerder door ons 'SOLLTEMPERATUR WARMWASSER COMFORT' genoemd
 23,ECO TEMPERATURE,ECO TEMPERATURE,Stiebel,ECO TEMPERATUR,,WP > WPM_3 > EINSTELLUNGEN > WARMWASSER > WARMWASSERTEMPERATUREN,°C,2,RW,10,60,0.1,,,31510,500,geldig,beweegt (2 waarden),10,,DONE and VERIFIED,eerder door ons 'SOLLTEMPERATUR WARMWASSER ECO' genoemd
 24,DHW,DHW,Stiebel,WARMWASSER,,WP > WPM_3 > START,°C,2,RO,10,65,0.1,,,30522,502,geldig,beweegt (81 waarden),10,,DONE and VERIFIED,eerder door ons 'ISTTEMPERATUR WARMWASSER' genoemd
-25,HEATING CURVE RISE,HEATING CURVE RISE,Stiebel,STEIGUNG HEIZKURVE,,WP > WPM_3 > EINSTELLUNGEN > HEIZEN > HEIZKREIS 1,,7,RW,0,3,0.01,,,,22,geldig,constant op 22,10,,empirisch vastgesteld,eerder door ons 'interne HK1‑Offset?' genoemd
+25,HEATING CURVE RISE,HEATING CURVE RISE,Stiebel,STEIGUNG HEIZKURVE,,WP > WPM_3 > EINSTELLUNGEN > HEIZEN > HEIZKREIS 1,,7,RW,0,3,0.01,,,41504,22,geldig,constant op 22,10,,empirisch vastgesteld,eerder door ons 'interne HK1‑Offset?' genoemd; modbus-adres uit manifest jan-2026 (681)
 26,HEATING CURVE RISE,HEATING CURVE RISE,Stiebel,STEIGUNG HEIZKURVE,,WP > WPM_3 > EINSTELLUNGEN > HEIZEN > HEIZKREIS 2,,7,RW,0,3,0.01,,,30507,29,geldig,beweegt (2 waarden),11,,DONE AND VERIFIED,in de analyse-set
 27,OUTSIDE TEMPERATURE,OUTSIDE TEMPERATURE,Stiebel,AUSSENTEMPERATUR,,WP > WPM_3 > INFO > ANLAGE > HEIZUNG,°C,2,RO,-60,80,0.1,,,30507,109,geldig,beweegt (95 waarden),10,,DONE,
 29,DEW POINT TEMPERATURE,DEW POINT TEMPERATURE,Stiebel,TAUPUNKTTEMPERATUR,,WP > WPM_3 > INFO > ANLAGE > RAUMTEMPERATUR,°C,2,RO,-40,30,0.1,,,30506,111,geldig,beweegt (60 waarden),10,,DONE and VERIFIED,zichtbaar afhankelijk van WebID 444
@@ -34,7 +34,7 @@ webid,naam,naam_en,naam_en_bron,naam_de,naam_modbus_csv,categorie,eenheid,wtype,
 37,ACTUAL FLOW TEMPERATURE,ACTUAL FLOW TEMPERATURE,Stiebel,VORLAUFISTTEMPERATUR,,WP > WPM_3 > INFO > ANLAGE > HEIZUNG,°C,2,RO,0,0,0.1,,,30516,204,geldig,beweegt (199 waarden),10,,DONE AND VERIFIED,eerder door ons 'RUECKLAUFTEMPERATUR - WP1' genoemd
 38,MAXIMUM FLOW TEMPERATURE,MAXIMUM FLOW TEMPERATURE,Stiebel,MAXIMALE VORLAUFTEMP,MAXIMALE VORLAUFTEMP,WP > WPM_3 > EINSTELLUNGEN > HEIZEN > GRUNDEINSTELLUNG,°C,2,RW,20,75,0.1,,,48001,450,geldig,constant op 450,10,,,
 39,SOURCE TEMPERATURE,SOURCE TEMPERATURE,Stiebel,QUELLENTEMPERATUR,,WP > WPM_3 > INFO > ANLAGE > QUELLE,°C,2,RO,0,0,0.1,,,30536,32768,ongeldig (0x8000),nooit beschreven,5,,,
-40,MIN SOURCE TEMPERATURE,MIN SOURCE TEMPERATURE,Stiebel,QUELLENTEMPERATUR MIN,,WP > WPM_3 > INFO > ANLAGE > QUELLE,°C,2,CRW,-10,10,0.1,,,,32768,ongeldig (0x8000),nooit beschreven,5,,,zichtbaar afhankelijk van WebID 65000
+40,MIN SOURCE TEMPERATURE,MIN SOURCE TEMPERATURE,Stiebel,QUELLENTEMPERATUR MIN,,WP > WPM_3 > INFO > ANLAGE > QUELLE,°C,2,CRW,-10,10,0.1,,,30537,32768,ongeldig (0x8000),nooit beschreven,5,,,zichtbaar afhankelijk van WebID 65000; modbus-adres uit manifest jan-2026 (681)
 41,DUAL MODE TEMP HZG,DUAL MODE TEMP HZG,Stiebel,BIVALENZTEMPERATUR HZG,,WP > WPM_3 > INFO > ANLAGE > WAERMEERZEUGER EXTERN,°C,2,RW,-20,40,0.1,,,41509,-200,geldig,constant op -200,10,,,
 42,DUAL MODE TEMP WW,DUAL MODE TEMP WW,Stiebel,BIVALENZTEMPERATUR WW,,WP > WPM_3 > INFO > ANLAGE > WAERMEERZEUGER EXTERN,°C,2,RW,-20,40,0.1,,,41513,-200,geldig,constant op -200,10,,,
 43,APPLICATION LIMIT HZG,APPLICATION LIMIT HZG,Stiebel,EINSATZGRENZE HZG,,WP > WPM_3 > INFO > ANLAGE > WAERMEERZEUGER EXTERN,°C,2,CRW,-20,40,0.1,,,30533,36864,ongeldig (0x9000),nooit beschreven,10,,,eerder door ons 'Temperatur (nicht belegt) – Vorschlag?' genoemd
@@ -42,7 +42,7 @@ webid,naam,naam_en,naam_en_bron,naam_de,naam_modbus_csv,categorie,eenheid,wtype,
 45,SYSTEM FROST PROTECTION,SYSTEM FROST PROTECTION,Stiebel,ANLAGENFROST,FROSTSCHUTZ ANLAGE,WP > WPM_3 > INFO > ANLAGE > HEIZUNG,°C,2,RW,-10,10,0.1,,,48002,40,geldig,constant op 40,10,,,eerder door ons 'FROSTSCHUTZ ANLAGE' genoemd
 49,VD HEATING DAY (Wh-deel),VD HEATING DAY (Wh-deel),"Stiebel, afgeleid uit de paarstructuur",VD HEIZEN TAG,VD HEIZEN TAG,,Wh,1,RO,-32768,32767,1,,,38001,728,geldig,beweegt (82 waarden),10,,,"fijne helft van een tellerpaar, grove helft is WebID 50; bevestigd op waarden tegen de Service Welt, 01-11-2026"
 50,VD HEATING DAY,VD HEATING DAY,Stiebel,VD HEIZEN TAG - WP1,,,kWh,11,RO,-2147483648,2147483647,0.001,,,33523,32,geldig,beweegt (65 waarden),10,,DONE,
-51,VD HEATING TOTAL (kWh-deel),VD HEATING TOTAL (kWh-deel),"Stiebel, afgeleid uit de paarstructuur",VD ZÄHLER (unbestimmt) – Vorschlag?,,,kWh,1,RO,-32768,32767,1,,,,234,geldig,beweegt (8 waarden),10,,,"eigen gok van ons, geen Stiebel-naam: 'VD ZAEHLER (unbestimmt)'; fijne helft van een tellerpaar, grove helft is WebID 52; bevestigd op waarden tegen de Service Welt, 01-11-2026"
+51,VD HEATING TOTAL (kWh-deel),VD HEATING TOTAL (kWh-deel),"Stiebel, afgeleid uit de paarstructuur",VD ZÄHLER (unbestimmt) – Vorschlag?,,,kWh,1,RO,-32768,32767,1,,,33502,234,geldig,beweegt (8 waarden),10,,,"eigen gok van ons, geen Stiebel-naam: 'VD ZAEHLER (unbestimmt)'; fijne helft van een tellerpaar, grove helft is WebID 52; bevestigd op waarden tegen de Service Welt, 01-11-2026; modbus-adres uit manifest jan-2026 (681)"
 52,VD HEATING TOTAL,VD HEATING TOTAL,Stiebel,VD HEIZEN SUMME - WP1,,,MWh,11,RO,-2147483648,2147483647,0.001,,,33524-33525,80,geldig,beweegt (3 waarden),10,,DONE,
 53,VD DHW DAY (Wh-deel),VD DHW DAY (Wh-deel),"Stiebel, afgeleid uit de paarstructuur",VD WARMWASSER TAG,VD WARMWASSER TAG,,Wh,1,RO,-32768,32767,1,,,38002,0,geldig,beweegt (12 waarden),11,,,"in de analyse-set; fijne helft van een tellerpaar, grove helft is WebID 54; bevestigd op waarden tegen de Service Welt, 01-11-2026"
 54,VD DHW DAY,VD DHW DAY,Stiebel,VD WARMWASSER TAG - WP1,,,kWh,11,RO,-2147483648,2147483647,0.001,,,33526,0,geldig,beweegt (9 waarden),10,,DONE,
@@ -59,15 +59,15 @@ webid,naam,naam_en,naam_en_bron,naam_de,naam_modbus_csv,categorie,eenheid,wtype,
 65,POWER CONSUMPTION HEATING TOTAL (kWh-deel),POWER CONSUMPTION HEATING TOTAL (kWh-deel),"Stiebel, afgeleid uit de paarstructuur",,,,kWh,1,RO,-32768,32767,1,,,33512,320,geldig,beweegt (8 waarden),10,,,"fijne helft van een tellerpaar, grove helft is WebID 66; bevestigd op waarden tegen de Service Welt, 01-11-2026"
 66,VD HEATING TOTAL,VD HEATING TOTAL,Stiebel,VD HEIZEN SUMME,,,MWh,11,RO,-2147483648,2147483647,0.001,,,33534-33535,17,geldig,constant op 16,10,,DONE,
 67,POWER CONSUMPTION DHW DAY (Wh-deel),POWER CONSUMPTION DHW DAY (Wh-deel),"Stiebel, afgeleid uit de paarstructuur",VD WARMWASSER TAG,VD WARMWASSER TAG,,Wh,1,RO,-32768,32767,1,,,38006,0,geldig,beweegt (12 waarden),10,,,"fijne helft van een tellerpaar, grove helft is WebID 68; bevestigd op waarden tegen de Service Welt, 01-11-2026"
-68,VD DHW DAY,VD DHW DAY,Stiebel,VD WARMWASSER TAG - WP1,,,kWh,11,RO,-2147483648,2147483647,0.001,,,,0,geldig,beweegt (3 waarden),11,,,in de analyse-set
+68,VD DHW DAY,VD DHW DAY,Stiebel,VD WARMWASSER TAG - WP1,,,kWh,11,RO,-2147483648,2147483647,0.001,,,33514,0,geldig,beweegt (3 waarden),11,,,in de analyse-set; modbus-adres uit manifest jan-2026 (681)
 69,POWER CONSUMPTION DHW TOTAL (kWh-deel),POWER CONSUMPTION DHW TOTAL (kWh-deel),"Stiebel, afgeleid uit de paarstructuur",,,,kWh,1,RO,-32768,32767,1,,,33515,472,geldig,beweegt (8 waarden),10,,,"fijne helft van een tellerpaar, grove helft is WebID 70; bevestigd op waarden tegen de Service Welt, 01-11-2026"
-70,VD DHW TOTAL,VD DHW TOTAL,Stiebel,VD WARMWASSER SUMME - WP1,,,MWh,11,RO,-2147483648,2147483647,0.001,,,,8,geldig,constant op 8,11,,,in de analyse-set
+70,VD DHW TOTAL,VD DHW TOTAL,Stiebel,VD WARMWASSER SUMME - WP1,,,MWh,11,RO,-2147483648,2147483647,0.001,,,33516,8,geldig,constant op 8,11,,,in de analyse-set; modbus-adres uit manifest jan-2026 (681)
 83,COOLING MODE,COOLING MODE,Stiebel,KUEHLMODUS,KUEHLMODUS,WP > WPM_3 > EINSTELLUNGEN > KUEHLEN > KUEHLMODUS,,6,RW,0,1,1,,"enum, 2 waarden -> webid_codes.csv",48003,32768,ongeldig (0x8000),nooit beschreven,5,,,1=ACTIVE COOLING
-85,FAN COOLING,FAN COOLING,Stiebel,GEBLAESEKUEHLUNG,GEBLAESEKUEHLUNG,WP > WPM_3 > EINSTELLUNGEN > KUEHLEN > GEBLAESEKUEHLUNG,,6,RW,0,1,1,,"enum, 2 waarden -> webid_codes.csv",,0,geldig,constant op 0,10,,DONE AND VERIFIED,1=ON
-86,SET ROOM TEMPERATURE,SET ROOM TEMPERATURE,Stiebel,RAUMSOLLTEMPERATUR,,WP > WPM_3 > EINSTELLUNGEN > KUEHLEN > GEBLAESEKUEHLUNG,°C,2,RW,20,30,0.1,,,,32768,ongeldig (0x8000),nooit beschreven,5,,DONE AND VERIFIED,eerder door ons 'ISTTEMPERATUR GEBLAESE' genoemd
+85,FAN COOLING,FAN COOLING,Stiebel,GEBLAESEKUEHLUNG,GEBLAESEKUEHLUNG,WP > WPM_3 > EINSTELLUNGEN > KUEHLEN > GEBLAESEKUEHLUNG,,6,RW,0,1,1,,"enum, 2 waarden -> webid_codes.csv",48004,0,geldig,constant op 0,10,,DONE AND VERIFIED,1=ON; modbus-adres uit manifest jan-2026 (681)
+86,SET ROOM TEMPERATURE,SET ROOM TEMPERATURE,Stiebel,RAUMSOLLTEMPERATUR,,WP > WPM_3 > EINSTELLUNGEN > KUEHLEN > GEBLAESEKUEHLUNG,°C,2,RW,20,30,0.1,,,41519,32768,ongeldig (0x8000),nooit beschreven,5,,DONE AND VERIFIED,eerder door ons 'ISTTEMPERATUR GEBLAESE' genoemd; modbus-adres uit manifest jan-2026 (681)
 87,FLOW TEMP HYSTERESIS,FLOW TEMP HYSTERESIS,Stiebel,HYSTERESE VORLAUFTEMP,,WP > WPM_3 > EINSTELLUNGEN > KUEHLEN > GEBLAESEKUEHLUNG,K,2,RW,1,5,0.1,,,41518,32768,ongeldig (0x8000),nooit beschreven,5,,,
 88,SET TEMPERATURE FAN,SET TEMPERATURE FAN,Stiebel,SOLLTEMPERATUR GEBLAESE,,WP > WPM_3 > INFO > ANLAGE > KUEHLEN,°C,2,RW,7,25,0.1,,,30525,32768,ongeldig (0x8000),nooit beschreven,5,,DONE and VERIFIED,
-89,AREA COOLING,AREA COOLING,Stiebel,FLAECHENKUEHLUNG,FLAECHENKUEHLUNG,WP > WPM_3 > EINSTELLUNGEN > KUEHLEN > FLAECHENKUEHLUNG,,6,RW,0,1,1,,"enum, 2 waarden -> webid_codes.csv",,1,geldig,constant op 1,10,,DONE and VERIFIED,1=ON
+89,AREA COOLING,AREA COOLING,Stiebel,FLAECHENKUEHLUNG,FLAECHENKUEHLUNG,WP > WPM_3 > EINSTELLUNGEN > KUEHLEN > FLAECHENKUEHLUNG,,6,RW,0,1,1,,"enum, 2 waarden -> webid_codes.csv",48005,1,geldig,constant op 1,10,,DONE and VERIFIED,1=ON; modbus-adres uit manifest jan-2026 (681)
 90,SET ROOM TEMPERATURE,SET ROOM TEMPERATURE,Stiebel,RAUMSOLLTEMPERATUR,,WP > WPM_3 > EINSTELLUNGEN > KUEHLEN > FLAECHENKUEHLUNG,°C,2,RW,20,30,0.1,,,30526,200,geldig,constant op 200,10,,DONE AND VERIFIED,eerder door ons 'ISTTEMPERATUR FLAECHE' genoemd
 91,FLOW TEMP HYSTERESIS,FLOW TEMP HYSTERESIS,Stiebel,HYSTERESE VORLAUFTEMP.,,WP > WPM_3 > EINSTELLUNGEN > KUEHLEN > FLAECHENKUEHLUNG,K,2,RW,1,5,0.1,,,41515,32768,ongeldig (0x8000),nooit beschreven,5,,,
 92,SET FLOW TEMPERATURE,SET FLOW TEMPERATURE,Stiebel,VORLAUFSOLLTEMPERATUR,,WP > WPM_3 > EINSTELLUNGEN > KUEHLEN > FLAECHENKUEHLUNG,°C,2,RW,7,25,0.1,,,30527,165,geldig,constant op 170,10,,DONE and VERIFIED,
@@ -88,12 +88,12 @@ webid,naam,naam_en,naam_en_bron,naam_de,naam_modbus_csv,categorie,eenheid,wtype,
 108,OUTSIDE TEMPERATURE,OUTSIDE TEMPERATURE,Stiebel,AUSSENTEMPERATUR,,WP > WPM_3 > EINSTELLUNGEN > WARMWASSER > WARMWASSERAUTOMATIK,°C,2,RW,-5,30,0.1,,,,32768,ongeldig (0x8000),nooit beschreven,5,,,
 109,IDLE TIME,IDLE TIME,Stiebel,STILLSTANDSZEIT,,WP > WPM_3 > EINSTELLUNGEN > INBETRIEBNAHME > VERDICHTER,min,8,RW,1,120,1,,,,5,geldig,constant op 5,10,,,
 111,SOURCE MEDIUM,SOURCE MEDIUM,Stiebel,QUELLENMEDIUM,QUELLENMEDIUM,WP > WPM_3 > EINSTELLUNGEN > INBETRIEBNAHME > QUELLE,,8,RW,0,8,1,,"enum, 9 waarden -> webid_codes.csv",48008,32768,ongeldig (0x8000),nooit beschreven,5,,,2=POTASSIUM CARBONATE; 1=WATER; 2=EXTRACT AIR MODULE 0; 3=EXTRACT AIR MODULE 30; 4=EXTRACT AIR MODULE 60; 5=EXTRACT AIR MODULE 120; 6=EXTRACT AIR MODULE 180; 8=GROUNDWATER MODULE
-112,,,,,,,,8,RO,0,7,1,,,,7,geldig,beweegt (5 waarden),10,bewegend;onderzoek,,
+112,-,-,"eigen manifest jan-2026, niet van Stiebel",,,,,8,RO,0,7,1,,,,7,geldig,beweegt (5 waarden),10,,,
 113,MAXIMUM RETURN TEMP,MAXIMUM RETURN TEMP,Stiebel,MAXIMALE RUECKLAUFTEMP,,WP > WPM_3 > EINSTELLUNGEN > HEIZEN > GRUNDEINSTELLUNG,°C,2,RW,20,65,0.1,,,,450,geldig,constant op 450,10,,,
 114,MIXER DYNAMICS,MIXER DYNAMICS,Stiebel,MISCHERDYNAMIK,,WP > WPM_3 > EINSTELLUNGEN > HEIZEN > HEIZKREIS 2,,8,RW,30,240,1,,,,100,geldig,constant op 100,10,,,zichtbaar afhankelijk van WebID 65000
 115,MAXIMUM TEMPERATURE,MAXIMUM TEMPERATURE,Stiebel,MAXIMAL TEMPERATUR,,WP > WPM_3 > EINSTELLUNGEN > HEIZEN > HEIZKREIS 2,°C,2,RW,20,60,0.1,,,,450,geldig,constant op 450,10,,,zichtbaar afhankelijk van WebID 65000
-116,ACTUAL TEMPERATURE HK 1,ACTUAL TEMPERATURE HK 1,Stiebel,ISTTEMPERATUR HK 1,,WP > WPM_3 > INFO > ANLAGE > HEIZUNG,°C,2,RO,0,40,0.1,,,,226,geldig,beweegt (122 waarden),10,,empirisch vastgesteld via HK1/HK2,eerder door ons 'HK1/HK2 (gedeeld) Vorlauf‑IST 1' genoemd
-117,SET TEMPERATURE HK 1,SET TEMPERATURE HK 1,Stiebel,SOLLTEMPERATUR HK 1,,WP > WPM_3 > INFO > ANLAGE > HEIZUNG,°C,2,RO,0,40,0.1,,,,236,geldig,beweegt (32 waarden),10,,empirisch vastgesteld via HK1,eerder door ons 'interne Flow‑Ableitung' genoemd
+116,ACTUAL TEMPERATURE HK 1,ACTUAL TEMPERATURE HK 1,Stiebel,ISTTEMPERATUR HK 1,,WP > WPM_3 > INFO > ANLAGE > HEIZUNG,°C,2,RO,0,40,0.1,,,30508,226,geldig,beweegt (122 waarden),10,,empirisch vastgesteld via HK1/HK2,eerder door ons 'HK1/HK2 (gedeeld) Vorlauf‑IST 1' genoemd; modbus-adres uit manifest jan-2026 (681)
+117,SET TEMPERATURE HK 1,SET TEMPERATURE HK 1,Stiebel,SOLLTEMPERATUR HK 1,,WP > WPM_3 > INFO > ANLAGE > HEIZUNG,°C,2,RO,0,40,0.1,,,30510,236,geldig,beweegt (32 waarden),10,,empirisch vastgesteld via HK1,eerder door ons 'interne Flow‑Ableitung' genoemd; modbus-adres uit manifest jan-2026 (681)
 118,ACTUAL BUFFER TEMPERATURE,ACTUAL BUFFER TEMPERATURE,Stiebel,PUFFERISTTEMPERATUR,,WP > WPM_3 > INFO > ANLAGE > HEIZUNG,°C,2,RO,0,90,0.1,,,30508,226,geldig,beweegt (120 waarden),10,,DONE AND VERIFIED,
 119,HEATING CURVE GAP,HEATING CURVE GAP,Stiebel,ABSTAND HEIZKURVE,,WP > WPM_3 > EINSTELLUNGEN > HEIZEN > WAERMEERZEUGER EXTERN,K,2,RW,1,15,0.1,,,,32768,ongeldig (0x8000),nooit beschreven,5,,,
 120,DHW HYSTERESIS,DHW HYSTERESIS,Stiebel,WARMWASSERHYSTERESE,WARMWASSERHYSTERESE,WP > WPM_3 > EINSTELLUNGEN > WARMWASSER > GRUNDEINSTELLUNG,K,2,RW,1,10,0.1,,,48009,50,geldig,constant op 50,10,,,
@@ -310,7 +310,7 @@ webid,naam,naam_en,naam_en_bron,naam_de,naam_modbus_csv,categorie,eenheid,wtype,
 333,ACTUAL TEMPERATURE,ACTUAL TEMPERATURE,Stiebel,ISTTEMPERATUR,,WP > WPM_3 > INFO > ANLAGE > WAERMEERZEUGER EXTERN,°C,2,RO,10,90,0.1,,,30531,32768,ongeldig (0x8000),nooit beschreven,5,,,
 334,SET BOILER TEMPERATURE,SET BOILER TEMPERATURE,Stiebel,KESSELSOLLTEMPERATUR,,WP > WPM_3 > EINSTELLUNGEN > HEIZEN > WAERMEERZEUGER EXTERN,°C,2,RW,35,90,0.1,,,,32768,ongeldig (0x8000),nooit beschreven,5,,,
 335,COLLECTOR TEMPERATURE,COLLECTOR TEMPERATURE,Stiebel,KOLLEKTORTEMPERATUR,,WP > WPM_3 > INFO > ANLAGE > SOLAR,°C,2,RO,0,90,0.1,,,30528,165,geldig,constant op 170,10,,,
-336,CYLINDER TEMPERATURE,CYLINDER TEMPERATURE,Stiebel,SPEICHERTEMPERATUR,,WP > WPM_3 > INFO > ANLAGE > SOLAR,°C,2,RO,0,90,0.1,,,,231,geldig,beweegt (24 waarden),11,,empirisch vastgesteld via HK1/HK2,in de analyse-set; eerder door ons 'Heizkurven‑Kompensation HK1/HK2 (gedeeld' genoemd
+336,CYLINDER TEMPERATURE,CYLINDER TEMPERATURE,Stiebel,SPEICHERTEMPERATUR,,WP > WPM_3 > INFO > ANLAGE > SOLAR,°C,2,RO,0,90,0.1,,,30529,231,geldig,beweegt (24 waarden),11,,empirisch vastgesteld via HK1/HK2,in de analyse-set; eerder door ons 'Heizkurven‑Kompensation HK1/HK2 (gedeeld' genoemd; modbus-adres uit manifest jan-2026 (681)
 342,EXTERNAL HEAT SOURCE,EXTERNAL HEAT SOURCE,Stiebel,WAERMEERZEUGER EXTERN,,WP > WPM_3 > EINSTELLUNGEN > HEIZEN > WAERMEERZEUGER EXTERN,,8,RW,0,3,1,,"enum, 4 waarden -> webid_codes.csv",,32768,ongeldig (0x8000),nooit beschreven,5,,,1=THREADED IMMERSION HEATER; 2=BOILER; 3=HZG PWM
 343,RUNTIME,RUNTIME,Stiebel,LAUFZEIT,,WP > WPM_3 > INFO > ANLAGE > WAERMEERZEUGER EXTERN,h,6,RO,0,0,1,,,30535,32768,ongeldig (0x8000),nooit beschreven,5,,,
 344,RUNTIME,RUNTIME,Stiebel,LAUFZEIT,,WP > WPM_3 > INFO > ANLAGE > SOLAR,h,6,RO,0,0,1,,,30530,32768,ongeldig (0x8000),nooit beschreven,5,,,
@@ -340,7 +340,7 @@ webid,naam,naam_en,naam_en_bron,naam_de,naam_modbus_csv,categorie,eenheid,wtype,
 433,SUMMER MODE WPM3,SUMMER MODE WPM3,eigen vertaling,SOMMERBETRIEB WPM3,SOMMERBETRIEB WPM3,WP > WPM_3 > EINSTELLUNGEN > INBETRIEBNAHME > NOTBETRIEB,,6,RO,0,32768,1,,,38009,0,geldig,beweegt (5 waarden),10,,,
 434,ACTUAL FLOW TEMPERATURE WP,ACTUAL FLOW TEMPERATURE WP,Stiebel,VORLAUFISTTEMPERATUR WP,,WP > WPM_3 > INFO > ANLAGE > HEIZUNG,°C,2,RO,0,0,0.1,,,30513,32768,ongeldig (0x8000),nooit beschreven,5,,,
 435,HEATING PRESSURE,HEATING PRESSURE,Stiebel,HEIZUNGSDRUCK,,WP > WPM_3 > INFO > ANLAGE > HEIZUNG,bar,7,RO,0,0,0.01,,,30520,181,geldig,beweegt (26 waarden),10,,DONE AND VERIFIED,eerder door ons 'WASSERDRUCK' genoemd
-437,ACTUAL FLOW TEMPERATURE NHZ,ACTUAL FLOW TEMPERATURE NHZ,Stiebel,VORLAUFISTTEMPERATUR NHZ,,WP > WPM_3 > INFO > ANLAGE > HEIZUNG,°C,2,RO,0,0,0.1,,,,241,geldig,beweegt (236 waarden),10,,empirisch vastgesteld via HK1/HK2,eerder door ons 'Wärmeabgabe Ableitung HK1/HK2 (gedeeld)' genoemd
+437,ACTUAL FLOW TEMPERATURE NHZ,ACTUAL FLOW TEMPERATURE NHZ,Stiebel,VORLAUFISTTEMPERATUR NHZ,,WP > WPM_3 > INFO > ANLAGE > HEIZUNG,°C,2,RO,0,0,0.1,,,30514,241,geldig,beweegt (236 waarden),10,,empirisch vastgesteld via HK1/HK2,eerder door ons 'Wärmeabgabe Ableitung HK1/HK2 (gedeeld)' genoemd; modbus-adres uit manifest jan-2026 (681)
 438,FLOW RATE,FLOW RATE,Stiebel,VOLUMENSTROM,,WP > WPM_3 > INFO > ANLAGE > HEIZUNG,l/min,7,RO,0,0,0.01,,,30548,0,geldig,beweegt (31 waarden),11,,DONE and VERIFIED,in de analyse-set; eerder door ons 'WASSERVOLUMENSTROM - WP1' genoemd
 439,SOURCE PRESSURE,SOURCE PRESSURE,Stiebel,QUELLENDRUCK,,WP > WPM_3 > INFO > ANLAGE > QUELLE,bar,7,RO,0,0,0.01,,,30538,32768,ongeldig (0x8000),nooit beschreven,5,,,
 440,ACTUAL TEMPERATURE FE7,ACTUAL TEMPERATURE FE7,Stiebel,ISTTEMPERATUR FE7,,WP > WPM_3 > INFO > ANLAGE > RAUMTEMPERATUR,°C,2,RO,0,0,0.1,,,30501,32768,ongeldig (0x8000),nooit beschreven,5,,,
@@ -348,9 +348,9 @@ webid,naam,naam_en,naam_en_bron,naam_de,naam_modbus_csv,categorie,eenheid,wtype,
 442,ACTUAL TEMPERATURE FEK,ACTUAL TEMPERATURE FEK,Stiebel,ISTTEMPERATUR FEK,,WP > WPM_3 > INFO > ANLAGE > RAUMTEMPERATUR,°C,2,RO,0,0,0.1,,,30503,213,geldig,beweegt (24 waarden),10,,,
 443,SET TEMPERATURE FEK,SET TEMPERATURE FEK,Stiebel,SOLLTEMPERATUR FEK,,WP > WPM_3 > INFO > ANLAGE > RAUMTEMPERATUR,°C,2,RO,0,0,0.1,,,30504,205,geldig,beweegt (3 waarden),10,,,
 444,RELATIVE HUMIDITY,RELATIVE HUMIDITY,Stiebel,RAUMFEUCHTE,,WP > WPM_3 > INFO > ANLAGE > RAUMTEMPERATUR,%,2,RO,0,0,0.1,,,30505,524,geldig,beweegt (119 waarden),10,,DONE and VERIFIED,
-445,ACTUAL FLOW TEMPERATURE,ACTUAL FLOW TEMPERATURE,Stiebel,VORLAUFISTTEMPERATUR,,WP > WPM_3 > INFO > ANLAGE > HEIZUNG,°C,2,RO,0,0,0.1,,,,204,geldig,beweegt (229 waarden),11,,empirisch vastgesteld via HK1/HK2,in de analyse-set; eerder door ons 'Rücklauf/Flow Ableitung HK1/HK2 (gedeeld' genoemd
+445,ACTUAL FLOW TEMPERATURE,ACTUAL FLOW TEMPERATURE,Stiebel,VORLAUFISTTEMPERATUR,,WP > WPM_3 > INFO > ANLAGE > HEIZUNG,°C,2,RO,0,0,0.1,,,30515,204,geldig,beweegt (229 waarden),11,,empirisch vastgesteld via HK1/HK2,in de analyse-set; eerder door ons 'Rücklauf/Flow Ableitung HK1/HK2 (gedeeld' genoemd; modbus-adres uit manifest jan-2026 (681)
 446,ACTUAL TEMPERATURE FAN,ACTUAL TEMPERATURE FAN,Stiebel,ISTTEMPERATUR GEBLAESE,,WP > WPM_3 > INFO > ANLAGE > KUEHLEN,°C,2,RO,0,0,0.1,,,30524,32768,ongeldig (0x8000),nooit beschreven,5,,,
-447,ACTUAL TEMPERATURE AREA,ACTUAL TEMPERATURE AREA,Stiebel,ISTTEMPERATUR FLAECHE,,WP > WPM_3 > INFO > ANLAGE > KUEHLEN,°C,2,RO,0,0,0.1,,,,231,geldig,beweegt (23 waarden),10,,empirisch vastgesteld via HK1,eerder door ons 'Kurven Ableitung HK1' genoemd
+447,ACTUAL TEMPERATURE AREA,ACTUAL TEMPERATURE AREA,Stiebel,ISTTEMPERATUR FLAECHE,,WP > WPM_3 > INFO > ANLAGE > KUEHLEN,°C,2,RO,0,0,0.1,,,30526,231,geldig,beweegt (23 waarden),10,,empirisch vastgesteld via HK1,eerder door ons 'Kurven Ableitung HK1' genoemd; modbus-adres uit manifest jan-2026 (681)
 448,SET TEMPERATURE AREA,SET TEMPERATURE AREA,Stiebel,SOLLTEMPERATUR FLAECHE,,WP > WPM_3 > INFO > ANLAGE > KUEHLEN,°C,2,RO,0,0,0.1,,,30527,165,geldig,constant op 170,10,,,
 449,SET TEMPERATURE,SET TEMPERATURE,Stiebel,SOLLTEMPERATUR,,WP > WPM_3 > INFO > ANLAGE > WAERMEERZEUGER EXTERN,°C,2,RO,0,0,0.1,,,30532,32768,ongeldig (0x8000),nooit beschreven,5,,,
 450,BUFFER OPERATION,BUFFER OPERATION,Stiebel,PUFFERBETRIEB,PUFFERBETRIEB,WP > WPM_3 > EINSTELLUNGEN > HEIZEN > GRUNDEINSTELLUNG,,6,RW,0,1,1,,"enum, 2 waarden -> webid_codes.csv",48016,1,geldig,constant op 1,10,,,1=ON
@@ -371,7 +371,7 @@ webid,naam,naam_en,naam_en_bron,naam_de,naam_modbus_csv,categorie,eenheid,wtype,
 467,FAN REDUCTION,FAN REDUCTION,Stiebel,REDUZIERUNG LUEFTER,,WP > WPM_3 > EINSTELLUNGEN > INBETRIEBNAHME > SILENT MODE,,6,RW,0,1,1,,"enum, 2 waarden -> webid_codes.csv",,32768,ongeldig (0x8000),nooit beschreven,5,,,1=ON
 468,HEAT PUMP OFF,HEAT PUMP OFF,Stiebel,WAERMEPUMPE AUS,,WP > WPM_3 > EINSTELLUNGEN > INBETRIEBNAHME > SILENT MODE,,6,RW,0,1,1,,"enum, 2 waarden -> webid_codes.csv",,0,geldig,constant op 0,10,,,1=ON
 471,OPERATING STATUS,OPERATING STATUS,Stiebel,BETRIEBSSTATUS,,WP > WPM_3 > DIAGNOSE > ANLAGE > BETRIEBSSTATUS,,6,RO,0,0,1,,"bitveld, 12 waarden -> webid_codes.csv",32501,2,geldig,beweegt (7 waarden),10,,,B1=HEATING CIRCUIT 2 PUMP; B2=HEAT-UP PROGRAM; B3=ELECTRIC EMERGENCY/BOOSTER HEATER; B4=HEATING; B5=DHW MODE; B6=COMPRESSOR; B7=SUMMER MODE; B8=COOLING MODE; B9=DEFROST
-472,,,,,,,,6,RO,0,65535,1,,,,32768,ongeldig (0x8000),nooit beschreven,5,stil;geen,,
+472,-,-,"eigen manifest jan-2026, niet van Stiebel",,,,,6,RO,0,65535,1,,,,32768,ongeldig (0x8000),nooit beschreven,5,,,
 474,DYNAMICS PASSIVE,DYNAMICS PASSIVE,Stiebel,DYNAMIK PASSIV,,WP > WPM_3 > EINSTELLUNGEN > KUEHLEN > FLAECHENKUEHLUNG,,6,RW,0,10,1,,,,32768,ongeldig (0x8000),nooit beschreven,5,,,eerder door ons 'GEBLAESE-/FLAECHENKUEHLUNG DYNAMIK PASSI' genoemd
 475,START DEFROST,START DEFROST,Stiebel,ABTAUEN EINLEITEN,,WP > WPM_3 > EINSTELLUNGEN > INBETRIEBNAHME > VERDICHTER,,8,RW,0,1,1,,"enum, 2 waarden -> webid_codes.csv",,0,geldig,constant op 0,10,,,1=ON
 476,CONSTANT OUTPUT,CONSTANT OUTPUT,Stiebel,KONSTANTE LEISTUNG,,WP > WPM_3 > EINSTELLUNGEN > INBETRIEBNAHME > AUSLEGUNG HEIZUNG,kW,2,RW,5,20,0.1,,,,70,geldig,constant op 70,10,,,
@@ -595,15 +595,15 @@ webid,naam,naam_en,naam_en_bron,naam_de,naam_modbus_csv,categorie,eenheid,wtype,
 60001,MAJOR,MAJOR,Stiebel,HAUPTVERSIONSNUMMER,ISG HAUPTVERSIONSNUMMER,WP > WPM_3 > DIAGNOSE > SYSTEM > ISG,,6,RO,0,65535,1,,,38017,10,geldig,constant op 10,10,,,eerder door ons 'ISG HAUPTVERSIONSNUMMER' genoemd
 60002,MINOR,MINOR,Stiebel,NEBENVERSIONSNUMMER,ISG NEBENVERSIONSNUMMER,WP > WPM_3 > DIAGNOSE > SYSTEM > ISG,,6,RO,0,65535,1,,,38018,2,geldig,constant op 2,10,,,eerder door ons 'ISG NEBENVERSIONSNUMMER' genoemd
 60003,REVISION,REVISION,Stiebel,REVISIONSNUMMER,ISG REVISIONSNUMMER,WP > WPM_3 > DIAGNOSE > SYSTEM > ISG,,6,RO,0,65535,1,,,38019,0,geldig,constant op 0,10,,,eerder door ons 'ISG REVISIONSNUMMER' genoemd
-60004,UPTIME DAYS,UPTIME DAYS,Stiebel,LAUFZEIT-TAGE,LAUFZEIT-TAGE,WP > WPM_3 > DIAGNOSE > SERVICE > ISG,,6,RO,0,65535,1,,,38020,30,geldig,beweegt (6 waarden),10,,,
-60005,UPTIME HOURS,UPTIME HOURS,Stiebel,LAUFZEIT-STUNDEN,LAUFZEIT-STUNDEN,WP > WPM_3 > DIAGNOSE > SERVICE > ISG,,6,RO,0,65535,1,,,38021,7,geldig,beweegt (24 waarden),10,,,
-60006,,,,,,,,6,RO,0,65535,1,,,,57,geldig,beweegt (60 waarden),10,bewegend;onderzoek,,
-60007,,,,,,,d,6,RO,0,65535,1,,,,30,geldig,beweegt (6 waarden),10,bewegend;onderzoek,,
-60008,,,,,,,h,6,RO,0,65535,1,,,,7,geldig,beweegt (24 waarden),10,bewegend;onderzoek,,
-60009,,,,,,,,6,RO,0,1,1,,,,0,geldig,constant op 0,10,stil;geen,,
-60010,,,,,,,s,6,RW,60,900,1,,,,60,geldig,constant op 60,10,constant;laag,,
+60004,UPTIME DAYS,UPTIME DAYS,Stiebel,LAUFZEIT-TAGE,LAUFZEIT-TAGE,WP > WPM_3 > DIAGNOSE > SERVICE > ISG,d,6,RO,0,65535,1,,,38020,30,geldig,beweegt (6 waarden),10,,,
+60005,UPTIME HOURS,UPTIME HOURS,Stiebel,LAUFZEIT-STUNDEN,LAUFZEIT-STUNDEN,WP > WPM_3 > DIAGNOSE > SERVICE > ISG,h,6,RO,0,65535,1,,,38021,7,geldig,beweegt (24 waarden),10,,,
+60006,-,-,"eigen manifest jan-2026, niet van Stiebel",,,,,6,RO,0,65535,1,,,,57,geldig,beweegt (60 waarden),10,,,
+60007,-,-,"eigen manifest jan-2026, niet van Stiebel",,,,d,6,RO,0,65535,1,,,,30,geldig,beweegt (6 waarden),10,,,
+60008,-,-,"eigen manifest jan-2026, niet van Stiebel",,,,h,6,RO,0,65535,1,,,,7,geldig,beweegt (24 waarden),10,,,
+60009,-,-,"eigen manifest jan-2026, niet van Stiebel",,,,,6,RO,0,1,1,,,,0,geldig,constant op 0,10,,,
+60010,-,-,"eigen manifest jan-2026, niet van Stiebel",,,,s,6,RW,60,900,1,,,,60,geldig,constant op 60,10,,,
 60011,IWS,IWS,eigen vertaling,IWS,,WP > WPM_3 > DIAGNOSE > SERVICE > REGLERKENNUNG,,6,RO,0,65535,1,,,,393,geldig,constant op 393,10,,,
-60012,,,,,,,,6,RO,0,65535,1,,,,1,geldig,constant op 1,10,constant;laag,,
+60012,-,-,"eigen manifest jan-2026, niet van Stiebel",,,,,6,RO,0,65535,1,,,,1,geldig,constant op 1,10,,,
 60013,ERROR NUMBER,ERROR NUMBER,eigen vertaling,FEHLER NUMMER,,WP > WPM_3 > DIAGNOSE > SERVICE > EREIGNIS,,6,RO,0,65535,1,,,32507,8301,geldig,beweegt (2 waarden),10,,,
 60014,FATAL ERROR ACTIVE,FATAL ERROR ACTIVE,eigen vertaling,FATALER FEHLER AKTIV,,WP > WPM_3 > DIAGNOSE > SERVICE > EREIGNIS,,6,RO,0,65535,1,,,32504,0,geldig,constant op 0,10,,,
 60015,,,,,,,,6,RO,0,65535,1,,,,32768,ongeldig (0x8000),nooit beschreven,5,stil;geen,,
