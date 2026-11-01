@@ -10,100 +10,90 @@ naartoe. `ISG/dumps/` bevat wat we eruit hebben gehaald, `ISG/staged/` wat er no
 
 ---
 
-## De geldigheidsregel
+## Geldigheid en schaal -- volgens Stiebels eigen code
 
-Dit is de hoofdvondst. Er waren vier sentinel-lijsten die elkaar deels tegenspraken
-(`isg_logger.py`, `isg_logger_delta_engine.py`, `manifest_uitleg.md` en de objecttabel).
-Geen van de vier is nodig.
+We hebben dit eerst uit de data proberen af te leiden, met vier onderling tegenstrijdige
+sentinel-lijsten als resultaat. Dat was de omweg. De gateway draait Stiebels eigen PHP, en
+daar staat het antwoord letterlijk in.
 
-### Regel 1 -- het gebied vanaf 0x8000
+**Bron:** `/firmware/rel_b/www/isg_object.php` en `/firmware/rel_b/www/stablevalues.php`
+op het apparaat, plus `_inc/pre7.inc`. Die bestanden staan **niet in deze repo** -- het is
+Stiebels auteursrechtelijk beschermde code en deze repo is publiek. Lees ze op het apparaat.
 
-**Een waarde van `32768` tot en met `65535` is ongeldig.** Voor elk register, elk datatype.
+### Ongeldig
 
-`32768` is `0x8000`: bit 15 gezet, voor een signed 16-bits register precies `INT16_MIN`.
-De firmware initialiseert elk object op die waarde -- in `../dumps/WPM_3_isg_objects.json`
-staat `value: 32768` bij **alle** 479 records, ook bij registers die in bedrijf een echte
-waarde geven. Een register dat de hardware nooit beschrijft, blijft eropstaan.
+`isg_object.php` doet bij het klaarzetten van elke waarde voor de UI:
 
-Getoetst op **5,49 miljoen waarnemingen uit tien onafhankelijke bronnen** (zeven logdagen,
-twee JSON-reeksen, vier toestandsnapshots). In het gebied vanaf `0x8000` komen precies drie
-waarden voor:
+    als abs(waarde) in {32768, 3276832768}:
+        toon '-'   (behalve bij presentation 7: toon abs(waarde))
+    anders:
+        normaliseer de waarde volgens het webType
 
-| waarde | | bij welk type | hoe vaak |
-|---|---|---|---|
-| 32768 | `0x8000` | alle types behalve 5 | 18.514 |
-| 32896 | `0x8080` | uitsluitend `wtype 5` | 678.650 |
-| 36864 | `0x9000` | `presentation 7` | 38.780 |
+Drie dingen vallen daaraan op:
 
-De waarde is dus typegebonden, maar voor de regel maakt dat niet uit -- alle drie liggen
-boven de drempel. Dat `wtype 5` een eigen waarde heeft past bij de aard van dat type: het
-is een bytepaar (de hoogste echte waarde `22624` = `0x5860` is 88 en 96, een schakeltijd in
-kwartieren), en `0x8080` is dan "beide helften leeg". In de objecttabel staat bij die
-registers letterlijk `maxValue: 32896`.
+- **`abs()` maakt het datatype irrelevant.** Of je `32768` of `-32768` leest doet niet mee.
+  Dat is precies waarom de tester `32768` meldt waar HA via Modbus `-32768` laat zien: het
+  is hetzelfde bitpatroon `0x8000`, en Stiebel vangt beide met een absolute waarde.
+- **`3276832768` is de 32-bits variant**: decimaal "32768" tweemaal achter elkaar. Bij een
+  32-bits register plakt de mapper de twee ongeldige helften aan elkaar.
+- `0x8000` is `INT16_MIN`, de waarde waarop de firmware elk object initialiseert. In
+  `../dumps/WPM_3_isg_objects.json` staat `value: 32768` bij alle 479 records. Een register
+  dat de hardware nooit beschrijft blijft eropstaan.
 
-**Waarom de drempel veilig is.** Per type is het gat tussen de hoogste waargenomen echte
-meting en de eerste ongeldige waarde minstens tienduizend:
+Daarnaast behandelt `_inc/pre7.inc` `0x9000` als ongeldig -- daar staan de geschaalde vormen
+hard in de code (`"3686.4"` is `36864 x 0,1`, `"-2867.2"` is `-28672 x 0,1`). Het staat dus
+niet in de centrale lijst maar wel in de presentatielaag.
 
-| wtype | hoogste echte meting | gat tot de ongeldige waarde |
-|---|---|---|
-| 1 | 995 | 31.773 |
-| 2 | 2.390 | 30.378 |
-| 5 | 22.624 | 10.272 |
-| 6 | 16.449 | 16.319 |
-| 7 | 3.609 | 29.159 |
-| 8 | 100 | 32.668 |
+En bij de samengestelde types (zie hieronder) volgt de ongeldigheid uit het type zelf: een
+bytehelft van `0x80` is geen geldige index. Dat is wat `32896` (`0x8080`) is: beide helften
+leeg.
 
-Over alle 681 registers geeft er precies **één** zowel waarden onder als boven de drempel:
-WebID 60030 (een SG-Ready-ingang) stond 4 van de 9.695 keer op `32768`. Die vier metingen
-waren ook werkelijk ongeldig. De regel kent dus geen tegenvoorbeeld.
+Samengevat, als een functie:
 
-Een waarde **boven** `65535` is juist geldig: dat is een 32-bits register (timestamps,
-grote tellers), en daar klopt de `max` uit de tester niet.
+    isValid(v, webType):
+        a = abs(v)
+        als a in {32768, 36864, 3276832768}:            ongeldig
+        als webType in {5, 9, 10}:
+            als (a >> 8) >= 128 of (a & 255) >= 128:    ongeldig
+        anders                                           geldig
 
-### Waarom een drempel en geen bit-test
+**Kruiscontrole.** Die regel markeert op 01-11-2026 194 van de 681 registers als ongeldig.
+Onafhankelijk daarvan laat de gedragsanalyse over 5,49 mln waarnemingen uit tien bronnen zien
+dat precies 194 registers nooit een geldige waarde geven. Dezelfde 194.
 
-De drempel ligt op `32768` omdat dat `0x8000` is: bit 15. Dat is het mechanisme in de
-firmware, en in het 16-bits bereik zijn de twee formuleringen aantoonbaar hetzelfde --
-over 10.618 waarnemingen geeft `v & 0x8000` nul keer een andere uitkomst dan
-`v >= 32768`.
+### Schaal
 
-**Implementeer het toch niet als bit-test.** Dat faalt op twee plekken:
+`stablevalues.php` bevat `sf::normalize($value, $type)`, dat de schaal volledig uit het
+webType bepaalt. Daarmee is de schaal voor **alle** 681 registers bekend, en zijn de 27
+handmatig gekozen factoren in de Modbus-configuratie overbodig:
 
-- **Negatieve waarden.** Alle 187 waargenomen negatieve waarden hebben bit 15 gezet zodra
-  je ze als uint16 leest: `-400` is `0xFE70`, `-1` is `0xFFFF`. Een bit-test keurt dus elke
-  temperatuur onder nul af.
-- **32-bits registers.** Drie van de tien waargenomen 32-bits waarden hebben bit 15 van hun
-  lage helft gezet, bijvoorbeeld WebID 60019 = `0x696BF7D6` en WebID 60307 = `0x01C1D3F3`.
-  Dat zijn geldige timestamps en tellers.
+| webType | wat ermee gebeurt |
+|---|---|
+| 2, 4 | `/ 10` (een decimaal) |
+| 7 | `/ 100` (twee decimalen) |
+| 11 | `/ 1000` (drie decimalen) |
+| 5 | `[v >> 8, v & 255]` -- een bytepaar, geen getal |
+| 9 | `[v / 4, (v % 4) * 15]` -- kwartieren naar uur en minuut |
+| 10 | twee van die paren: een start- en een stoptijd |
+| 1, 3, 6, 8, 15 | geen schaling |
 
-De drempel `32768 <= v <= 65535` drukt alle drie de voorwaarden uit die nodig zijn: bit 15
-gezet, het is een 16-bits getal, en het is niet als negatief geinterpreteerd. Een
-bit-operatie drukt alleen de eerste uit.
+Dat verklaart ook de `wtype 5`-groep die eerder raadselachtig leek: de hoogste echte waarde
+daar is `22624`, en dat is `[88, 96]` -- 22:00 en 24:00 in kwartieren. Een schakeltijdvenster,
+geen meetwaarde.
 
-### Regel 2 -- sensor ontbreekt of is defect
+**Let op bij `[min, max]`.** Die staan in de tester-uitvoer al in geschaalde eenheden, terwijl
+de waarde ruw is. Vergelijken zonder eerst te schalen levert tientallen valse alarmen.
 
-Staat er een echt bereik in de tester-uitvoer, dan is `waarde x schaal` buiten `[min, max]`
-ongeldig.
+### Waar HA van Stiebel afwijkt
 
-Dit vangt wat regel 1 niet ziet: een niet-aangesloten NTC levert de ondergrens van zijn
-meetbereik, en dat is een gewoon negatief getal. Zulke registers houden over tienduizenden
-metingen exact dezelfde waarde -- een werkende sensor ruist altijd, dus een waarde die op
-precies de bereikgrens vastligt meet niet.
+Bij tien registers gebruikt de Modbus-configuratie in HA een andere schaal dan Stiebel: alle
+tien zijn `webType 11`, waar Stiebel `/1000` doet en HA `1.0`. De catalogus vermeldt dat per
+register in `opmerking`.
 
-**Let op de eenheden:** `min` en `max` in de tester-uitvoer zijn *geschaalde* grootheden,
-de waarde is *ruw*. Vergelijken zonder te schalen levert tientallen valse alarmen.
-
-### Wat niet nodig blijkt
-
-- **Geen tabel met sentinelwaarden per register.** De drempel volstaat.
-- **Geen uitzondering voor bitvelden.** Een bitveld zou bit 15 kunnen gebruiken en dan door
-  regel 1 sneuvelen, maar dat gebeurt nergens: over alle registers is de hoogste
-  gecombineerde bitmaske van waargenomen geldige waarden `0x4041`. Bit 14 wordt gebruikt,
-  bit 15 nergens. De kolom `bitmasker_gezien` in de catalogus legt dat per register vast,
-  zodat het controleerbaar blijft als er ooit een register bijkomt.
-- **De veldbeschrijvingen helpen hier niet.** `presentation` en `step` uit de objecttabel
-  scheiden geen bitvelden van getallen: `presentation 2` bevat temperaturen en
-  energietellers, en `step` leeg is vooral de `wtype 5`-groep. Er is geen bitveld-vlag.
+Dat verschil is niet neutraal. Een eerdere gelijktijdige meting van HA naast de tester leek 51
+schaalfactoren te "bevestigen", maar die toets laat alleen zien dat beide hetzelfde **ruwe**
+getal lezen -- niet dat HA's schaal juist is. Waar de twee verschillen is Stiebels code
+gezaghebbend en de HA-waarde eigen werk.
 
 ---
 
