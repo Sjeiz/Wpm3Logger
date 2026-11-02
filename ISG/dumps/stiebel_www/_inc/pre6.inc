@@ -1,1 +1,0 @@
-<input type="<?=($obj->input->type?$obj->input->type:'text')?>" class="small center" value="<?=$obj->value?>" name="<?=$obj->webID?>" id="<?=$obj->webID?>">

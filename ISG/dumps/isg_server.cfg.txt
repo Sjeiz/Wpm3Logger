@@ -1,3 +1,0 @@
-Driver=lib/driver_can.so
-MenuTemplate=etc/config/menus/NO_DEV_config.json.template
-ObjectDb=etc/config/objects/NO_DEV_isg_objects.db
