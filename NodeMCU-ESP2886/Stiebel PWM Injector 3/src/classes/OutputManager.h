@@ -6,6 +6,7 @@ public:
     void begin();
     void setDefrost();
     void setPostRun(int pwmPercent);
+    void setCooling();
     void setNormal();
     void loop(const char* stateName);
     int getCurrentPwmPercent() const { return currentPwmPercent; }

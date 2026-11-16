@@ -52,8 +52,10 @@ State* centralTransition(uint16_t modbusStatus, State* previousState) {
         return previousState;
     }
 
-    // HOT_WATER → POST_RUN when compressor turns off
-    if (!compressorAan && previousState == hotWaterState) {
+    // HOT_WATER → POST_RUN when compressor turns off, only outside summer mode (B7).
+    // In summer mode this falls through to STANDBY below.
+    bool summerMode = (modbusStatus & ISG_STATUS_SUMMER_MODE_ACTIVE);
+    if (!compressorAan && previousState == hotWaterState && !summerMode) {
         postRunEndTime = millis() + postRunTimeout;
         return postRunState;
     }

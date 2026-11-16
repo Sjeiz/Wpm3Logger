@@ -25,6 +25,8 @@ void OutputManager::loop(const char* stateName) {
         setDefrost();
     } else if (strcmp(stateName, "POST_RUN") == 0) {
         setPostRun(PWM_OUT_DUTY_PERCENT);
+    } else if (strcmp(stateName, "COOLING") == 0) {
+        setCooling();
     } else {
         setNormal();
     }
@@ -60,6 +62,16 @@ void OutputManager::setPostRun(int pwmPercent) {
     logMessage(String("PWM-out set to ") + String(pwmValue) + " (duty " + String(pwmPercent) + "%, inverted)", LogLevel::LOG_DEBUG);
     ledTicker.detach();
     ledToggle(1000, 1000, false); // 1 second on/off
+}
+void OutputManager::setCooling() {
+    digitalWrite(PIN_PUMP_FORCE, HIGH); // Pump forced ON while cooling
+    digitalWrite(PIN_PUMP_BLOCKED, LOW);
+    // No PWM injection: same as setNormal(), so the WPM3's own PWM signal passes through
+    analogWrite(PIN_PWM_OUT, 0);
+    currentPwmPercent = 0;
+    ledTicker.detach();
+    digitalWrite(LED_BUILTIN, HIGH); // Start with LED off
+    ledToggle(100, 800, false); // Same flash pattern as normal
 }
 void OutputManager::setNormal() {
     digitalWrite(PIN_PUMP_FORCE, LOW);
