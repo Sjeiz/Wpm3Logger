@@ -47,8 +47,8 @@ extern const int PWM_OUT_DUTY_PERCENT;   // PWM duty cycle (%)
 // Web ID 471 = OPERATING STATUS (BETRIEBSSTATUS), bit field, menu DIAGNOSE > ANLAGE > BETRIEBSSTATUS.
 // HA: sensor.isg_471 ("ISG Operating Status").
 #define ISG_WEBID_OPERATING_STATUS 471
-#define ISG_471_HEATING_CIRCUIT_1_PUMP            0x0001 // bit 0  HEATING CIRCUIT 1 PUMP (HK 1 PUMPE): HK1 pump runs
-#define ISG_471_HEATING_CIRCUIT_2_PUMP            0x0002 // bit 1  HEATING CIRCUIT 2 PUMP (HK 2 PUMPE): not our floor pump, that one hangs on the mixer-pump output
+#define ISG_471_HEATING_CIRCUIT_1_PUMP            0x0001 // bit 0  HEATING CIRCUIT 1 PUMP (HK 1 PUMPE): switches with the compressor only; not the HKP terminal (measured)
+#define ISG_471_HEATING_CIRCUIT_2_PUMP            0x0002 // bit 1  HEATING CIRCUIT 2 PUMP (HK 2 PUMPE): same as 402 bit 5 / 485 bit 1, the empty MKP terminal; the floor pump is on HKP (402 bit 4 / 485 bit 0)
 #define ISG_471_HEAT_UP_PROGRAM                   0x0004 // bit 2  HEAT-UP PROGRAM (AUFHEIZPROGRAMM): screed heat-up program active
 #define ISG_471_ELECTRIC_EMERGENCY_BOOSTER_HEATER 0x0008 // bit 3  ELECTRIC EMERGENCY/BOOSTER HEATER (NHZ STUFEN): electric backup heater stages on
 #define ISG_471_HEATING                           0x0010 // bit 4  HEATING (HEIZBETRIEB): heat pump runs for space heating

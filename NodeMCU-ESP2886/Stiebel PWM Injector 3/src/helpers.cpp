@@ -19,7 +19,8 @@ String decodeIsgStatus(uint16_t status) {
   int realFlagCount = 0;
   // --- PUMPS ---
   if (status & ISG_471_HEATING_CIRCUIT_1_PUMP) { flags += "HK1, "; realFlagCount++; }      // bit 0 HEATING CIRCUIT 1 PUMP
-  // bit 1 HEATING CIRCUIT 2 PUMP not logged: our floor pump is wired to the mixer-pump output instead
+  // bit 1 HEATING CIRCUIT 2 PUMP not logged: same as 402 bit 5 / 485 bit 1, the empty MKP terminal;
+  // the floor pump is on HKP (402 bit 4 / 485 bit 0)
   // --- PROGRAMS / MODES ---
   if (status & ISG_471_HEAT_UP_PROGRAM) { flags += "HEATUP, "; realFlagCount++; }          // bit 2 HEAT-UP PROGRAM
   if (status & ISG_471_ELECTRIC_EMERGENCY_BOOSTER_HEATER) { flags += "NHZ, "; realFlagCount++; } // bit 3 ELECTRIC EMERGENCY/BOOSTER HEATER
