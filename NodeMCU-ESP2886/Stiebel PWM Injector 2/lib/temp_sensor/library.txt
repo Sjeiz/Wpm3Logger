@@ -1,3 +1,0 @@
-# PlatformIO library dependencies for Stiebel PWM Injector 2
-OneWire
-DallasTemperature

@@ -1,2 +1,0 @@
-# Raw HTTP captures: keep the CRLF line endings byte for byte.
-*.http -text

@@ -3,6 +3,8 @@
 Een snelle, robuuste en schaalbare **C#‑logger** voor het uitlezen van een **Stiebel Eltron / WPM / ISG** warmtepomp via **Modbus TCP**.  
 De logger leest alle relevante registers uit, converteert waarden naar fysische eenheden en schrijft deze weg naar een CSV‑bestand voor verdere analyse, visualisatie of integratie in Home Assistant.
 
+De NodeMCU-pompregelaar voor de WPM3 staat in een eigen repo: [Sjeiz/stiebel-pump-controller](https://github.com/Sjeiz/stiebel-pump-controller).
+
 ## Features
 
 - Volledige Modbus‑uitlezing van ISG‑exposed registers  

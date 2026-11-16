@@ -1,6 +1,0 @@
-{
-  "name": "pwm-logger",
-  "version": "1.0.0",
-  "description": "PlatformIO ESP8266 PWM Monitor",
-  "private": true
-}

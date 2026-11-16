@@ -1,9 +1,0 @@
-HTTP/1.0 400 Bad Request
-Connection: close
-X-Powered-By: PHP/5.3.0
-Content-Type: application/json
-Content-Length: 61
-Date: Mon, 16 Nov 2026 22:08:46 GMT
-Server: lighttpd/1.4.19
-
-{"error":"WebID not reported by this device","ids":["99999"]}
