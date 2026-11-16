@@ -26,7 +26,7 @@ const char* ISG_HOST                = "servicewelt.iot.cheizoo.lan";
 const int ISG_HTTP_PORT             = 80;
 const char* ISG_API_PATH            = "/isg_api.php";
 const int ISG_HTTP_TIMEOUT_MS       = 8000; // One call took ~2.5 s (measured); a call queued behind HA's on the ISG's single PHP worker takes ~5 s
-const int ISG_POLL_INTERVAL_SEC     = 10;
+const int ISG_POLL_INTERVAL_SEC     = 30; // Each call holds the ISG's single PHP worker ~2.5 s
 const int ISG_POLL_STABLETIME_SEC   = 30; // Time in seconds to consider ISG data stable after a change
 const IsgRegDef ISG_REGS[]          = {
     {"OPERATING STATUS", ISG_WEBID_OPERATING_STATUS}, // web ID 471, BETRIEBSSTATUS bit field

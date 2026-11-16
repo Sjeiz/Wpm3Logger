@@ -106,6 +106,8 @@ static std::string withStatusLine(const std::string& http, const std::string& st
 
 // ---- the controller loop, in the order of main.cpp loop() -------------------------------------
 static const uint32_t TICK_MS = 100;
+// Longest wait for the next answer: one poll interval plus the ~2.5 s the ISG takes, with margin.
+static const uint32_t NEXT_ANSWER_MS = ISG_POLL_INTERVAL_SEC * 1000UL + 3000;
 static const uint32_t POSTRUN_PWM_RAW = (uint32_t)((100 - PWM_OUT_DUTY_PERCENT) * 1023 / 100);
 
 struct Controller {
@@ -144,6 +146,16 @@ static void serve(const std::string& response) {
     g_fakeIsg.response = response;
     g_fakeIsg.neverRespond = false;
     g_fakeIsg.acceptConnect = true;
+}
+
+// Feeds a status word straight into the state machine and the outputs, without the ISG round trip,
+// for rules that act inside one poll interval.
+static void feed(Controller& c, uint16_t word, uint32_t ms) {
+    for (uint32_t t = 0; t < ms; t += TICK_MS) {
+        g_fakeMillis += TICK_MS;
+        sm.update(word);
+        c.out.loop(sm.currentStateName());
+    }
 }
 
 static void assertState(const char* expected) {
@@ -192,7 +204,7 @@ void tearDown() {}
 static void settleIn(Controller& c, uint16_t word, const char* state) {
     c.start();
     serve(withStatus(word));
-    c.runUntil(state, 20000);
+    c.runUntil(state, NEXT_ANSWER_MS);
     c.runFor(ISG_POLL_STABLETIME_SEC * 1000UL + 1000);
     assertState(state);
 }
@@ -207,7 +219,7 @@ void test_L1_live_parse_matches_ha() {
     Controller c;
     c.start();
     serve(loadFixture(LIVE_HEATING));
-    c.runFor(15000);
+    c.runFor(NEXT_ANSWER_MS);
     TEST_ASSERT_TRUE(g_fakeIsg.lastRequest.rfind("GET /isg_api.php?ids=471,438 HTTP/1.0\r\n", 0) == 0);
     TEST_ASSERT_TRUE(g_fakeIsg.lastRequest.find("Host: servicewelt.iot.cheizoo.lan\r\n") != std::string::npos);
     TEST_ASSERT_EQUAL_UINT16(83, c.isg.getWord(ISG_WEBID_OPERATING_STATUS));
@@ -250,7 +262,7 @@ void test_L3_live_heating_state() {
     Controller c;
     c.start();
     serve(loadFixture(LIVE_HEATING));
-    c.runUntil("HEATING", 15000);
+    c.runUntil("HEATING", NEXT_ANSWER_MS);
     assertPassiveOutputs();
 }
 
@@ -259,7 +271,7 @@ void test_L4_live_http400_is_error() {
     Controller c;
     settleIn(c, W_HEATING, "HEATING");
     serve(loadFixture("live_http400_unknown_webid.http"));
-    c.runUntil("ERROR", 15000);
+    c.runUntil("ERROR", NEXT_ANSWER_MS);
     TEST_ASSERT_EQUAL_UINT16(ISG_READ_ERROR, c.isg.getWord(ISG_WEBID_OPERATING_STATUS));
     assertPassiveOutputs();
 }
@@ -270,7 +282,7 @@ void test_L5_live_471_absent_is_error() {
     Controller c;
     settleIn(c, W_HEATING, "HEATING");
     serve(loadFixture("live_471_absent.http"));
-    c.runUntil("ERROR", 15000);
+    c.runUntil("ERROR", NEXT_ANSWER_MS);
     TEST_ASSERT_EQUAL_UINT16(1429, c.isg.getHundredths(ISG_WEBID_FLOW_RATE));
     assertPassiveOutputs();
 }
@@ -280,7 +292,7 @@ void test_L6_live_empty_object_is_error() {
     Controller c;
     settleIn(c, W_HEATING, "HEATING");
     serve(loadFixture("live_empty_object.http"));
-    c.runUntil("ERROR", 15000);
+    c.runUntil("ERROR", NEXT_ANSWER_MS);
     TEST_ASSERT_EQUAL_UINT16(ISG_READ_ERROR, c.isg.getHundredths(ISG_WEBID_FLOW_RATE));
     assertPassiveOutputs();
 }
@@ -293,7 +305,7 @@ static void expectErrorFrom(const std::string& response) {
     Controller c;
     settleIn(c, W_HEATING, "HEATING");
     serve(response);
-    c.runUntil("ERROR", 15000);
+    c.runUntil("ERROR", NEXT_ANSWER_MS);
     TEST_ASSERT_EQUAL_UINT16(ISG_READ_ERROR, c.isg.getWord(ISG_WEBID_OPERATING_STATUS));
     assertPassiveOutputs();
 }
@@ -320,7 +332,7 @@ void test_E2_connect_refused() {
     Controller c;
     settleIn(c, W_HEATING, "HEATING");
     g_fakeIsg.acceptConnect = false;
-    c.runUntil("ERROR", 15000);
+    c.runUntil("ERROR", NEXT_ANSWER_MS);
     assertPassiveOutputs();
 }
 
@@ -356,7 +368,7 @@ void test_E9_438_invalid_keeps_state() {
     Controller c;
     settleIn(c, W_HEATING, "HEATING");
     serve(withField(loadFixture(LIVE_HEATING), "438", "\"fast\""));
-    c.runFor(15000);
+    c.runFor(NEXT_ANSWER_MS);
     assertState("HEATING");
     TEST_ASSERT_EQUAL_UINT16(ISG_READ_ERROR, c.isg.getHundredths(ISG_WEBID_FLOW_RATE));
     TEST_ASSERT_EQUAL_UINT16(W_HEATING, c.isg.getWord(ISG_WEBID_OPERATING_STATUS));
@@ -384,7 +396,7 @@ void test_E13_split_response() {
     serve(http);
     g_fakeIsg.splitAt = http.find("\r\n\r\n") + 2;
     g_fakeIsg.splitDelayMs = 300;
-    c.runUntil("HEATING", 15000);
+    c.runUntil("HEATING", NEXT_ANSWER_MS);
     TEST_ASSERT_EQUAL_UINT16(1429, c.isg.getHundredths(ISG_WEBID_FLOW_RATE));
 }
 
@@ -417,7 +429,7 @@ void test_S2_error_recovery_immediate() {
     Controller c;
     c.start();
     serve(withStatus(W_HEATING));
-    uint32_t at = c.runUntil("HEATING", 15000);
+    uint32_t at = c.runUntil("HEATING", NEXT_ANSWER_MS);
     TEST_ASSERT_TRUE(at - 1000000 < (uint32_t)ISG_POLL_STABLETIME_SEC * 1000UL);
     assertPassiveOutputs();
 }
@@ -427,11 +439,11 @@ void test_S3_minimum_state_time() {
     Controller c;
     c.start();
     serve(withStatus(W_HEATING));
-    uint32_t entered = c.runUntil("HEATING", 15000);
+    uint32_t entered = c.runUntil("HEATING", NEXT_ANSWER_MS);
     serve(withStatus(W_STANDBY));
     c.runFor(ISG_POLL_STABLETIME_SEC * 1000UL - 200);
     assertState("HEATING");
-    uint32_t left = c.runUntil("STANDBY", 15000);
+    uint32_t left = c.runUntil("STANDBY", NEXT_ANSWER_MS);
     TEST_ASSERT_TRUE(left - entered >= (uint32_t)ISG_POLL_STABLETIME_SEC * 1000UL);
     assertPassiveOutputs();
 }
@@ -441,21 +453,33 @@ void test_S4_heating_to_standby() {
     Controller c;
     settleIn(c, W_HEATING, "HEATING");
     serve(withStatus(W_STANDBY));
-    c.runUntil("STANDBY", 15000);
+    c.runUntil("STANDBY", NEXT_ANSWER_MS);
     c.runFor(60000);
     assertState("STANDBY");
     assertPassiveOutputs();
 }
 
-// S5: DEFROST is immediate, also inside the minimum state time; outputs stay passive (D8 not blocked).
+// S5: DEFROST is immediate, also inside the minimum state time, and keeps the outputs passive
+// (D8 not blocked). Fed straight into the state machine: a poll answer arrives at most once per
+// interval, which is not shorter than the minimum state time. A normal change at the same moment
+// is held (control).
 void test_S5_defrost_immediate_passive() {
     Controller c;
     c.start();
-    serve(withStatus(W_HEATING));
-    uint32_t entered = c.runUntil("HEATING", 15000);
+    feed(c, W_HEATING, TICK_MS);
+    assertState("HEATING");
+    feed(c, W_HEATING, 5000);
+    feed(c, W_STANDBY, TICK_MS);
+    assertState("HEATING");                         // control: held by the minimum state time
+    feed(c, W_DEFROST, TICK_MS);
+    assertState("DEFROST");
+    assertPassiveOutputs();
+
+    // and over the ISG path
+    Controller d;
+    settleIn(d, W_HEATING, "HEATING");
     serve(withStatus(W_DEFROST));
-    uint32_t at = c.runUntil("DEFROST", 15000);
-    TEST_ASSERT_TRUE(at - entered < (uint32_t)ISG_POLL_STABLETIME_SEC * 1000UL);
+    d.runUntil("DEFROST", NEXT_ANSWER_MS);
     assertPassiveOutputs();
 }
 
@@ -464,7 +488,7 @@ void test_S6_defrost_back_to_heating() {
     Controller c;
     settleIn(c, W_DEFROST, "DEFROST");
     serve(withStatus(W_HEATING));
-    c.runUntil("HEATING", 15000);
+    c.runUntil("HEATING", NEXT_ANSWER_MS);
     assertPassiveOutputs();
 }
 
@@ -474,7 +498,7 @@ void test_S7_hot_water_post_run() {
     settleIn(c, W_HOT_WATER, "HOT_WATER");
     assertPassiveOutputs();
     serve(withStatus(W_STANDBY));
-    uint32_t entered = c.runUntil("POST_RUN", 15000);
+    uint32_t entered = c.runUntil("POST_RUN", NEXT_ANSWER_MS);
     assertPostRunOutputs();
     TEST_ASSERT_TRUE(postRunEndTime != 0);
     c.runFor(POST_RUN_DURATION_MIN * 60000UL - 1000);
@@ -491,7 +515,7 @@ void test_S8_hot_water_summer_no_post_run() {
     Controller c;
     settleIn(c, W_HOT_WATER, "HOT_WATER");
     serve(withStatus(W_SUMMER_OFF));
-    c.runUntil("STANDBY", 15000);
+    c.runUntil("STANDBY", NEXT_ANSWER_MS);
     c.runFor(60000);
     assertState("STANDBY");
     TEST_ASSERT_EQUAL_UINT32(0, postRunEndTime);
@@ -502,7 +526,7 @@ void test_S8_hot_water_summer_no_post_run() {
 static void intoPostRun(Controller& c) {
     settleIn(c, W_HOT_WATER, "HOT_WATER");
     serve(withStatus(W_STANDBY));
-    c.runUntil("POST_RUN", 15000);
+    c.runUntil("POST_RUN", NEXT_ANSWER_MS);
     c.runFor(ISG_POLL_STABLETIME_SEC * 1000UL + 1000);
     assertState("POST_RUN");
 }
@@ -512,7 +536,7 @@ void test_S9_post_run_cancel_cooling() {
     Controller c;
     intoPostRun(c);
     serve(withStatus(W_COOLING));
-    c.runUntil("COOLING", 15000);
+    c.runUntil("COOLING", NEXT_ANSWER_MS);
     TEST_ASSERT_EQUAL_UINT32(0, postRunEndTime);
     assertCoolingOutputs();
 }
@@ -522,7 +546,7 @@ void test_S10_post_run_cancel_heating_without_compressor() {
     Controller c;
     intoPostRun(c);
     serve(withStatus(W_BASE | ISG_471_HEATING));
-    c.runUntil("HEATING", 15000);
+    c.runUntil("HEATING", NEXT_ANSWER_MS);
     TEST_ASSERT_EQUAL_UINT32(0, postRunEndTime);
     assertPassiveOutputs();
 }
@@ -532,7 +556,7 @@ void test_S11_post_run_cancel_hot_water() {
     Controller c;
     intoPostRun(c);
     serve(withStatus(W_HOT_WATER));
-    c.runUntil("HOT_WATER", 15000);
+    c.runUntil("HOT_WATER", NEXT_ANSWER_MS);
     TEST_ASSERT_EQUAL_UINT32(0, postRunEndTime);
     assertPassiveOutputs();
 }
@@ -542,12 +566,12 @@ void test_S12_post_run_cancel_priority() {
     Controller c;
     intoPostRun(c);
     serve(withStatus(W_BASE | ISG_471_COOLING_MODE | ISG_471_HEATING | ISG_471_DHW_MODE));
-    c.runUntil("COOLING", 15000);
+    c.runUntil("COOLING", NEXT_ANSWER_MS);
 
     Controller d;
     intoPostRun(d);
     serve(withStatus(W_BASE | ISG_471_HEATING | ISG_471_DHW_MODE));
-    d.runUntil("HEATING", 15000);
+    d.runUntil("HEATING", NEXT_ANSWER_MS);
 }
 
 // S13: POST_RUN -> DEFROST cancels the timer; after the defrost the state is STANDBY, not POST_RUN.
@@ -555,11 +579,11 @@ void test_S13_post_run_defrost_cancels() {
     Controller c;
     intoPostRun(c);
     serve(withStatus(W_BASE | ISG_471_DEFROST));
-    c.runUntil("DEFROST", 15000);
+    c.runUntil("DEFROST", NEXT_ANSWER_MS);
     TEST_ASSERT_EQUAL_UINT32(0, postRunEndTime);
     assertPassiveOutputs();
     serve(withStatus(W_STANDBY));
-    c.runUntil("STANDBY", ISG_POLL_STABLETIME_SEC * 1000UL + 15000);
+    c.runUntil("STANDBY", ISG_POLL_STABLETIME_SEC * 1000UL + NEXT_ANSWER_MS);
     assertPassiveOutputs();
 }
 
@@ -568,11 +592,11 @@ void test_S14_post_run_error_and_recovery() {
     Controller c;
     intoPostRun(c);
     g_fakeIsg.neverRespond = true;
-    c.runUntil("ERROR", 25000);
+    c.runUntil("ERROR", NEXT_ANSWER_MS + ISG_HTTP_TIMEOUT_MS);
     TEST_ASSERT_EQUAL_UINT32(0, postRunEndTime);
     assertPassiveOutputs();
     serve(withStatus(W_STANDBY));
-    c.runUntil("STANDBY", 15000);
+    c.runUntil("STANDBY", NEXT_ANSWER_MS);
     assertPassiveOutputs();
 }
 
@@ -581,11 +605,11 @@ void test_S15_cooling_and_back() {
     Controller c;
     settleIn(c, W_STANDBY, "STANDBY");
     serve(withStatus(W_COOLING));
-    c.runUntil("COOLING", 15000);
+    c.runUntil("COOLING", NEXT_ANSWER_MS);
     assertCoolingOutputs();
     c.runFor(ISG_POLL_STABLETIME_SEC * 1000UL + 1000);
     serve(withStatus(W_STANDBY));
-    c.runUntil("STANDBY", 15000);
+    c.runUntil("STANDBY", NEXT_ANSWER_MS);
     assertPassiveOutputs();
 }
 
@@ -594,36 +618,45 @@ void test_S16_compressor_on_priority() {
     Controller a;
     settleIn(a, W_STANDBY, "STANDBY");
     serve(withStatus(W_BASE | ISG_471_COMPRESSOR | ISG_471_COOLING_MODE | ISG_471_HEATING | ISG_471_DHW_MODE));
-    a.runUntil("COOLING", 15000);
+    a.runUntil("COOLING", NEXT_ANSWER_MS);
 
     Controller b;
     settleIn(b, W_STANDBY, "STANDBY");
     serve(withStatus(W_BASE | ISG_471_COMPRESSOR | ISG_471_HEATING | ISG_471_DHW_MODE));
-    b.runUntil("HEATING", 15000);
+    b.runUntil("HEATING", NEXT_ANSWER_MS);
 
     Controller d;
     settleIn(d, W_STANDBY, "STANDBY");
     serve(withStatus(W_HOT_WATER));
-    d.runUntil("HOT_WATER", 15000);
+    d.runUntil("HOT_WATER", NEXT_ANSWER_MS);
 
     Controller e;
     settleIn(e, W_HEATING, "HEATING");
     serve(withStatus(W_COMPRESSOR_ONLY));
-    e.runUntil("STANDBY", 15000);
+    e.runUntil("STANDBY", NEXT_ANSWER_MS);
     assertPassiveOutputs();
 }
 
-// S17: ERROR during a state is immediate, also inside the minimum state time; COOLING -> ERROR
-// releases D7.
+// S17: ERROR is immediate, also inside the minimum state time; COOLING -> ERROR releases D7.
+// Fed straight into the state machine (see S5), then over the ISG path with a refused connection.
 void test_S17_error_immediate_from_cooling() {
     Controller c;
     c.start();
+    feed(c, W_COOLING, TICK_MS);
+    assertState("COOLING");
+    assertCoolingOutputs();
+    feed(c, W_COOLING, 5000);
+    feed(c, ISG_READ_ERROR, TICK_MS);
+    assertState("ERROR");
+    assertPassiveOutputs();
+
+    Controller d;
+    d.start();
     serve(withStatus(W_COOLING));
-    uint32_t entered = c.runUntil("COOLING", 15000);
+    d.runUntil("COOLING", NEXT_ANSWER_MS);
     assertCoolingOutputs();
     g_fakeIsg.acceptConnect = false;
-    uint32_t at = c.runUntil("ERROR", 15000);
-    TEST_ASSERT_TRUE(at - entered < (uint32_t)ISG_POLL_STABLETIME_SEC * 1000UL);
+    d.runUntil("ERROR", NEXT_ANSWER_MS);
     assertPassiveOutputs();
 }
 
