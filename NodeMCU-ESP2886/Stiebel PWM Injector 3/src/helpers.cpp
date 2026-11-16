@@ -8,30 +8,30 @@
 #include "test.h"
 #include "loggers/Logger.h"
 
-// Decodes Modbus status bitflags to string (HK2_PUMP only as comment)
-String decodeModbusStatus(uint16_t status) {
+// Decodes web ID 471 OPERATING STATUS (BETRIEBSSTATUS) to short log labels; bit names in config.h.
+String decodeIsgStatus(uint16_t status) {
   char hexbuf[7];
   snprintf(hexbuf, sizeof(hexbuf), "0x%04X", status);
-  String result = "Modbus:(";
+  String result = "ISG471:(";
   result += hexbuf;
   result += ") ";
   String flags = "";
   int realFlagCount = 0;
   // --- PUMPS ---
-  if (status & (1 << 0)) { flags += "HK1, "; realFlagCount++; }
-  // if (status & (1 << 1)) flags += "HK2_PUMP, "; // B1 (ignored, connected differently)
+  if (status & ISG_471_HEATING_CIRCUIT_1_PUMP) { flags += "HK1, "; realFlagCount++; }      // bit 0 HEATING CIRCUIT 1 PUMP
+  // bit 1 HEATING CIRCUIT 2 PUMP not logged: our floor pump is wired to the mixer-pump output instead
   // --- PROGRAMS / MODES ---
-  if (status & (1 << 2)) { flags += "HEATUP, "; realFlagCount++; }
-  if (status & (1 << 3)) { flags += "NHZ, "; realFlagCount++; }
-  if (status & (1 << 4)) { flags += "HEAT, "; realFlagCount++; }
-  if (status & (1 << 5)) { flags += "WATER, "; realFlagCount++; }
-  if (status & (1 << 6)) { flags += "COMPR, "; realFlagCount++; }
-  if (status & (1 << 7)) { flags += "SUMMER, "; realFlagCount++; }
-  if (status & (1 << 8)) { flags += "COOL, "; realFlagCount++; }
-  if (status & (1 << 9)) { flags += "DEFR, "; realFlagCount++; }
+  if (status & ISG_471_HEAT_UP_PROGRAM) { flags += "HEATUP, "; realFlagCount++; }          // bit 2 HEAT-UP PROGRAM
+  if (status & ISG_471_ELECTRIC_EMERGENCY_BOOSTER_HEATER) { flags += "NHZ, "; realFlagCount++; } // bit 3 ELECTRIC EMERGENCY/BOOSTER HEATER
+  if (status & ISG_471_HEATING) { flags += "HEAT, "; realFlagCount++; }                    // bit 4 HEATING
+  if (status & ISG_471_DHW_MODE) { flags += "WATER, "; realFlagCount++; }                  // bit 5 DHW MODE
+  if (status & ISG_471_COMPRESSOR) { flags += "COMPR, "; realFlagCount++; }                // bit 6 COMPRESSOR
+  if (status & ISG_471_SUMMER_MODE) { flags += "SUMMER, "; realFlagCount++; }              // bit 7 SUMMER MODE
+  if (status & ISG_471_COOLING_MODE) { flags += "COOL, "; realFlagCount++; }               // bit 8 COOLING MODE
+  if (status & ISG_471_DEFROST) { flags += "DEFR, "; realFlagCount++; }                    // bit 9 DEFROST
   // --- SILENT MODES ---
-  if (status & (1 << 10)) { flags += "SILENT1, "; realFlagCount++; }
-  if (status & (1 << 11)) { flags += "SILENT2, "; realFlagCount++; }
+  if (status & ISG_471_SILENT_MODE_1) { flags += "SILENT1, "; realFlagCount++; }           // bit 10 SILENT MODE 1
+  if (status & ISG_471_SILENT_MODE_2) { flags += "SILENT2, "; realFlagCount++; }           // bit 11 SILENT MODE 2
   if (realFlagCount > 0) {
     flags = flags.substring(0, flags.length() - 2); // remove last ", "
     result += flags;
@@ -63,8 +63,8 @@ StatusInfo updateStatusInfo(uint16_t isgStatus, float flowTemp, uint16_t flowRat
     snprintf(info.outputStatus, sizeof(info.outputStatus), "NORMAL");
   }
 
-  // Compressor state
-  snprintf(info.compressorStr, sizeof(info.compressorStr), "%s", (isgStatus & ISG_STATUS_COMPRESSOR) ? "ON" : "OFF");
+  // Compressor state: web ID 471 bit 6 COMPRESSOR (VERDICHTER)
+  snprintf(info.compressorStr, sizeof(info.compressorStr), "%s", (isgStatus & ISG_471_COMPRESSOR) ? "ON" : "OFF");
 
   // PWM-out: show OFF if 0%, else show percentage (in POST_RUN always show 25%)
   if (strcmp(stateManager.currentStateName(), "POST_RUN") == 0) {
@@ -86,8 +86,8 @@ StatusInfo updateStatusInfo(uint16_t isgStatus, float flowTemp, uint16_t flowRat
 
   // Flow temp
   info.flowTemp = flowTemp;
-  // Flow rate moving average, ignore error values (ISG_MODBUS_READ_ERROR)
-  if (flowRate != ISG_MODBUS_READ_ERROR) {
+  // Flow rate moving average, ignore error values (ISG_READ_ERROR)
+  if (flowRate != ISG_READ_ERROR) {
     flowRateBuffer[flowRateIndex] = flowRate;
     flowRateIndex = (flowRateIndex + 1) % FLOWRATE_MA_SIZE;
     if (flowRateCount < FLOWRATE_MA_SIZE) flowRateCount++;
@@ -95,7 +95,7 @@ StatusInfo updateStatusInfo(uint16_t isgStatus, float flowTemp, uint16_t flowRat
   uint32_t flowRateSum = 0;
   uint8_t flowRateValid = 0;
   for (uint8_t i = 0; i < flowRateCount; i++) {
-    if (flowRateBuffer[i] != ISG_MODBUS_READ_ERROR) {
+    if (flowRateBuffer[i] != ISG_READ_ERROR) {
       flowRateSum += flowRateBuffer[i];
       flowRateValid++;
     }
@@ -104,14 +104,14 @@ StatusInfo updateStatusInfo(uint16_t isgStatus, float flowTemp, uint16_t flowRat
 
   // Wifi state
   info.wifiOk = networkManager.isWiFiConnected();
-  snprintf(info.modbusStr, sizeof(info.modbusStr), "%s", evaluateIsgStatus(isgStatus));
+  snprintf(info.isgStr, sizeof(info.isgStr), "%s", evaluateIsgStatus(isgStatus));
   return info;
 }
 
   // Flow temp
   const char* formatStatusLogLine(const StatusInfo& statusInfo) {
   char flowTempStr[16];
-  if ((int)statusInfo.flowTemp == ISG_MODBUS_READ_ERROR) {
+  if ((int)statusInfo.flowTemp == ISG_READ_ERROR) {
     snprintf(flowTempStr, sizeof(flowTempStr), "FAIL");
   } else {
     snprintf(flowTempStr, sizeof(flowTempStr), "%.1f°C", statusInfo.flowTemp);
@@ -119,7 +119,7 @@ StatusInfo updateStatusInfo(uint16_t isgStatus, float flowTemp, uint16_t flowRat
   
   // Flow rate
   char flowRateStr[16];
-  if ((int)statusInfo.flowRate == ISG_MODBUS_READ_ERROR) {
+  if ((int)statusInfo.flowRate == ISG_READ_ERROR) {
     snprintf(flowRateStr, sizeof(flowRateStr), "FAIL");
   } else {
     snprintf(flowRateStr, sizeof(flowRateStr), "%.1f l/min", statusInfo.flowRate / 100.0f);
@@ -127,12 +127,12 @@ StatusInfo updateStatusInfo(uint16_t isgStatus, float flowTemp, uint16_t flowRat
   
   // compose status line
   static char buf[400];
-  // Haal modbus status als hex uit statusInfo.modbusStr ("0x1234" of "FAIL")
-  uint16_t modbusVal = 0;
-  if (strncmp(statusInfo.modbusStr, "0x", 2) == 0) {
-    modbusVal = (uint16_t)strtol(statusInfo.modbusStr + 2, nullptr, 16);
+  // Haal de ISG-status (web ID 471) als hex uit statusInfo.isgStr ("0x1234" of "FAIL")
+  uint16_t isgVal = 0;
+  if (strncmp(statusInfo.isgStr, "0x", 2) == 0) {
+    isgVal = (uint16_t)strtol(statusInfo.isgStr + 2, nullptr, 16);
   }
-  String modbusDecoded = decodeModbusStatus(modbusVal);
+  String isgDecoded = decodeIsgStatus(isgVal);
   snprintf(buf, sizeof(buf),
     "State: %s (%s)  PumpHK2:%s  Compressor:%s  PWM-out:%s  PWM-in:%s  Flow:%s @ %s  WiFi:%s  %s",
     statusInfo.stateName,
@@ -144,7 +144,7 @@ StatusInfo updateStatusInfo(uint16_t isgStatus, float flowTemp, uint16_t flowRat
     flowTempStr,
     flowRateStr,
     statusInfo.wifiOk ? "OK" : "FAIL",
-    modbusDecoded.c_str()
+    isgDecoded.c_str()
   );
   return buf;
 }
@@ -176,21 +176,21 @@ void logMessage(const String& message) {
   logMessage(message, LogLevel::LOG_NORMAL);
 }
 
-// Tries to initialize ModbusManager if WiFi is connected and logs the result
-void tryInitModbusManager() {
+// Tries to initialize IsgApiManager if WiFi is connected and logs the result
+void tryInitIsgApiManager() {
   if (networkManager.isWiFiConnected()) {
-    modbusManager.begin(isgIp, ISG_PORT);
-    if (modbusManager.isInitialized()) {
-      logMessage("[INFO] ModbusManager initialized (WiFi connected)");
+    isgApiManager.begin(isgIp, ISG_HTTP_PORT);
+    if (isgApiManager.isInitialized()) {
+      logMessage("[INFO] IsgApiManager initialized (WiFi connected)");
     } else {
-      logMessage("[WARN] ModbusManager init failed (host unresolved)");
+      logMessage("[WARN] IsgApiManager init failed (host unresolved)");
     }
   }
 }
-// Geeft een string voor de modbus status ("FAIL" of hex string)
+// Geeft een string voor de ISG-status, web ID 471 ("FAIL" of hex string)
 const char* evaluateIsgStatus(uint16_t isgStatus) {
   static char hexbuf[12];
-  if (isgStatus == ISG_MODBUS_READ_ERROR) {
+  if (isgStatus == ISG_READ_ERROR) {
     return "FAIL";
   } else {
     snprintf(hexbuf, sizeof(hexbuf), "0x%04X", isgStatus);

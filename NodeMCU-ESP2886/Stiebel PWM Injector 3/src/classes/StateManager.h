@@ -14,12 +14,12 @@ public:
     virtual void handle() = 0;
     virtual void exit() = 0;
     virtual const char* name() const = 0;
-    virtual State* transition(uint16_t modbusStatus) = 0;
+    virtual State* transition(uint16_t isgStatus) = 0;
 };
 
 
 // Externe centralTransition zodat test en src dezelfde implementatie delen
-extern State* centralTransition(uint16_t modbusStatus, State* previousState);
+extern State* centralTransition(uint16_t isgStatus, State* previousState);
 
 // Globale state pointers zodat test en src dezelfde instanties delen
 extern State* errorState;
@@ -45,8 +45,8 @@ public:
         if (DEBUG) Serial.printf("[DEBUG] Exiting %s\n", _name);
     }
     const char* name() const override { return _name; }
-    State* transition(uint16_t modbusStatus) override {
-        return _transitionFunc ? _transitionFunc(modbusStatus) : this;
+    State* transition(uint16_t isgStatus) override {
+        return _transitionFunc ? _transitionFunc(isgStatus) : this;
     }
 
     TransitionFunc _transitionFunc;
@@ -57,17 +57,17 @@ private:
 // --- StateManager ---
 class StateManager {
 public:
-    using StateChangeCallback = std::function<void(const char* newState, uint16_t modbusStatus)>;
+    using StateChangeCallback = std::function<void(const char* newState, uint16_t isgStatus)>;
 
     StateManager();
     ~StateManager();
     void begin(State* initialState);
-    void update(uint16_t modbusStatus);
+    void update(uint16_t isgStatus);
     const char* currentStateName() const;
     State* getCurrentStatePtr() const { return currentState; }
     void setStateChangeCallback(StateChangeCallback cb) { stateChangeCallback = cb; }
 private:
     State* currentState = nullptr;
     StateChangeCallback stateChangeCallback = nullptr;
-    uint16_t lastModbusStatus = 0;
+    uint16_t lastIsgStatus = 0;
 };

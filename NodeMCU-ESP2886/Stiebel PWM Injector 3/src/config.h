@@ -39,34 +39,44 @@ extern const bool VERBOSE;
 extern const int PWM_OUT_FREQUENCY_HZ;   // PWM frequency (Hz)
 extern const int PWM_OUT_DUTY_PERCENT;   // PWM duty cycle (%)
 
-// ISG_OPERATING_STATUS bitflag definitions
-#define ISG_STATUS_HK1_PUMP           0x0001 // B00
-#define ISG_STATUS_HK2_PUMP           0x0002 // B01
-#define ISG_STATUS_HEAT_UP_PROGRAM    0x0004 // B02
-#define ISG_STATUS_NHZ_STAGES_RUNNING 0x0008 // B03
-#define ISG_STATUS_HEATING            0x0010 // B04
-#define ISG_STATUS_HOT_WATER          0x0020 // B05
-#define ISG_STATUS_COMPRESSOR         0x0040 // B06
-#define ISG_STATUS_SUMMER_MODE_ACTIVE 0x0080 // B07
-#define ISG_STATUS_COOLING            0x0100 // B08
-#define ISG_STATUS_DEFROSTING         0x0200 // B09
-#define ISG_STATUS_SILENT_MODE_1      0x0400 // B10
-#define ISG_STATUS_SILENT_MODE_2      0x0800 // B11
+// --- ISG web IDs -------------------------------------------------------------------------------
+// Same web IDs, bit numbers and names as Home Assistant: the register is sensor.isg_<webid>, a bit is
+// binary_sensor.isg_<webid>_<bit>. Names are Stiebel's (English UI name, German original in
+// brackets), as in kennis/webid_catalogus.csv of the stiebel-isg repo.
+
+// Web ID 471 = OPERATING STATUS (BETRIEBSSTATUS), bit field, menu DIAGNOSE > ANLAGE > BETRIEBSSTATUS.
+// HA: sensor.isg_471 ("ISG Operating Status").
+#define ISG_WEBID_OPERATING_STATUS 471
+#define ISG_471_HEATING_CIRCUIT_1_PUMP            0x0001 // bit 0  HEATING CIRCUIT 1 PUMP (HK 1 PUMPE): HK1 pump runs
+#define ISG_471_HEATING_CIRCUIT_2_PUMP            0x0002 // bit 1  HEATING CIRCUIT 2 PUMP (HK 2 PUMPE): not our floor pump, that one hangs on the mixer-pump output
+#define ISG_471_HEAT_UP_PROGRAM                   0x0004 // bit 2  HEAT-UP PROGRAM (AUFHEIZPROGRAMM): screed heat-up program active
+#define ISG_471_ELECTRIC_EMERGENCY_BOOSTER_HEATER 0x0008 // bit 3  ELECTRIC EMERGENCY/BOOSTER HEATER (NHZ STUFEN): electric backup heater stages on
+#define ISG_471_HEATING                           0x0010 // bit 4  HEATING (HEIZBETRIEB): heat pump runs for space heating
+#define ISG_471_DHW_MODE                          0x0020 // bit 5  DHW MODE (WARMWASSERBETRIEB): heat pump runs for domestic hot water
+#define ISG_471_COMPRESSOR                        0x0040 // bit 6  COMPRESSOR (VERDICHTER): compressor runs
+#define ISG_471_SUMMER_MODE                       0x0080 // bit 7  SUMMER MODE (SOMMERBETRIEB): summer mode, no space heating
+#define ISG_471_COOLING_MODE                      0x0100 // bit 8  COOLING MODE (KUEHLBETRIEB): heat pump runs for cooling
+#define ISG_471_DEFROST                           0x0200 // bit 9  DEFROST (ABTAUBETRIEB): outdoor unit is defrosting
+#define ISG_471_SILENT_MODE_1                     0x0400 // bit 10 SILENT MODE 1 (SILENTMODE 1)
+#define ISG_471_SILENT_MODE_2                     0x0800 // bit 11 SILENT MODE 2 (SILENTMODE 2)
+
+// Web ID 438 = FLOW RATE (VOLUMENSTROM), l/min, menu INFO > ANLAGE > HEIZUNG: heating water flow.
+// HA: sensor.isg_438 ("ISG Flow Rate").
+#define ISG_WEBID_FLOW_RATE 438
 
 
-
-// Modbus/ISG configuration
+// ISG HTTP API configuration (endpoint isg_api.php, read path: GET, no token needed)
 extern const char* ISG_HOST;
-extern const int ISG_PORT;
-extern const int ISG_OPERATING_STATUS_ADDR;
+extern const int ISG_HTTP_PORT;
+extern const char* ISG_API_PATH;
+extern const int ISG_HTTP_TIMEOUT_MS;
 extern const int ISG_POLL_INTERVAL_SEC;
 extern const int ISG_POLL_STABLETIME_SEC;
-#define ISG_MODBUS_READ_ERROR 0xFFFF 
-#define ISG_SLAVE_ID 1
-struct ModbusRegDef {const char* name; uint16_t address;};
-struct ModbusConfig {const ModbusRegDef* regs; uint8_t count;};
-extern const ModbusRegDef MODBUS_REGS[];
-extern const ModbusConfig MODBUS_CONFIG;
+#define ISG_READ_ERROR 0xFFFF // "no value": request failed or the web ID was absent from the payload
+struct IsgRegDef {const char* name; uint16_t webid;};
+struct IsgConfig {const IsgRegDef* regs; uint8_t count;};
+extern const IsgRegDef ISG_REGS[];
+extern const IsgConfig ISG_CONFIG;
 
 
 // WiFi configuration

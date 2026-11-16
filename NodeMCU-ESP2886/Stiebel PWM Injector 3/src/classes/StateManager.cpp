@@ -18,8 +18,10 @@ State* standbyState    = nullptr;
 
 // postRunEndTime moet extern gedeeld worden voor correcte logging
 unsigned long postRunEndTime = 0;
-// Central transition function
-State* centralTransition(uint16_t modbusStatus, State* previousState) {
+// Central transition function.
+// isgStatus is web ID 471 OPERATING STATUS (BETRIEBSSTATUS), the bit field HA shows as sensor.isg_471;
+// the ISG_471_* bit names and their meaning are in config.h.
+State* centralTransition(uint16_t isgStatus, State* previousState) {
     const unsigned long postRunTimeout = POST_RUN_DURATION_MIN * 60000UL;
     const unsigned long minStateTime = ISG_POLL_STABLETIME_SEC * 1000UL;
     static unsigned long stateEnterTime = 0;
@@ -32,41 +34,43 @@ State* centralTransition(uint16_t modbusStatus, State* previousState) {
         lastState = previousState;
     }
 
-    // ERROR overrules everything
-    if (modbusStatus == ISG_MODBUS_READ_ERROR) {
+    // ERROR overrules everything: no value for web ID 471 (request failed or value absent)
+    if (isgStatus == ISG_READ_ERROR) {
         postRunEndTime = 0;
         return errorState;
     }
 
-    // DEFROST overrules everything except ERROR
-    if (modbusStatus & ISG_STATUS_DEFROSTING) {
+    // DEFROST overrules everything except ERROR: 471 bit 9 DEFROST (ABTAUBETRIEB)
+    if (isgStatus & ISG_471_DEFROST) {
         postRunEndTime = 0;
         return defrostState;
     }
 
-    // Compressor active?
-    bool compressorAan = (modbusStatus & ISG_STATUS_COMPRESSOR);
+    // Compressor active? 471 bit 6 COMPRESSOR (VERDICHTER)
+    bool compressorAan = (isgStatus & ISG_471_COMPRESSOR);
 
     // Minimaal minStateTime in elke status blijven, behalve bij errorState
     if (previousState != errorState && (now - stateEnterTime) < minStateTime) {
         return previousState;
     }
 
-    // HOT_WATER → POST_RUN when compressor turns off, only outside summer mode (B7).
+    // HOT_WATER → POST_RUN when compressor turns off, only outside summer mode
+    // (471 bit 7 SUMMER MODE, SOMMERBETRIEB).
     // In summer mode this falls through to STANDBY below.
-    bool summerMode = (modbusStatus & ISG_STATUS_SUMMER_MODE_ACTIVE);
+    bool summerMode = (isgStatus & ISG_471_SUMMER_MODE);
     if (!compressorAan && previousState == hotWaterState && !summerMode) {
         postRunEndTime = millis() + postRunTimeout;
         return postRunState;
     }
 
-    // POST_RUN → STANDBY when timer expires or compressor turns on again
+    // POST_RUN → STANDBY when timer expires; a new run (471 bit 8 COOLING MODE, bit 4 HEATING or
+    // bit 5 DHW MODE) cancels the timer
     if (previousState == postRunState) {
-        if (modbusStatus & (ISG_STATUS_COOLING | ISG_STATUS_HEATING | ISG_STATUS_HOT_WATER)) {
+        if (isgStatus & (ISG_471_COOLING_MODE | ISG_471_HEATING | ISG_471_DHW_MODE)) {
             postRunEndTime = 0; // Cancel timer
-            if (modbusStatus & ISG_STATUS_COOLING)    return coolingState;
-            if (modbusStatus & ISG_STATUS_HEATING)    return heatingState;
-            if (modbusStatus & ISG_STATUS_HOT_WATER)  return hotWaterState;
+            if (isgStatus & ISG_471_COOLING_MODE) return coolingState;  // bit 8 KUEHLBETRIEB
+            if (isgStatus & ISG_471_HEATING)      return heatingState;  // bit 4 HEIZBETRIEB
+            if (isgStatus & ISG_471_DHW_MODE)     return hotWaterState; // bit 5 WARMWASSERBETRIEB
         }
         if (postRunEndTime != 0 && millis() < postRunEndTime) {
             return postRunState; // Stay in POST_RUN
@@ -79,9 +83,9 @@ State* centralTransition(uint16_t modbusStatus, State* previousState) {
     if (!compressorAan) return standbyState;
 
     // Compressor on: normal priority
-    if (modbusStatus & ISG_STATUS_COOLING)    return coolingState;
-    if (modbusStatus & ISG_STATUS_HEATING)    return heatingState;
-    if (modbusStatus & ISG_STATUS_HOT_WATER)  return hotWaterState;
+    if (isgStatus & ISG_471_COOLING_MODE) return coolingState;  // bit 8 COOLING MODE (KUEHLBETRIEB)
+    if (isgStatus & ISG_471_HEATING)      return heatingState;  // bit 4 HEATING (HEIZBETRIEB)
+    if (isgStatus & ISG_471_DHW_MODE)     return hotWaterState; // bit 5 DHW MODE (WARMWASSERBETRIEB)
 
     // Fallback
     return standbyState;
@@ -113,8 +117,8 @@ StateManager::~StateManager() {
 // stateEnterTime is declared externally in main.cpp
 extern unsigned long stateEnterTime;
 
-void StateManager::update(uint16_t modbusStatus) {
-    State* nextState = currentState->transition(modbusStatus);
+void StateManager::update(uint16_t isgStatus) {
+    State* nextState = currentState->transition(isgStatus);
     // Debug logging: show pointer and name values before and after transition
     Serial.printf("[DEBUG] update() called. currentState ptr: %p, nextState ptr: %p\n", currentState, nextState);
     if (currentState) {
@@ -162,7 +166,7 @@ void StateManager::update(uint16_t modbusStatus) {
         }
         // Callback voor state change
         if (stateChangeCallback) {
-            stateChangeCallback(nextState->name(), modbusStatus);
+            stateChangeCallback(nextState->name(), isgStatus);
         }
         currentState->exit();
         if (DEBUG) {

@@ -21,14 +21,18 @@ const int WIFI_RETRY_SEC   = 60;
 // OTA password configuration
 const char* OTA_PASSWORD = "StiebelPumpControl";
 
-// Modbus/ISG configuration
+// ISG HTTP API configuration (same endpoint and web IDs as Home Assistant)
 const char* ISG_HOST                = "servicewelt.iot.cheizoo.lan";
-const int ISG_PORT                  = 502;
-const int ISG_OPERATING_STATUS_ADDR = 2500;
+const int ISG_HTTP_PORT             = 80;
+const char* ISG_API_PATH            = "/isg_api.php";
+const int ISG_HTTP_TIMEOUT_MS       = 8000; // One call took ~2.5 s (measured); a call queued behind HA's on the ISG's single PHP worker takes ~5 s
 const int ISG_POLL_INTERVAL_SEC     = 10;
 const int ISG_POLL_STABLETIME_SEC   = 30; // Time in seconds to consider ISG data stable after a change
-const ModbusRegDef MODBUS_REGS[]    = {	{"OPERATING_STATUS", 2500},	{"FLOW_RATE", 520}};
-const ModbusConfig MODBUS_CONFIG    = {MODBUS_REGS, sizeof(MODBUS_REGS) / sizeof(ModbusRegDef)};
+const IsgRegDef ISG_REGS[]          = {
+    {"OPERATING STATUS", ISG_WEBID_OPERATING_STATUS}, // web ID 471, BETRIEBSSTATUS bit field
+    {"FLOW RATE",        ISG_WEBID_FLOW_RATE}         // web ID 438, VOLUMENSTROM in l/min
+};
+const IsgConfig ISG_CONFIG          = {ISG_REGS, sizeof(ISG_REGS) / sizeof(IsgRegDef)};
 
 
 // PWM configuration

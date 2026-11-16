@@ -62,15 +62,13 @@ void NetworkManager::tryConnectWiFi() {
     if (wifiConnected) {
         logMessage("\xE2\x9C\x85 WiFi connected: " + WiFi.localIP().toString());
         syncTimeWithNTP();
-        // Herinitialiseer ModbusManager direct na WiFi reconnect
+        // Restart the ISG API client right after a WiFi reconnect
         extern IPAddress isgIp;
-        modbusManager.begin(isgIp, ISG_PORT);
-        // Dummy-read om eerste mislukte Modbus-read te negeren
-        modbusManager.getByName("OPERATING_STATUS");
-        if (modbusManager.isInitialized()) {
-            logMessage("[INFO] ModbusManager initialized (WiFi reconnected)");
+        isgApiManager.begin(isgIp, ISG_HTTP_PORT);
+        if (isgApiManager.isInitialized()) {
+            logMessage("[INFO] IsgApiManager initialized (WiFi reconnected)");
         } else {
-            logMessage("[WARN] ModbusManager init failed (host unresolved)");
+            logMessage("[WARN] IsgApiManager init failed (host unresolved)");
         }
     } else {
         logMessage("\xE2\x9D\x8C WiFi connection failed!");

@@ -36,19 +36,19 @@ Controls the PWM output signal to the pump. Manages frequency, duty cycle, and e
 
 ---
 
-### 3. ModbusManager
+### 3. IsgApiManager
 
 **Purpose:**  
-Manages Modbus TCP communication with the Stiebel ISG. Handles polling, error recovery, and data parsing.
+Reads the Stiebel ISG over its HTTP API (`isg_api.php`), with the same web IDs Home Assistant uses.
 
 **Key Responsibilities:**
-- Polling ISG for operating status and flow rate
-- Handling connection errors and automatic reinitialization
-- Parsing and storing Modbus register values
+- Polling web ID 471 OPERATING STATUS and web ID 438 FLOW RATE in one non-blocking HTTP request
+- Treating a failed request, a timeout or a missing value as "no value"
+- Parsing the JSON answer and storing the values per web ID
 
 **Main Files:**  
-- `src/classes/ModbusManager.cpp`  
-- `src/classes/ModbusManager.h`
+- `src/classes/IsgApiManager.cpp`  
+- `src/classes/IsgApiManager.h`
 
 ---
 

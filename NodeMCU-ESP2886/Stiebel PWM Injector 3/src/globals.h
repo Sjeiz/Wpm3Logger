@@ -8,7 +8,7 @@
 #include "sensors/FlowTempSensor.h"
 #include "classes/NetworkManager.h"
 #include "classes/WebServerManager.h"
-#include "classes/ModbusManager.h"
+#include "classes/IsgApiManager.h"
 #include "classes/StateManager.h"
 #include <Arduino.h>
 
@@ -19,7 +19,7 @@ extern OutputManager outputManager;
 extern FlowTempSensor flowTempSensor;
 extern NetworkManager networkManager;
 extern WebServerManager webServerManager;
-extern ModbusManager modbusManager;
+extern IsgApiManager isgApiManager;
 extern StateManager stateManager;
 extern unsigned long stateEnterTime;
 

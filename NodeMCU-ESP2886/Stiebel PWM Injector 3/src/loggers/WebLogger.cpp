@@ -34,7 +34,7 @@ void WebLogger::logStatus(const StatusInfo& statusInfo) {
     // 6. Update bij flowtemp change > WEBLOGGER_TEMP_DELTA
     // 7. Update bij flowrate change > WEBLOGGER_FLOW_DELTA_PCT
     // 8. Update bij Wifi change
-    // 9. Update bij modbus change
+    // 9. Update bij ISG-status change (web ID 471)
 
     static StatusInfo prev = {};
     static unsigned long lastDetail = 0;
@@ -61,8 +61,8 @@ void WebLogger::logStatus(const StatusInfo& statusInfo) {
     if (flowPctPrev > 0 && fabs(flowPctNow - flowPctPrev) / flowPctPrev * 100.0f >= WEBLOGGER_FLOW_DELTA_PCT) logDetail = true;
     // 8. Wifi change
     if (statusInfo.wifiOk != prev.wifiOk) logDetail = true;
-    // 9. Modbus change
-    if (strcmp(statusInfo.modbusStr, prev.modbusStr) != 0) logDetail = true;
+    // 9. ISG status change (web ID 471)
+    if (strcmp(statusInfo.isgStr, prev.isgStr) != 0) logDetail = true;
 
     if (logDetail) {
         this->log(formatStatusLogLine(statusInfo));

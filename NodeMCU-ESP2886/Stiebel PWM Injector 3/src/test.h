@@ -2,10 +2,10 @@
 #pragma once
 #include <Arduino.h>
 
-extern bool modbusOverrideFlag;
-extern uint16_t modbusOverrideBits;
+extern bool isgOverrideFlag;
+extern uint16_t isgOverrideBits;
 
 void handleSerialTestCommand(const String& cmd);
 void printSerialTestHelp();
-uint16_t parseModbusBits(const String& bitNamesStr);
-uint16_t readModbusRegister(uint16_t realBits);
+uint16_t parseIsgBits(const String& bitNamesStr);
+uint16_t readIsgStatus(uint16_t realBits);

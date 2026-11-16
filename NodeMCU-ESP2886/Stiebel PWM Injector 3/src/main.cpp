@@ -10,7 +10,6 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include <time.h>
-#include <ModbusClientTCPasync.h>
 #include <DallasTemperature.h>
 
 #include "sensors/PwmInSensor.h"
@@ -60,8 +59,8 @@ void setup() {
     ESP.restart();
   }
 
-  // Start ModbusManager with IP address
-  modbusManager.begin(isgIp, ISG_PORT);
+  // Start IsgApiManager with IP address
+  isgApiManager.begin(isgIp, ISG_HTTP_PORT);
 
   char heapMsg[64];
   snprintf(heapMsg, sizeof(heapMsg), "[INFO] Initialization completed (free heap: %.1f KB)", ESP.getFreeHeap() / 1024.0);
@@ -78,25 +77,25 @@ void loop() {
   ArduinoOTA.handle(); 
 
   // Handle inputs and clients
-  handleSerialTestInput(); // Can override Modbus status bits for testing purposes
+  handleSerialTestInput(); // Can override the web ID 471 status bits for testing purposes
   logManager.getTelnetBridge()->handleClient();
   webServerManager.handleClient();
 
-  // Re-initialize ModbusManager only with previously resolved IP
-  if (!modbusManager.isInitialized()) {
-    modbusManager.begin(isgIp, ISG_PORT);
+  // Re-initialize IsgApiManager only with previously resolved IP
+  if (!isgApiManager.isInitialized()) {
+    isgApiManager.begin(isgIp, ISG_HTTP_PORT);
   }
-  if(modbusManager.isInitialized()) modbusManager.loop(); // Poll Modbus data
-  else tryInitModbusManager();
+  if(isgApiManager.isInitialized()) isgApiManager.loop(); // Poll the ISG HTTP API (non-blocking)
+  else tryInitIsgApiManager();
 
-  // 1. Get latest Modbus status value or overridden value from serial console for testing purposes
+  // 1. Get latest ISG values or the value overridden from the serial console for testing purposes
   uint16_t isgStatus;
   uint16_t isgFlowRate;
-  if(!modbusOverrideFlag & modbusManager.isInitialized()) {
-    isgStatus = modbusManager.getByName("OPERATING_STATUS");
-    isgFlowRate = modbusManager.getByName("FLOW_RATE");
+  if(!isgOverrideFlag & isgApiManager.isInitialized()) {
+    isgStatus = isgApiManager.getWord(ISG_WEBID_OPERATING_STATUS);                    // web ID 471 OPERATING STATUS (BETRIEBSSTATUS)
+    isgFlowRate = isgApiManager.getHundredths(ISG_WEBID_FLOW_RATE);                   // web ID 438 FLOW RATE (VOLUMENSTROM), 0.01 l/min
   } else {
-    isgStatus = modbusOverrideBits;
+    isgStatus = isgOverrideBits;
     isgFlowRate = 0;
   }
 
@@ -105,7 +104,7 @@ void loop() {
   float pwmIn = pwmInSensor.read();
   float flowTemp = flowTempSensor.read();
 
-  // 2. State machine update based on Modbus status or test override
+  // 2. State machine update based on web ID 471 or test override
   stateManager.update(isgStatus);
 
   // 3. Update outputs based on state

@@ -21,12 +21,12 @@ void handleOutputState(const char* stateName, const uint16_t status);
 void logMessage(const String& message, const LogLevel level);
 void handleSerialTestInput();
 String elapsedTimeToString(unsigned long elapsedMs);
-void tryInitModbusManager();
+void tryInitIsgApiManager();
 const char* evaluateIsgStatus(uint16_t isgStatus);
 
 
-// Decodeert Modbus status bitflags naar string (HK2_PUMP alleen als commentaar)
-String decodeModbusStatus(uint16_t status);
+// Decodeert web ID 471 OPERATING STATUS (BETRIEBSSTATUS) naar korte loglabels
+String decodeIsgStatus(uint16_t status);
 
 // Returns StatusInfo struct using provided values
 StatusInfo updateStatusInfo(uint16_t isgStatus, float flowTemp, uint16_t flowRate, float pwmIn, int pwmOut, bool pumpBlocked, bool pumpForced);

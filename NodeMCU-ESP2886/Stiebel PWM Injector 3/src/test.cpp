@@ -3,12 +3,12 @@
 // Serial test interface for the state machine
 #include <Arduino.h>
 #include "globals.h"
-#include "classes/ModbusManager.h"
+#include "classes/IsgApiManager.h"
 #include "test.h"
 #include "helpers.h"
 
-uint16_t modbusOverrideBits = 0;
-bool modbusOverrideFlag = false;
+uint16_t isgOverrideBits = 0;
+bool isgOverrideFlag = false;
 
 struct BitName {
     const char* name;
@@ -16,12 +16,12 @@ struct BitName {
 };
 
 const BitName bitNames[] = {
-    {"COMPRESSOR", ISG_STATUS_COMPRESSOR},
-    {"DEFROSTING", ISG_STATUS_DEFROSTING},
-    {"COOLING", ISG_STATUS_COOLING},
-    {"HEATING", ISG_STATUS_HEATING},
-    {"HOT_WATER", ISG_STATUS_HOT_WATER},
-    {"READ_ERROR", ISG_MODBUS_READ_ERROR},
+    {"COMPRESSOR", ISG_471_COMPRESSOR},   // 471 bit 6 COMPRESSOR (VERDICHTER)
+    {"DEFROST", ISG_471_DEFROST},         // 471 bit 9 DEFROST (ABTAUBETRIEB)
+    {"COOLING_MODE", ISG_471_COOLING_MODE}, // 471 bit 8 COOLING MODE (KUEHLBETRIEB)
+    {"HEATING", ISG_471_HEATING},         // 471 bit 4 HEATING (HEIZBETRIEB)
+    {"DHW_MODE", ISG_471_DHW_MODE},       // 471 bit 5 DHW MODE (WARMWASSERBETRIEB)
+    {"READ_ERROR", ISG_READ_ERROR},       // no value for web ID 471
     {nullptr, 0}
 };
 
@@ -42,12 +42,12 @@ void handleSerialTestCommand(const String& line) {
       logMessage("[DEBUG] test: print help");
       printSerialTestHelp();
     } else if (bitNamesStr.equalsIgnoreCase("off")) {
-      modbusOverrideFlag = false;
+      isgOverrideFlag = false;
       logMessage("[TEST] Override disabled.");
     } else {
-      modbusOverrideBits = parseModbusBits(bitNamesStr);
-      modbusOverrideFlag = true;
-      logMessage(String("[TEST] Override active (0x") + String(modbusOverrideBits, HEX) + "): " + bitNamesStr);
+      isgOverrideBits = parseIsgBits(bitNamesStr);
+      isgOverrideFlag = true;
+      logMessage(String("[TEST] Override active (0x") + String(isgOverrideBits, HEX) + "): " + bitNamesStr);
     }
   } else {
     logMessage(String("[DEBUG] handleSerialTestCommand: onbekend commando [") + line + "]");
@@ -56,7 +56,7 @@ void handleSerialTestCommand(const String& line) {
 
 void printSerialTestHelp() {
   logMessage(F("[TEST] Test interface commands:"));
-  logMessage(F("[TEST]   test <bitname> [<bitname> ...]  - Override Modbus bits (e.g.: test COMPRESSOR HEATING)"));
+  logMessage(F("[TEST]   test <bitname> [<bitname> ...]  - Override web ID 471 bits (e.g.: test COMPRESSOR HEATING)"));
   logMessage(F("[TEST]   test off                        - Disable override"));
   String bitNamesStr = F("[TEST] Bit names: ");
   for (int i = 0; bitNames[i].name; ++i) {
@@ -66,7 +66,7 @@ void printSerialTestHelp() {
   logMessage(bitNamesStr);
 }
 
-uint16_t parseModbusBits(const String& input) {
+uint16_t parseIsgBits(const String& input) {
     uint16_t bits = 0;
     String s = input;
     s.trim();
@@ -88,9 +88,9 @@ uint16_t parseModbusBits(const String& input) {
     return bits;
 }
 
-uint16_t readModbusRegister(uint16_t realBits) {
-  if (modbusOverrideFlag) {
-    return modbusOverrideBits;
+uint16_t readIsgStatus(uint16_t realBits) {
+  if (isgOverrideFlag) {
+    return isgOverrideBits;
   }
   return realBits;
 }

@@ -10,6 +10,6 @@ struct StatusInfo {
     float flowTemp;
     uint16_t flowRate;
     bool wifiOk;
-    char modbusStr[24];
+    char isgStr[24];
     char stateTimeStr[16];
 };
